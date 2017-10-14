@@ -11,8 +11,11 @@
 * [MVC 프레임워크 구현 2단계](https://nextstep.camp/courses/-KtTs-ZFzvIWITSLbp3r/-Kf9lGDk0Vc5K7GvnqC3/lessons)
 * [MVC 프레임워크 구현 3단계](https://nextstep.camp/courses/-KtTs-ZFzvIWITSLbp3r/-Kf9leY0VnZi2akOLdkW/lessons)
 
-#### JDBC 라이브러리 구현
+#### JDBC 라이브러리
+* [JDBC 라이브러리 구현](https://nextstep.camp/courses/-KtTs-ZFzvIWITSLbp3r/-Kf9l9BNDgvymNo6IxDs/lessons)
 
+#### DI 프레임워크
+* [DI 프레임워크 구현 1단계](https://nextstep.camp/courses/-KtTs-ZFzvIWITSLbp3r/-Kf9qPOW42m1nnuoyvXz/lessons)
 
 ## 코드 리뷰 과정
 > 저장소 브랜치에 자신의 github 아이디에 해당하는 브랜치가 존재해야 한다. 자신의 github 아이디에 해당하는 브랜치가 있는지 확인한다.
