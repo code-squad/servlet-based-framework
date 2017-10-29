@@ -3,18 +3,19 @@ package core.mvc.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import core.db.DataBase;
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import next.controller.UserSessionUtils;
 
 public class ListUserController implements Controller{
 
 	@Override
-	public String run(HttpServletRequest req) {
+	public ModelAndView run(HttpServletRequest req) {
 		if(!UserSessionUtils.isLogined(req.getSession())) {
-			return "redirect:/users/loginForm";
+			return new ModelAndView(new JspView("redirect:/users/loginForm"));
 		}
-		
-		req.setAttribute("users", DataBase.findAll());
-		return "/user/list.jsp";
+		ModelAndView mav = new ModelAndView(new JspView("/user/list.jsp"));
+		mav.addObject("users", DataBase.findAll());
+		return mav;
 	}
-
 }
