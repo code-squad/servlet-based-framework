@@ -1,4 +1,4 @@
-package next.controller;
+package core.mvc.controller;
 
 import javax.servlet.http.HttpSession;
 

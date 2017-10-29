@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
-import next.controller.UserSessionUtils;
 
 public class LogoutController implements Controller {
 

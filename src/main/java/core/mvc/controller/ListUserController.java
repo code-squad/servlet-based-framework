@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import core.db.DataBase;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
-import next.controller.UserSessionUtils;
 
 public class ListUserController implements Controller{
 
