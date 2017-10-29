@@ -37,7 +37,9 @@ public class DispatcherServlet extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse res) {
 		RequestLine requestedLine = generateRequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod()));
 		Controller controller = rm.getController(requestedLine);
-
+		if (controller == null) {
+			System.err.println("No Controllers Found.");
+		}
 		try {
 			ModelAndView mav = controller.run(req);
 			mav.getView().render(mav.getModel(), req, res);
