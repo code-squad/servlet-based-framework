@@ -19,5 +19,4 @@ public class CreateUserController implements Controller {
 		}
 		return new ModelAndView(new JspView("redirect:/users/form"));
 	}
-
 }

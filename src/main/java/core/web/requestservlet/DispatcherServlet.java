@@ -30,7 +30,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		RequestLine requestedLine = generateRequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod()));
+		RequestLine requestedLine = generateRequestLine(req);
 		Controller controller = rm.getController(requestedLine);
 		if (controller == null) {
 			res.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -44,8 +44,8 @@ public class DispatcherServlet extends HttpServlet {
 		}
 	}
 
-	private RequestLine generateRequestLine(String path, RequestMethod method) {
-		return new RequestLine(path, method);
+	private RequestLine generateRequestLine(HttpServletRequest req) {
+		return new RequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod()));
 	}
 
 }
