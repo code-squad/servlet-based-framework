@@ -30,6 +30,7 @@ public class UserDaoTest {
         assertEquals(expected, actual);
 
         expected.update(new User("userId", "password2", "name2", "sanjigi@email.com"));
+        System.out.println(expected.getName());
         userDao.update(expected);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
@@ -39,6 +40,7 @@ public class UserDaoTest {
     public void findAll() throws Exception {
         UserDao userDao = new UserDao();
         List<User> users = userDao.findAll();
-        assertEquals(1, users.size());
+        System.out.println(users.get(1).getName());
+        assertEquals(2, users.size());
     }
 }

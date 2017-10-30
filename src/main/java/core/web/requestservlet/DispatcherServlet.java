@@ -1,5 +1,7 @@
 package core.web.requestservlet;
 
+import java.io.IOException;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +29,11 @@ public class DispatcherServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse res) {
+	protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		RequestLine requestedLine = generateRequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod()));
 		Controller controller = rm.getController(requestedLine);
 		if (controller == null) {
+			res.sendError(HttpServletResponse.SC_NOT_FOUND);
 			System.err.println("No Controllers Found.");
 		}
 		try {
