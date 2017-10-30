@@ -3,33 +3,26 @@ package next.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import core.annotation.RequestMethod;
-
 public class RequestMapping {
-	Map<RequestMethod, Map<String, Controller>> requestMap;
+	Map<RequestMethod, Controller> requestMap;
 	public RequestMapping() {
-		requestMap = new HashMap<RequestMethod, Map<String, Controller>>();
-		initGetController();
-		initPostController();
+		requestMap = new HashMap<RequestMethod, Controller>();
+		initController();
 	}
-	public void initGetController() {
-		Map<String, Controller> controllerMap = new HashMap<String, Controller>();
-		controllerMap.put("/users", new ListUserController());
-		controllerMap.put("/users/loginForm", new LoginFormController());
-		controllerMap.put("/users/logout", new LogoutController());
-		controllerMap.put("/users/profile", new ProfileController());
-		controllerMap.put("/users/updateForm", new UpdateFormController());
-		requestMap.put(RequestMethod.GET, controllerMap);
+	public void initController() {
+		requestMap.put(new RequestMethod("/users", "GET"), new ListUserController());
+		requestMap.put(new RequestMethod("/users/loginForm", "GET"), new LoginFormController());
+		requestMap.put(new RequestMethod("/users/logout", "GET"), new LogoutController());
+		requestMap.put(new RequestMethod("/users/profile", "GET"), new ProfileController());
+		requestMap.put(new RequestMethod("/users/updateForm", "GET"), new UpdateFormController());
+		requestMap.put(new RequestMethod("/users/form", "GET"), new ForwardController("/user/form"));
+		
+		requestMap.put(new RequestMethod("/users/create", "POST"), new CreateUserController());
+		requestMap.put(new RequestMethod("/users/login", "POST"), new LoginController());
+		requestMap.put(new RequestMethod("/users/update", "POST"), new UpdateUserController());
+		
 	}
-	public void initPostController() {
-		Map<String, Controller> controllerMap = new HashMap<String, Controller>();
-		controllerMap.put("/users/create", new CreateUserController());
-		controllerMap.put("/users/login", new LoginController());
-		controllerMap.put("/users/update", new UpdateUserController());
-		requestMap.put(RequestMethod.POST, controllerMap);
-	}
-	public Controller getController(RequestMethod method, String url) {
-		Map<String, Controller> controllerMap = this.requestMap.get(method);
-		return controllerMap.containsKey(url) ? controllerMap.get(url) : null;
+	public Controller getMatchController(RequestMethod requestMethod) {
+		return this.requestMap.containsKey(requestMethod) ? this.requestMap.get(requestMethod) : null ;
 	}
 }
