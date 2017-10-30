@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,13 +23,20 @@ public class DispatcherServlet extends HttpServlet {
 		Controller controller = requestmapping.getController(req.getRequestURI());
 		try {
 			String view = controller.execute(req, resp);
-			JspView jspView = new JspView(view);
-			Map<String,Controller> model = new HashMap<>();
-			model.put(view, controller);
-			jspView.render(model, req, resp);
+			generateView(req, resp, controller, view);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	private void generateView(HttpServletRequest req, HttpServletResponse resp, Controller controller, String view)
+			throws IOException, ServletException {
+		Map<String,Controller> model = new HashMap<>();
+		model.put(view, controller);
+		if (view.startsWith("redirect:")) {
+		    resp.sendRedirect(view.substring("redirect:".length()));
+		}
+		RequestDispatcher rd = req.getRequestDispatcher(view);
+		rd.forward(req, resp);
 	}
 	
 
