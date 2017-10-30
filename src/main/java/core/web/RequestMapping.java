@@ -14,7 +14,7 @@ import next.controller.ProfileController;
 import next.controller.UpdateUserController;
 
 public class RequestMapping {
-	Map<String, Controller> controllers ;
+	private Map<String, Controller> controllers ;
 
 	public 	RequestMapping(){
 		init();
