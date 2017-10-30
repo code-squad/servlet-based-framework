@@ -11,7 +11,6 @@ public class ListUserController implements Controller {
 		if (!UserSessionUtils.isLogined(req.getSession())) {
             return "redirect:/users/loginForm";
         }
-
         req.setAttribute("users", DataBase.findAll());
 		return "/user/list.jsp";
 	}

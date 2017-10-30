@@ -9,7 +9,6 @@ public class ForwardController implements Controller {
 	public ForwardController(String url) {
 		this.url = url;
 	}
-	
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		return url + ".jsp";

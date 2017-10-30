@@ -23,6 +23,6 @@ public class RequestMapping {
 		
 	}
 	public Controller getMatchController(RequestMethod requestMethod) {
-		return this.requestMap.containsKey(requestMethod) ? this.requestMap.get(requestMethod) : null ;
+		return this.requestMap.containsKey(requestMethod) ? this.requestMap.get(requestMethod) : null;
 	}
 }
