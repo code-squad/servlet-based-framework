@@ -26,11 +26,9 @@ public class UserSessionUtils {
         if (!isLogined(session)) {
             return false;
         }
-
         if (user == null) {
             return false;
         }
-
         return user.isSameUser(getUserFromSession(session));
     }
 }
