@@ -6,22 +6,21 @@ import com.google.common.collect.Maps;
 
 import next.controller.Controller;
 import next.controller.CreateUserController;
-import next.controller.ForwardController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
 import next.controller.LogoutController;
 import next.controller.ProfileController;
-import next.controller.RedirectController;
 import next.controller.UpdateUserController;
 
 public class RequestMapping {
-	Map<String, Controller> controllers = Maps.newHashMap();
+	Map<String, Controller> controllers ;
 
 	public 	RequestMapping(){
 		init();
 	}
 	public void init() {
+		controllers = Maps.newHashMap();
 		controllers.clear();
 		controllers.put("/users/create", new CreateUserController());
 		controllers.put("/users/form", new CreateUserController());
@@ -36,9 +35,6 @@ public class RequestMapping {
 	}
 	
 	public Controller getController(String path) {
-		
-//		if(controllers.get(path)!=null) {
 			return controllers.get(path);
-//		}
 	}
 }
