@@ -50,7 +50,7 @@ public class UserDao {
 		pstmt.setString(2, originalUser.getName());
 		pstmt.setString(3, originalUser.getEmail());
 		pstmt.setString(4, originalUser.getUserId());
-		
+
 		pstmt.executeUpdate();
 
 		if (pstmt != null) {
@@ -60,7 +60,6 @@ public class UserDao {
 		if (con != null) {
 			con.close();
 		}
-		
 
 	}
 
