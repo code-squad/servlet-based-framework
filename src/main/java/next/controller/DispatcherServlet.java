@@ -16,11 +16,7 @@ import org.slf4j.LoggerFactory;
 public class DispatcherServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 	private static final long serialVersionUID = 1L;
-	private static RequestMapping requestMapper;
-
-	public DispatcherServlet() {
-		requestMapper = new RequestMapping();
-	}
+	private static final RequestMapping requestMapper = new RequestMapping();
 	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

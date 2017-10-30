@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestMapping {
-	Map<RequestMethod, Controller> requestMap;
+	private Map<RequestMethod, Controller> requestMap;
 	public RequestMapping() {
 		requestMap = new HashMap<RequestMethod, Controller>();
 		initController();
