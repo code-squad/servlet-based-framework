@@ -15,7 +15,7 @@ public class ProfileController implements Controller {
 		User user = DataBase.findUserById(userId);
 
 		if (user == null) {
-			throw new NullPointerException("No user matches with your request.");
+			throw new RuntimeException("No user matches with your request.");
 		}
 		ModelAndView mav = new ModelAndView(new JspView("/user/profile.jsp"));
 		mav.addObject("user", user);

@@ -9,11 +9,12 @@ import core.mvc.controller.CreateUserController;
 import core.mvc.controller.HomeController;
 import core.mvc.controller.LoginController;
 import core.mvc.controller.LoginPostController;
-import core.mvc.controller.UserJoinFormController;;
+import core.mvc.controller.UserJoinFormController;
 
 public class RequestMapping {
 
 	private static RequestMapping rm;
+	private Map<RequestLine, Controller> controllers = new HashMap<>();
 
 	private RequestMapping() {
 
@@ -25,8 +26,6 @@ public class RequestMapping {
 		}
 		return rm;
 	}
-
-	private Map<RequestLine, Controller> controllers = new HashMap<>();
 
 	public void addController(Controller controller, RequestLine line) {
 		this.controllers.put(line, controller);
