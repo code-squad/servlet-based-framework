@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.qos.logback.classic.net.SyslogAppender;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 

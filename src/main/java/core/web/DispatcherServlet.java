@@ -15,11 +15,10 @@ import next.controller.Controller;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
-	
+	RequestMapping requestmapping= new RequestMapping();
 	@Override
 	public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		RequestMapping requestmapping = new RequestMapping();
-		requestmapping.init();
+
 		Controller controller = requestmapping.getController(req.getRequestURI());
 		try {
 			String view = controller.execute(req, resp);
