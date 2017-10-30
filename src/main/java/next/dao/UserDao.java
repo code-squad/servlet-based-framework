@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.qos.logback.classic.net.SyslogAppender;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 
@@ -36,12 +38,55 @@ public class UserDao {
     }
 
     public void update(User user) throws SQLException {
-        // TODO 구현 필요함.
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            con = ConnectionManager.getConnection();
+            String sql = "UPDATE USERS SET password=?,name=?,email=? WHERE userId=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, user.getPassword());
+            pstmt.setString(2, user.getName());
+            pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getUserId());
+
+            pstmt.executeUpdate();
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 
     public List<User> findAll() throws SQLException {
-        // TODO 구현 필요함.
-        return new ArrayList<User>();
+        Connection con = null;
+        ResultSet rs ;
+        Statement stmt;
+        List<User> users = new ArrayList<User>();
+        try {
+            con = ConnectionManager.getConnection();
+            String sql = "SELECT * FROM USERS";
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(sql);
+    		while (rs.next()) {
+    			String userId = rs.getString("userId");
+    			String password = rs.getString("password");
+    			String name = rs.getString("name");
+    			String email = rs.getString("email");
+    			System.out.printf("%s, %s, %s, %s\n", userId, password, name, email);
+    			users.add(new User(userId,password,name,email));
+    		}
+        } finally {
+
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return users;
     }
 
     public User findByUserId(String userId) throws SQLException {
