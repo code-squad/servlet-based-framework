@@ -8,7 +8,7 @@ public abstract class InsertJdbcManager {
 
 	private String sql;
 
-	public void insert() throws SQLException {
+	public void executeQuery() throws SQLException {
 		String sql = createSql();
 		Connection conn = ConnectionManager.getConnection();
 		PreparedStatement pstmt = null;

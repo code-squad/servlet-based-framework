@@ -29,7 +29,7 @@ public class UserDao {
 			}
 
 		};
-		manager.insert();
+		manager.executeQuery();
 	}
 
 	public void update(User user) throws SQLException {
