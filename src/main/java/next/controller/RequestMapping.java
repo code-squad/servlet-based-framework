@@ -4,12 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestMapping {
-	private Map<RequestMethod, Controller> requestMap;
-	public RequestMapping() {
+	private static final Map<RequestMethod, Controller> requestMap;
+	static {
 		requestMap = new HashMap<RequestMethod, Controller>();
-		initController();
-	}
-	public void initController() {
 		requestMap.put(new RequestMethod("/users", "GET"), new ListUserController());
 		requestMap.put(new RequestMethod("/users/loginForm", "GET"), new LoginFormController());
 		requestMap.put(new RequestMethod("/users/logout", "GET"), new LogoutController());
@@ -20,9 +17,8 @@ public class RequestMapping {
 		requestMap.put(new RequestMethod("/users/create", "POST"), new CreateUserController());
 		requestMap.put(new RequestMethod("/users/login", "POST"), new LoginController());
 		requestMap.put(new RequestMethod("/users/update", "POST"), new UpdateUserController());
-		
 	}
 	public Controller getMatchController(RequestMethod requestMethod) {
-		return this.requestMap.containsKey(requestMethod) ? this.requestMap.get(requestMethod) : null;
+		return requestMap.containsKey(requestMethod) ? requestMap.get(requestMethod) : null;
 	}
 }
