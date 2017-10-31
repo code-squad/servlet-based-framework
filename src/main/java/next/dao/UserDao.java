@@ -6,14 +6,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 import core.jdbc.FindAllJdbcManager;
-import core.jdbc.JdbcManager;
+import core.jdbc.InsertJdbcManager;
 import core.jdbc.SelectJdbcManager;
 import core.jdbc.UpdateJdbcManager;
 import next.model.User;
 
 public class UserDao {
 	public void insert(User user) throws SQLException {
-		JdbcManager manager = new JdbcManager() {
+		InsertJdbcManager manager = new InsertJdbcManager() {
 
 			@Override
 			public String createSql() {
