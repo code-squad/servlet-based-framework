@@ -1,16 +1,8 @@
 package core.jdbc;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import next.dao.UserDao;
-import next.model.User;
 
 public abstract class JdbcManager {
 

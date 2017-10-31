@@ -1,13 +1,10 @@
 package next.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import core.jdbc.ConnectionManager;
 import core.jdbc.FindAllJdbcManager;
 import core.jdbc.JdbcManager;
 import core.jdbc.SelectJdbcManager;
