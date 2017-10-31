@@ -13,7 +13,6 @@ public class RequestMapping {
 		requestMap.put(new RequestMethod("/users/profile", "GET"), new ProfileController());
 		requestMap.put(new RequestMethod("/users/updateForm", "GET"), new UpdateFormController());
 		requestMap.put(new RequestMethod("/users/form", "GET"), new ForwardController("/user/form"));
-		
 		requestMap.put(new RequestMethod("/users/create", "POST"), new CreateUserController());
 		requestMap.put(new RequestMethod("/users/login", "POST"), new LoginController());
 		requestMap.put(new RequestMethod("/users/update", "POST"), new UpdateUserController());
