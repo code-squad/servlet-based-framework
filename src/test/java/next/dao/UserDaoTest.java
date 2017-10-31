@@ -20,7 +20,7 @@ public class UserDaoTest {
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
     }
-
+    
     @Test
     public void crud() throws Exception {
         User expected = new User("userId", "password", "name", "javajigi@email.com");
