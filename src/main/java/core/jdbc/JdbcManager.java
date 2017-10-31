@@ -19,11 +19,11 @@ public abstract class JdbcManager {
 		this.sql = sql;
 	}
 
-	public void executeQuery() throws SQLException {
+	public void executeQuery(PreparedStatementSetter pstmts) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(this.sql);
-			setParameters(pstmt);
+			pstmts.generatePstmt(pstmt);
 
 			pstmt.executeUpdate();
 		} finally {
@@ -36,52 +36,50 @@ public abstract class JdbcManager {
 		}
 	}
 
-	public User find() {
+	public User find(PreparedStatementSetter pstmts, RowMapper<User> rm) {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		User user = null;
+		ResultSet rs;
 
 		conn = ConnectionManager.getConnection();
 		try {
 
 			pstmt = conn.prepareStatement(sql);
-			setParameters(pstmt);
+			pstmts.generatePstmt(pstmt);
 			rs = pstmt.executeQuery();
-
-			user = mapRow(rs);
+			return rm.mapRow(rs);
+			
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
-		return user;
+
+		return null;
 
 	}
-	
-	public List<User> findAll(){
-		List<User> userlist = new ArrayList<User>();
+
+	public List<User> findAll(RowMapper<List<User>> rm) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		con = ConnectionManager.getConnection();
+
 		try {
-		pstmt = con.prepareStatement(sql);
-
-		rs = pstmt.executeQuery();
-
-		while (rs.next()) {
-			userlist.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-					rs.getString("email")));
-		}
-		}
-		catch(SQLException e) {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			return rm.mapRow(rs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return userlist;
+		return null;
+
+		/*
+		 * while (rs.next()) { userlist.add(new User(rs.getString("userId"),
+		 * rs.getString("password"), rs.getString("name"), rs.getString("email"))); } }
+		 * catch(SQLException e) { e.printStackTrace(); }
+		 */
+
 	}
-
-	public abstract void setParameters(PreparedStatement pstmt) throws SQLException;
-
-	public abstract User mapRow(ResultSet rs) throws SQLException;
 
 }

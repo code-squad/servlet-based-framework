@@ -1,12 +1,10 @@
 package next.dao;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import core.jdbc.FindAllJdbcManager;
-import core.jdbc.FindJdbcManager;
 import core.jdbc.JdbcManager;
 import next.model.User;
 
@@ -16,21 +14,17 @@ public class UserDao {
 
 		JdbcManager manager = new JdbcManager(sql) {
 
-			@Override
-			public void setParameters(PreparedStatement pstmt) throws SQLException {
+		};
+		manager.executeQuery(pstmt -> {
+			try {
 				pstmt.setString(1, user.getUserId());
 				pstmt.setString(2, user.getPassword());
 				pstmt.setString(3, user.getName());
 				pstmt.setString(4, user.getEmail());
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-
-			@Override
-			public User mapRow(ResultSet rs) {
-				return null;
-			}
-
-		};
-		manager.executeQuery();
+		});
 	}
 
 	public void update(User user) throws SQLException {
@@ -40,62 +34,55 @@ public class UserDao {
 
 		JdbcManager jdbm = new JdbcManager(sql) {
 
-			@Override
-			public void setParameters(PreparedStatement pstmt) throws SQLException {
+		};
+		jdbm.executeQuery(pstmt -> {
+
+			try {
 				pstmt.setString(1, originalUser.getPassword());
 				pstmt.setString(2, originalUser.getName());
 				pstmt.setString(3, originalUser.getEmail());
 				pstmt.setString(4, originalUser.getUserId());
 
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-
-			@Override
-			public User mapRow(ResultSet rs) {
-				return null;
-			}
-		};
-		jdbm.executeQuery();
+		});
 	}
 
 	public List<User> findAll() throws SQLException {
 		String sql = "SELECT userId, password, name, email FROM USERS";
 		JdbcManager fjdbm = new JdbcManager(sql) {
 
-			@Override
-			public void setParameters(PreparedStatement pstmt) throws SQLException {
-
-			}
-
-			@Override
-			public User mapRow(ResultSet rs) throws SQLException {
-				return null;
-			}
-
 		};
-		return fjdbm.findAll();
+		return fjdbm.findAll(rs -> {
+			List<User> userlist = new ArrayList<>();
+			while (rs.next()) {
+				userlist.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+						rs.getString("email")));
+			}
+			return userlist;
+		});
 	}
 
 	public User findByUserId(String userId) throws SQLException {
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
 		JdbcManager sjdbm = new JdbcManager(sql) {
 
-			@Override
-			public User mapRow(ResultSet rs) throws SQLException {
-				User user = null;
-				if (rs.next()) {
-					user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-							rs.getString("email"));
-				}
-				return user;
-			}
-
-			@Override
-			public void setParameters(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, userId);
-			}
 		};
 
-		return sjdbm.find();
+		return sjdbm.find(pstmt -> {
+			try {
+				pstmt.setString(1, userId);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}, rs -> {
+			if (rs.next()) {
+				return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+						rs.getString("email"));
+			}
+			return null;
+		});
 	}
 
 }
