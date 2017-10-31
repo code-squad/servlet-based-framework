@@ -24,7 +24,7 @@ public class JdbcTemplate {
 	public void update(String query, Object ...obj) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
-			createPreparedStatementSetter(pstmt);
+			createPreparedStatementSetter(obj).setValues(pstmt);
 			pstmt.executeUpdate();
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
@@ -73,7 +73,7 @@ public class JdbcTemplate {
 		User user = null;
 		try(Connection con = ConnectionManager.getConnection(); 
 				PreparedStatement pstmt = con.prepareStatement(query)) {
-				createPreparedStatementSetter(pstmt);
+				createPreparedStatementSetter(obj).setValues(pstmt);
 				rs = pstmt.executeQuery();
 			if(rs.next()) {
 				user = rm.mapRow(rs);
