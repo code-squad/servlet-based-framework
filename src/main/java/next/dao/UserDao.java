@@ -14,7 +14,7 @@ public class UserDao {
 		JdbcManager manager = new JdbcManager(sql) {
 
 		};
-		manager.executeQuery(pstmt -> {
+		manager.insertObject(pstmt -> {
 			try {
 				pstmt.setString(1, user.getUserId());
 				pstmt.setString(2, user.getPassword());
@@ -34,7 +34,7 @@ public class UserDao {
 		JdbcManager jdbm = new JdbcManager(sql) {
 
 		};
-		jdbm.executeQuery(pstmt -> {
+		jdbm.insertObject(pstmt -> {
 
 			try {
 				pstmt.setString(1, originalUser.getPassword());

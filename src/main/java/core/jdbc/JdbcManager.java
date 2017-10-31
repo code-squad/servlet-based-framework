@@ -19,7 +19,7 @@ public abstract class JdbcManager {
 		this.sql = sql;
 	}
 
-	public void executeQuery(PreparedStatementSetter pstmts) throws SQLException {
+	public void insertObject(PreparedStatementSetter pstmts) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(this.sql);
@@ -68,18 +68,10 @@ public abstract class JdbcManager {
 			rs = pstmt.executeQuery();
 			return rm.mapRow(rs);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return null;
-
-		/*
-		 * while (rs.next()) { userlist.add(new User(rs.getString("userId"),
-		 * rs.getString("password"), rs.getString("name"), rs.getString("email"))); } }
-		 * catch(SQLException e) { e.printStackTrace(); }
-		 */
-
 	}
 
 }
