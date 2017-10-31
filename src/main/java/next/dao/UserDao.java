@@ -8,110 +8,87 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.jdbc.ConnectionManager;
+import core.jdbc.FindAllJdbcManager;
+import core.jdbc.JdbcManager;
+import core.jdbc.SelectJdbcManager;
+import core.jdbc.UpdateJdbcManager;
 import next.model.User;
 
 public class UserDao {
 	public void insert(User user) throws SQLException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		try {
-			con = ConnectionManager.getConnection();
-			String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, user.getUserId());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getName());
-			pstmt.setString(4, user.getEmail());
+		JdbcManager manager = new JdbcManager() {
 
-			pstmt.executeUpdate();
-		} finally {
-			if (pstmt != null) {
-				pstmt.close();
+			@Override
+			public String createSql() {
+				return "INSERT INTO USERS VALUES(?,?,?,?)";
 			}
 
-			if (con != null) {
-				con.close();
+			@Override
+			public void setParameter(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, user.getUserId());
+				pstmt.setString(2, user.getPassword());
+				pstmt.setString(3, user.getName());
+				pstmt.setString(4, user.getEmail());
 			}
-		}
+
+		};
+		manager.insert();
 	}
 
 	public void update(User user) throws SQLException {
 		User originalUser = findByUserId(user.getUserId());
 		originalUser.update(user);
 
-		Connection con = null;
-		PreparedStatement pstmt = null;
+		UpdateJdbcManager ujdbm = new UpdateJdbcManager() {
 
-		con = ConnectionManager.getConnection();
-		String sql = "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
-		pstmt = con.prepareStatement(sql);
+			@Override
+			public String createSql() {
+				return "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
+			}
 
-		pstmt.setString(1, originalUser.getPassword());
-		pstmt.setString(2, originalUser.getName());
-		pstmt.setString(3, originalUser.getEmail());
-		pstmt.setString(4, originalUser.getUserId());
+			@Override
+			public void setParameters(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, originalUser.getPassword());
+				pstmt.setString(2, originalUser.getName());
+				pstmt.setString(3, originalUser.getEmail());
+				pstmt.setString(4, originalUser.getUserId());
 
-		pstmt.executeUpdate();
-
-		if (pstmt != null) {
-			pstmt.close();
-		}
-
-		if (con != null) {
-			con.close();
-		}
-
+			}
+		};
+		ujdbm.executeQuery();
 	}
 
 	public List<User> findAll() throws SQLException {
-		List<User> userlist = new ArrayList<User>();
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		FindAllJdbcManager fjdbm = new FindAllJdbcManager() {
 
-		con = ConnectionManager.getConnection();
-		String sql = "SELECT userId, password, name, email FROM USERS";
-		pstmt = con.prepareStatement(sql);
+			@Override
+			public String createSql() {
+				return "SELECT userId, password, name, email FROM USERS";
+			}
 
-		rs = pstmt.executeQuery();
-
-		while (rs.next()) {
-			userlist.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-					rs.getString("email")));
-		}
-
-		return userlist;
+		};
+		return fjdbm.findAll();
 	}
 
 	public User findByUserId(String userId) throws SQLException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			con = ConnectionManager.getConnection();
-			String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, userId);
+		SelectJdbcManager sjdbm = new SelectJdbcManager() {
 
-			rs = pstmt.executeQuery();
-
-			User user = null;
-			if (rs.next()) {
-				user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-						rs.getString("email"));
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				User user = null;
+				if (rs.next()) {
+					user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+							rs.getString("email"));
+				}
+				return user;
 			}
 
-			return user;
-		} finally {
-			if (rs != null) {
-				rs.close();
+			@Override
+			public void setParameters(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, userId);
 			}
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (con != null) {
-				con.close();
-			}
-		}
+		};
+		return sjdbm.executeQuery();
 	}
+
 }
