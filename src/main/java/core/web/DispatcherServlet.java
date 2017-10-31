@@ -3,6 +3,7 @@ package core.web;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -38,7 +39,9 @@ public class DispatcherServlet extends HttpServlet {
 		model.put(view, controller);
 		if (view.startsWith("redirect:")) {
 		    resp.sendRedirect(view.substring("redirect:".length()));
+		    return;
 		}
+
 		RequestDispatcher rd = req.getRequestDispatcher(view);
 		rd.forward(req, resp);
 	}

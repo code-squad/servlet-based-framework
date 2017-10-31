@@ -24,7 +24,7 @@ public class RequestMapping {
 		controllers.clear();
 		controllers.put("/users/create", new CreateUserController());
 		controllers.put("/users/form", new CreateUserController());
-		controllers.put("/user/login", new LoginController());
+		controllers.put("/users/login", new LoginController());
 		controllers.put("/users/loginForm", new LoginController());
 		controllers.put("/users/logout", new LogoutController());
 		controllers.put("/users/profile", new ProfileController());
