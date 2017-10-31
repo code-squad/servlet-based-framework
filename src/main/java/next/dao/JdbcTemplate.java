@@ -14,7 +14,7 @@ public abstract class JdbcTemplate {
 		try {
 			con = ConnectionManager.getConnection();
 			pstmt = con.prepareStatement(craeteQuery());
-			setValues(user, pstmt);
+			setValues(pstmt);
 			pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -25,6 +25,6 @@ public abstract class JdbcTemplate {
 				pstmt.close();
 		}
 	}
-	public abstract void setValues(User user, PreparedStatement pstmt) throws SQLException;
+	public abstract void setValues(PreparedStatement pstmt) throws SQLException;
 	public abstract String craeteQuery();
 }

@@ -14,7 +14,7 @@ public class UserDao {
     public void insert(User user) throws SQLException {
     		JdbcTemplate insertTemplate = new JdbcTemplate() {
 				@Override
-				public void setValues(User user, PreparedStatement pstmt) throws SQLException {
+				public void setValues(PreparedStatement pstmt) throws SQLException {
 					pstmt.setString(1, user.getUserId());
 					pstmt.setString(2, user.getPassword());
 					pstmt.setString(3, user.getName());
@@ -30,7 +30,7 @@ public class UserDao {
     public void update(User user) throws SQLException {
     		JdbcTemplate updateTemplate = new JdbcTemplate() {
 				@Override
-				public void setValues(User user, PreparedStatement pstmt) throws SQLException {
+				public void setValues(PreparedStatement pstmt) throws SQLException {
 					// TODO Auto-generated method stub
 					pstmt.setString(1, user.getPassword());
 			    		pstmt.setString(2, user.getName());
