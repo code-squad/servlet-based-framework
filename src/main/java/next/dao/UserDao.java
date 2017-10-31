@@ -20,13 +20,13 @@ public class UserDao {
 				pstmt.setString(3, user.getName());
 				pstmt.setString(4, user.getEmail());
 			}
-
 			@Override
-			public String craeteQuery() {
-				return "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+			public Object mapRow(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
-		insertTemplate.update(user);
+		insertTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)");
 	}
 
 	public void update(User user) throws SQLException {
@@ -41,16 +41,16 @@ public class UserDao {
 			}
 
 			@Override
-			public String craeteQuery() {
+			public Object mapRow(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return "UPDATE USERS set password=?, name=?, email=? WHERE userId=?";
+				return null;
 			}
 		};
-		updateTemplate.update(user);
+		updateTemplate.update("UPDATE USERS set password=?, name=?, email=? WHERE userId=?");
 	}
 
 	public List<User> findAll() throws SQLException {
-		SelectJdbcTemplate selectJdbcTemplate = new SelectJdbcTemplate() {
+		JdbcTemplate selectJdbcTemplate = new JdbcTemplate() {
 
 			@Override
 			public void setValues(PreparedStatement pstmt) {
@@ -67,7 +67,7 @@ public class UserDao {
 	}
 
 	public User findByUserId(String userId) throws SQLException {
-		SelectJdbcTemplate selectJdbcTemplate = new SelectJdbcTemplate() {
+		JdbcTemplate selectJdbcTemplate = new JdbcTemplate() {
 
 			@Override
 			public void setValues(PreparedStatement pstmt) throws SQLException {
