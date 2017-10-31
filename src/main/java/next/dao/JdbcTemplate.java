@@ -8,21 +8,14 @@ import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public abstract class JdbcTemplate {
-	public void update(User user) throws SQLException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		try {
-			con = ConnectionManager.getConnection();
-			pstmt = con.prepareStatement(craeteQuery());
+	public void update(User user) {
+		try(Connection con = ConnectionManager.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(craeteQuery());){
 			setValues(pstmt);
 			pstmt.executeUpdate();
 		}catch(Exception e) {
+			//throw new ~~Exception
 			e.printStackTrace();
-		}finally {
-			if(con!=null)
-				con.close();
-			if(pstmt!=null)
-				pstmt.close();
 		}
 	}
 	public abstract void setValues(PreparedStatement pstmt) throws SQLException;
