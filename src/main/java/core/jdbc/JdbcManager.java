@@ -9,7 +9,7 @@ import java.util.List;
 
 import next.model.User;
 
-public abstract class JdbcManager {
+public class JdbcManager {
 
 	private String sql;
 	private Connection conn = ConnectionManager.getConnection();
