@@ -12,26 +12,28 @@ public class JdbcManager {
 
 	private Connection conn = ConnectionManager.getConnection();
 
-	
-
-	public void insertObject(PreparedStatementSetter pstmts, String sql) throws SQLException {
+	public void insertObject(PreparedStatementSetter pstmts, String sql) {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmts.generatePstmt(pstmt);
 
 			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
 		} finally {
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (conn != null) {
-				conn.close();
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new DataAccessException(e);
 			}
 		}
 	}
-	
-
 
 	public User find(PreparedStatementSetter pstmts, String sql, RowMapper<User> rm) {
 		PreparedStatement pstmt = null;
@@ -44,12 +46,10 @@ public class JdbcManager {
 			pstmts.generatePstmt(pstmt);
 			rs = pstmt.executeQuery();
 			return rm.mapRow(rs);
-			
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-		}
 
-		return null;
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
 
 	}
 
@@ -65,10 +65,8 @@ public class JdbcManager {
 			rs = pstmt.executeQuery();
 			return rm.mapRow(rs);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DataAccessException(e);
 		}
-
-		return null;
 	}
 
 }
