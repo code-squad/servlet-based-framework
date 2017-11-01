@@ -1,10 +1,8 @@
 package next.dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import core.jdbc.DataAccessException;
 import core.jdbc.JdbcManager;
 import next.model.User;
 
@@ -42,7 +40,8 @@ public class UserDao {
 
 		};
 		return fjdbm.findAll(sql, rs -> {
-			return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"), rs.getString("email"));
+			return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+					rs.getString("email"));
 		});
 	}
 
