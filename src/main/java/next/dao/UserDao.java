@@ -11,9 +11,7 @@ public class UserDao {
 	public void insert(User user) throws SQLException {
 		String sql = "INSERT INTO USERS VALUES(?,?,?,?)";
 
-		JdbcManager manager = new JdbcManager(sql) {
-
-		};
+		JdbcManager manager = new JdbcManager();
 		manager.insertObject(pstmt -> {
 			try {
 				pstmt.setString(1, user.getUserId());
@@ -23,7 +21,7 @@ public class UserDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		});
+		}, sql);
 	}
 
 	public void update(User user) throws SQLException {
@@ -31,7 +29,7 @@ public class UserDao {
 		originalUser.update(user);
 		String sql = "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
 
-		JdbcManager jdbm = new JdbcManager(sql) {
+		JdbcManager jdbm = new JdbcManager() {
 
 		};
 		jdbm.insertObject(pstmt -> {
@@ -45,15 +43,15 @@ public class UserDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		});
+		}, sql);
 	}
 
 	public List<User> findAll() throws SQLException {
 		String sql = "SELECT userId, password, name, email FROM USERS";
-		JdbcManager fjdbm = new JdbcManager(sql) {
+		JdbcManager fjdbm = new JdbcManager() {
 
 		};
-		return fjdbm.findAll(rs -> {
+		return fjdbm.findAll(sql, rs -> {
 			List<User> userlist = new ArrayList<>();
 			while (rs.next()) {
 				userlist.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
@@ -65,7 +63,7 @@ public class UserDao {
 
 	public User findByUserId(String userId) throws SQLException {
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
-		JdbcManager sjdbm = new JdbcManager(sql) {
+		JdbcManager sjdbm = new JdbcManager() {
 
 		};
 
@@ -75,7 +73,7 @@ public class UserDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}, rs -> {
+		}, sql, rs -> {
 			if (rs.next()) {
 				return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
 						rs.getString("email"));

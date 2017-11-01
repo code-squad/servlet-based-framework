@@ -10,18 +10,14 @@ import next.model.User;
 
 public class JdbcManager {
 
-	private String sql;
 	private Connection conn = ConnectionManager.getConnection();
 
-	public JdbcManager(String sql) {
+	
 
-		this.sql = sql;
-	}
-
-	public void insertObject(PreparedStatementSetter pstmts) throws SQLException {
+	public void insertObject(PreparedStatementSetter pstmts, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(this.sql);
+			pstmt = conn.prepareStatement(sql);
 			pstmts.generatePstmt(pstmt);
 
 			pstmt.executeUpdate();
@@ -34,8 +30,10 @@ public class JdbcManager {
 			}
 		}
 	}
+	
 
-	public User find(PreparedStatementSetter pstmts, RowMapper<User> rm) {
+
+	public User find(PreparedStatementSetter pstmts, String sql, RowMapper<User> rm) {
 		PreparedStatement pstmt = null;
 		ResultSet rs;
 
@@ -55,7 +53,7 @@ public class JdbcManager {
 
 	}
 
-	public List<User> findAll(RowMapper<List<User>> rm) {
+	public List<User> findAll(String sql, RowMapper<List<User>> rm) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
