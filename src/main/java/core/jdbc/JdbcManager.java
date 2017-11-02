@@ -7,34 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.db.exceptions.MultipleDataException;
 import next.model.User;
 
 public class JdbcManager {
 
 	private Connection conn = ConnectionManager.getConnection();
 
-	public void insertObject(PreparedStatementSetter pstmts, String sql) {
-		PreparedStatement pstmt = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmts.generatePstmt(pstmt);
-
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DataAccessException(e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				throw new DataAccessException(e);
-			}
-		}
-	}
 
 	public void insertObject(String sql, Object... objects) {
 		PreparedStatement pstmt = null;
@@ -48,64 +27,33 @@ public class JdbcManager {
 		}
 	}
 
-	public User find(PreparedStatementSetter pstmts, String sql, RowMapper<User> rm) {
-		PreparedStatement pstmt = null;
-		ResultSet rs;
-
-		conn = ConnectionManager.getConnection();
-		try {
-
-			pstmt = conn.prepareStatement(sql);
-			pstmts.generatePstmt(pstmt);
-			rs = pstmt.executeQuery();
-			return rm.mapRow(rs);
-
-		} catch (SQLException e) {
-			throw new DataAccessException(e);
+	public <T> T find(String sql, RowMapper<T> rm, Object... objects) {
+		List<T> objectList = findAll(sql, rm, objects);
+		if (objectList.isEmpty()) {
+			return null;
 		}
-
+		if (objectList.size() > 1) {
+			throw new MultipleDataException(MultipleDataException.STANDARD_MULTI_DATA_ERR_MSG); 
+		}
+		return objectList.get(0);
 	}
 
-	public User find(String sql, RowMapper<User> rm, Object... objects) {
+	public <T> List<T> findAll(String sql, RowMapper<T> rm, Object... objects) {
 		PreparedStatement pstmt = null;
-		ResultSet rs;
-		User user = null;
-
-		conn = ConnectionManager.getConnection();
+		ResultSet rs = null;
+		List<T> objectList = new ArrayList<T>();
 
 		try {
-
 			pstmt = conn.prepareStatement(sql);
 			setParameters(pstmt, objects);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				user = rm.mapRow(rs);
-			}
-			return user;
-		} catch (SQLException e) {
-			throw new DataAccessException(e);
-		}
-
-	}
-
-	public List<User> findAll(String sql, RowMapper<User> rm) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<User> userlist = new ArrayList<User>();
-
-		con = ConnectionManager.getConnection();
-
-		try {
-			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				userlist.add(rm.mapRow(rs));
+				objectList.add(rm.mapRow(rs));
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
-		return userlist;
+		return objectList;
 	}
 
 	private void setParameters(PreparedStatement pstmt, Object... objects) {

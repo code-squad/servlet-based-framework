@@ -9,19 +9,9 @@ import next.model.User;
 public class UserDao {
 	public void insert(User user) {
 		String sql = "INSERT INTO USERS VALUES(?,?,?,?)";
-
 		JdbcManager manager = new JdbcManager();
-		manager.insertObject(pstmt -> {
 
-			try {
-				pstmt.setString(1, user.getUserId());
-				pstmt.setString(2, user.getPassword());
-				pstmt.setString(3, user.getName());
-				pstmt.setString(4, user.getEmail());
-			} catch (SQLException e) {
-
-			}
-		}, sql);
+		manager.insertObject(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
 	}
 
 	public void update(User user) {
