@@ -28,18 +28,60 @@ public class UserDao {
 		template.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
-	public List<User> findAll() {
+	public <T> List<T> findAll() {
 		JdbcTemplate template = new JdbcTemplate();
 
 		String sql = "SELECT * FROM USERS";
-		return template.query(sql);
+		return template.query(sql, new RowMapper() {
+
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+						rs.getString("email"));
+			}
+
+		});
 	}
 
-	public User findByUserId(String userId) {
+	public <T> T findByUserId(String userId) {
 		JdbcTemplate template = new JdbcTemplate();
 
-		String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-		return (User) template.queryForObject(sql, userId);
+		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId=?";
+		return (T) template.queryForObject(sql, new RowMapper() {
+
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+						rs.getString("email"));
+			}
+
+		}, userId);
 
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((con == null) ? 0 : con.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserDao other = (UserDao) obj;
+		if (con == null) {
+			if (other.con != null)
+				return false;
+		} else if (!con.equals(other.con))
+			return false;
+		return true;
+	}
+
 }

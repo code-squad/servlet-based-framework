@@ -72,7 +72,7 @@ public class Question {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(User obj) {
         if (this == obj)
             return true;
         if (obj == null)

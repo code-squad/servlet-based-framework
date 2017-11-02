@@ -11,37 +11,33 @@ import java.util.List;
 import next.model.User;
 
 public class JdbcTemplate {
-	ResultSet rs;
 
-	
-	public List query(String sql) {
-		List<User> users = new ArrayList<User>();
-		try (Connection con = ConnectionManager.getConnection(); Statement stmt = con.createStatement();) {
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				users.add(new User(rs.getString("userId"), rs.getString("password"),  rs.getString("name"), rs.getString("email")));
-			}
-		} catch (SQLException e) {
-			throw new DataAccessException(e);
-		}
-		return users;
-	}
 
-	public Object queryForObject(String sql, String userId) {
-		User user=null;
+	public <T> List<T> query(String sql,RowMapper<T> rowmapper, Object...parameter) {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
-			pstmt.setString(1, userId);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-						rs.getString("email"));
+			for (int i = 0; i < parameter.length; i++) {
+				pstmt.setString(i+1, (String) parameter[i]);
 			}
+			ResultSet rs = pstmt.executeQuery();
+
+			List<T> values = new ArrayList<>();
+			while (rs.next()) {
+				values.add(rowmapper.mapRow(rs));
+			}
+			return values;
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
-		return user;
 	}
+	
+	public <T> T queryForObject(String sql, RowMapper<T> rowmapper, Object...parameter) {
+		List<T> result = query(sql, rowmapper, parameter);
+		if (result.isEmpty()) {
+			return null;
+		}
+		return result.get(0);
 
+	}
 	public void update(String sql, Object...values) {
 		try (Connection con = ConnectionManager.getConnection();PreparedStatement pstmt = con.prepareStatement(sql); ) {
 			for (int i = 0; i < values.length; i++) {
@@ -53,5 +49,6 @@ public class JdbcTemplate {
 		}
 		
 	}
+
 
 }
