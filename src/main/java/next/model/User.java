@@ -47,12 +47,13 @@ public class User {
         return userId.equals(user.userId);
     }
 
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
@@ -85,9 +86,9 @@ public class User {
 		if (userId == null) {
 			if (other.userId != null)
 				return false;
-		} 
-			return userId.equals(other.userId);
-		
+		} else if (!userId.equals(other.userId))
+			return false;
+		return true;
 	}
 
 	@Override
