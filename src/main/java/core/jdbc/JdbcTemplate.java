@@ -16,16 +16,21 @@ public class JdbcTemplate {
 			for (int i = 0; i < parameter.length; i++) {
 				pstmt.setString(i+1, (String) parameter[i]);
 			}
-			ResultSet rs = pstmt.executeQuery();
-
-			List<T> values = new ArrayList<>();
-			while (rs.next()) {
-				values.add(rowmapper.mapRow(rs));
-			}
-			return values;
+			return setReponseQuery(rowmapper, pstmt);
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
+	}
+
+	private <T> List<T> setReponseQuery(RowMapper<T> rowmapper, PreparedStatement pstmt) throws SQLException {
+		ResultSet rs = pstmt.executeQuery();
+
+		List<T> values = new ArrayList<>();
+		while (rs.next()) {
+			values.add(rowmapper.mapRow(rs));
+		}
+		rs.close();
+		return values;
 	}
 	
 	public <T> T queryForObject(String sql, RowMapper<T> rowmapper, Object...parameter) {
