@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.db.exceptions.MultipleDataException;
-import next.model.User;
 
 public class JdbcManager {
 
