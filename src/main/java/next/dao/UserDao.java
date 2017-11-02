@@ -11,8 +11,7 @@ public class UserDao {
 		String sql = "INSERT INTO USERS VALUES(?,?,?,?)";
 		JdbcManager manager = new JdbcManager();
 
-		//manager.insertObject(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
-		manager.insertObject("USERS", user);
+		manager.insertObject(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
 	}
 
 	public void update(User user) {

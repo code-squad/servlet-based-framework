@@ -92,7 +92,6 @@ public class JdbcManager {
 
 	private void setParameters(PreparedStatement pstmt, Object o) {
 		Class<?> targetClass = o.getClass();
-		Schema sch = new Schema(targetClass);
 		
 		List<Object> objects = new ArrayList<Object>();
 		List<Method> getters = Arrays.asList(targetClass.getMethods()).stream()

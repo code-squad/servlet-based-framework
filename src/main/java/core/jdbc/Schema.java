@@ -1,7 +1,6 @@
 package core.jdbc;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ public class Schema {
 	}
 	
 	public boolean isCorrectPosition(int index, String fieldName) {
-		return items.get(index).toLowerCase().equals(fieldName.toLowerCase());
+		return items.get(index).equalsIgnoreCase(fieldName.toLowerCase());
 	}
 	
 	public String getField(int index) {
