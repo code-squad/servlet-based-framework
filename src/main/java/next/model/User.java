@@ -47,7 +47,7 @@ public class User {
         return userId.equals(user.userId);
     }
 
-    @Override
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -58,9 +58,7 @@ public class User {
 		return result;
 	}
 
-
-
-    @Override
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -87,9 +85,9 @@ public class User {
 		if (userId == null) {
 			if (other.userId != null)
 				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
-		return true;
+		} 
+			return userId.equals(other.userId);
+		
 	}
 
 	@Override
