@@ -1,19 +1,17 @@
 package next.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import core.jdbc.ConnectionManager;
 import core.jdbc.JdbcTemplate;
-import core.jdbc.PreparedStatementSetter;
 import core.jdbc.RowMapper;
 import next.model.User;
 
 public class UserDao {
-	Connection con = ConnectionManager.getConnection();
+	private Connection con = ConnectionManager.getConnection();
 
 	public void insert(User user) {
 		JdbcTemplate template = new JdbcTemplate();
