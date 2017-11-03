@@ -30,7 +30,7 @@ public class JdbcManager {
 		}
 	}
 
-	public void insertObject(String tableName, User object) {
+	public void insertObject(String tableName, Object object) {
 		PreparedStatement pstmt = null;
 
 		StringBuilder queryBuilder = new StringBuilder();
