@@ -11,7 +11,7 @@ import core.jdbc.ConnectionManager;
 
 public class JdbcTemplate {
 	
-	public void update(String query, String ...obj) {
+	public void update(String query, Object ...obj) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
 			createPreparedStatementSetter(obj).setValues(pstmt);
@@ -21,7 +21,7 @@ public class JdbcTemplate {
 		}
 	}
 	
-	public <T> List<T> query(String query, RowMapper<T> rm, String...obj){
+	public <T> List<T> query(String query, RowMapper<T> rm, Object...obj){
 		try(Connection con = ConnectionManager.getConnection(); 
 				PreparedStatement pstmt = con.prepareStatement(query);){	
 			createPreparedStatementSetter(obj).setValues(pstmt);
@@ -31,15 +31,16 @@ public class JdbcTemplate {
 		}
 	}
 	
-	public <T> T queryForObject(String query, RowMapper<T> rm, String...obj){
-		return query(query, rm, obj).get(0);
+	public <T> T queryForObject(String query, RowMapper<T> rm, Object...obj){
+		List<T> list = query(query, rm, obj);
+		return list.isEmpty() ? null : list.get(0);
 	}
 	
-	public PreparedStatementSetter createPreparedStatementSetter(String...obj) {
+	public PreparedStatementSetter createPreparedStatementSetter(Object...obj) {
 		return (pstmt) -> {
 			int index = 1;
-			for(String o : obj) {
-				pstmt.setString(index++, o);
+			for(Object o : obj) {
+				pstmt.setObject(index++, o);
 			}
 		};
 	}
