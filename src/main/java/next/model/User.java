@@ -46,6 +46,14 @@ public class User {
     public boolean isSameUser(User user) {
         return userId.equals(user.userId);
     }
+    
+    public static boolean isValid(User user) {
+    		return !empty(user.getUserId()) && !empty(user.getEmail()) && !empty(user.getName()) && !empty(user.getEmail());
+    }
+    
+    private static boolean empty(String s) {
+    		return s == null || s.trim().isEmpty();
+    }
 
     @Override
     public int hashCode() {
