@@ -9,7 +9,7 @@ import next.model.User;
 public class UserDao {
 	public void insert(User user) {
 		String sql = "INSERT INTO USERS VALUES(?,?,?,?)";
-		JdbcManager manager = new JdbcManager();
+		JdbcManager manager = JdbcManager.getInstance();
 
 		manager.insertObject(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
 	}
@@ -19,16 +19,14 @@ public class UserDao {
 		originalUser.update(user);
 
 		String sql = "UPDATE USERS SET PASSWORD = ?, NAME = ?, EMAIL = ? WHERE USERID = ?";
-		JdbcManager jdbm = new JdbcManager();
+		JdbcManager jdbm = JdbcManager.getInstance();
 		jdbm.insertObject(sql, originalUser.getPassword(), originalUser.getName(), originalUser.getEmail(),
 				originalUser.getUserId());
 	}
 
 	public List<User> findAll() throws SQLException {
 		String sql = "SELECT userId, password, name, email FROM USERS";
-		JdbcManager fjdbm = new JdbcManager() {
-
-		};
+		JdbcManager fjdbm =  JdbcManager.getInstance();
 		return fjdbm.findAll(sql, rs -> {
 			return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
 					rs.getString("email"));
@@ -37,7 +35,7 @@ public class UserDao {
 
 	public User findByUserId(String userId) {
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
-		JdbcManager sjdbm = new JdbcManager();
+		JdbcManager sjdbm = JdbcManager.getInstance();
 
 		return sjdbm.find(sql, rs -> {
 

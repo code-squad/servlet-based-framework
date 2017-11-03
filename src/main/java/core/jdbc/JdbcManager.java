@@ -15,7 +15,19 @@ import core.db.exceptions.MultipleDataException;
 
 public class JdbcManager {
 
+	private static JdbcManager jdbm;
 	private Connection conn = ConnectionManager.getConnection();
+
+	private JdbcManager() {
+
+	}
+
+	public static JdbcManager getInstance() {
+		if (jdbm == null) {
+			jdbm = new JdbcManager();
+		}
+		return jdbm;
+	}
 
 	public void insertObject(String sql, Object... objects) {
 		PreparedStatement pstmt = null;
@@ -91,10 +103,9 @@ public class JdbcManager {
 
 	private void setParameters(PreparedStatement pstmt, Object o) {
 		Class<?> targetClass = o.getClass();
-		
+
 		List<Object> objects = new ArrayList<Object>();
-		List<Method> getters = Arrays.asList(targetClass.getMethods()).stream()
-				.filter(m -> m.getName().contains("get"))
+		List<Method> getters = Arrays.asList(targetClass.getMethods()).stream().filter(m -> m.getName().contains("get"))
 				.collect(Collectors.toList());
 
 		try {
