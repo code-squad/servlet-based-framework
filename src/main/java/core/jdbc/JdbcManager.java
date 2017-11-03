@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import core.db.exceptions.MultipleDataException;
-import next.model.User;
 
 public class JdbcManager {
 
