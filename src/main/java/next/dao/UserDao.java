@@ -5,29 +5,23 @@ import java.util.List;
 import next.model.User;
 
 public class UserDao {
+	private static final UserDao userDao = new UserDao();
+	private UserDao() {}
+	public static UserDao getInstance() {
+		return userDao;
+	}
 	public void insert(User user) throws SQLException {
-		JdbcTemplate insertTemplate = new JdbcTemplate();
-		insertTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", (pstmt) -> {
-			pstmt.setString(1, user.getUserId());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getName());
-			pstmt.setString(4, user.getEmail());
-		});
+		JdbcTemplate insertTemplate = JdbcTemplate.getInstance();
+		insertTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
 	}
 
 	public void update(User user) throws SQLException {
-		JdbcTemplate updateTemplate = new JdbcTemplate();
-//		updateTemplate.update("UPDATE USERS set password=?, name=?, email=? WHERE userId=?", (pstmt) -> {
-//			pstmt.setString(1, user.getPassword());
-//			pstmt.setString(2, user.getName());
-//			pstmt.setString(3, user.getEmail());
-//			pstmt.setString(4, user.getUserId());
-//		});
+		JdbcTemplate updateTemplate = JdbcTemplate.getInstance();
 		updateTemplate.update("UPDATE USERS set password=?, name=?, email=? WHERE userId=?", user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
-	public List<User> findAll() throws SQLException {
-		JdbcTemplate selectJdbcTemplate = new JdbcTemplate();
+	public List<User> findAll() throws SQLException {	
+		JdbcTemplate selectJdbcTemplate = JdbcTemplate.getInstance();
 		return selectJdbcTemplate.query("SELECT UserId, password, name, email FROM USERS", (rs) -> {
 			return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
 					rs.getString("email"));
@@ -35,15 +29,7 @@ public class UserDao {
 	}
 
 	public User findByUserId(String userId) throws SQLException {
-		JdbcTemplate selectJdbcTemplate = new JdbcTemplate();
-//		return (User) selectJdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", 
-//				(rs) -> {
-//					return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-//							rs.getString("email"));
-//				},
-//				(pstmt) -> {
-//					pstmt.setString(1, userId);
-//		});
+		JdbcTemplate selectJdbcTemplate = JdbcTemplate.getInstance();
 		return (User) selectJdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", (rs) -> {
 			return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
 					rs.getString("email"));

@@ -8,9 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.jdbc.ConnectionManager;
-import next.model.User;
 
 public class JdbcTemplate {
+	private static final JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private JdbcTemplate() {}
+	public static JdbcTemplate getInstance() {
+		return jdbcTemplate;
+	}
+	
 	public void update(String query, PreparedStatementSetter pstmtSetter) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
@@ -20,84 +25,50 @@ public class JdbcTemplate {
 			throw new DataAccessException(e);
 		}
 	}
-	
 	public void update(String query, Object ...obj) {
-		try(Connection con = ConnectionManager.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(query);){
-			createPreparedStatementSetter(obj).setValues(pstmt);
-			pstmt.executeUpdate();
-		}catch(SQLException e) {
-			throw new DataAccessException(e);
-		}
+		update(query, createPreparedStatementSetter(obj));
 	}
 	
-	public List<User> query(String query, RowMapper<User> rm){
-		List<User> users = new ArrayList<User>();
+	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter){
 		try(Connection con = ConnectionManager.getConnection(); 
-				PreparedStatement pstmt = con.prepareStatement(query);
-				ResultSet rs = pstmt.executeQuery();){	
-			while(rs.next()) {
-				users.add(rm.mapRow(rs));
-			}
-		}catch(SQLException e) {
-			throw new DataAccessException(e);
-		}
-		return users;
-	}
-	
-	public Object queryForObject(String query, RowMapper<User> rm,  PreparedStatementSetter pstmtSetter){
-		ResultSet rs = null;
-		User user = null;
-		try(Connection con = ConnectionManager.getConnection(); 
-				PreparedStatement pstmt = con.prepareStatement(query)) {
+				PreparedStatement pstmt = con.prepareStatement(query);){	
 			pstmtSetter.setValues(pstmt);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				user = rm.mapRow(rs);
-			}
-			return user;
+			return getResultSetData(pstmt, rm);
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
-		}finally {
-			if(rs!=null)
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DataAccessException(e);
-				}
 		}
 	}
+	public <T> List<T> query(String query, RowMapper<T> rm, Object...obj){
+		return query(query, rm, createPreparedStatementSetter(obj));
+	}
 	
-	public Object queryForObject(String query, RowMapper<User> rm, Object...obj){
-		ResultSet rs = null;
-		User user = null;
-		try(Connection con = ConnectionManager.getConnection(); 
-				PreparedStatement pstmt = con.prepareStatement(query)) {
-				createPreparedStatementSetter(obj).setValues(pstmt);
-				rs = pstmt.executeQuery();
-			if(rs.next()) {
-				user = rm.mapRow(rs);
-			}
-			return user;
-		}catch(SQLException e) {
-			throw new DataAccessException(e);
-		}finally {
-			if(rs!=null)
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DataAccessException(e);
-				}
-		}
+	public <T> T queryForObject(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter) {
+		List<T> list = query(query, rm, pstmtSetter);
+		return list.isEmpty() ? null : list.get(0);
+	}
+	public <T> T queryForObject(String query, RowMapper<T> rm, Object...obj){
+		List<T> list = query(query, rm, obj);
+		return list.isEmpty() ? null : list.get(0);
 	}
 	
 	public PreparedStatementSetter createPreparedStatementSetter(Object...obj) {
 		return (pstmt) -> {
 			int index = 1;
 			for(Object o : obj) {
-				pstmt.setString(index++, (String)o);
-				//이게 이렇게 객체가 아닌 String을 받아오는게 맞나?
+				pstmt.setObject(index++, o);
 			}
 		};
+	}
+	
+	public <T> List<T> getResultSetData(PreparedStatement pstmt, RowMapper<T> rm){
+		List<T> lists = new ArrayList<T>();
+		try(ResultSet rs = pstmt.executeQuery()){
+			while(rs.next()) {
+				lists.add(rm.mapRow(rs));
+			}
+			return lists;
+		}catch(SQLException e) {
+			throw new DataAccessException(e);
+		}
 	}
 }
