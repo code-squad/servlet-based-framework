@@ -10,27 +10,42 @@ import java.util.List;
 import core.jdbc.ConnectionManager;
 
 public class JdbcTemplate {
+	private static final JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private JdbcTemplate() {}
+	public static JdbcTemplate getInstance() {
+		return jdbcTemplate;
+	}
 	
-	public void update(String query, Object ...obj) {
+	public void update(String query, PreparedStatementSetter pstmtSetter) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
-			createPreparedStatementSetter(obj).setValues(pstmt);
+			pstmtSetter.setValues(pstmt);
 			pstmt.executeUpdate();
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
+	public void update(String query, Object ...obj) {
+		update(query, createPreparedStatementSetter(obj));
+	}
 	
-	public <T> List<T> query(String query, RowMapper<T> rm, Object...obj){
+	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter){
 		try(Connection con = ConnectionManager.getConnection(); 
 				PreparedStatement pstmt = con.prepareStatement(query);){	
-			createPreparedStatementSetter(obj).setValues(pstmt);
+			pstmtSetter.setValues(pstmt);
 			return getResultSetData(pstmt, rm);
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
+	public <T> List<T> query(String query, RowMapper<T> rm, Object...obj){
+		return query(query, rm, createPreparedStatementSetter(obj));
+	}
 	
+	public <T> T queryForObject(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter) {
+		List<T> list = query(query, rm, pstmtSetter);
+		return list.isEmpty() ? null : list.get(0);
+	}
 	public <T> T queryForObject(String query, RowMapper<T> rm, Object...obj){
 		List<T> list = query(query, rm, obj);
 		return list.isEmpty() ? null : list.get(0);
