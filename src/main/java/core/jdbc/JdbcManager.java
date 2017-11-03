@@ -15,7 +15,7 @@ import core.db.exceptions.MultipleDataException;
 
 public class JdbcManager {
 
-	private static JdbcManager jdbm;
+	private static final JdbcManager jdbm = new JdbcManager();
 	private Connection conn = ConnectionManager.getConnection();
 
 	private JdbcManager() {
@@ -23,13 +23,10 @@ public class JdbcManager {
 	}
 
 	public static JdbcManager getInstance() {
-		if (jdbm == null) {
-			jdbm = new JdbcManager();
-		}
 		return jdbm;
 	}
 
-	public void insertObject(String sql, Object... objects) {
+	public final void insertObject(final String sql, Object... objects) {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
