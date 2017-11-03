@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/users/profile")
-public class ProfileController extends HttpServlet {
+public class ProfileController extends HttpServlet implements Controller{
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -26,4 +26,10 @@ public class ProfileController extends HttpServlet {
         RequestDispatcher rd = req.getRequestDispatcher("/user/profile.jsp");
         rd.forward(req, resp);
     }
+
+	@Override
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

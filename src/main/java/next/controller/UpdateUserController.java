@@ -16,7 +16,7 @@ import core.db.DataBase;
 import next.model.User;
 
 @WebServlet(value = { "/users/update", "/users/updateForm" })
-public class UpdateUserController extends HttpServlet {
+public class UpdateUserController extends HttpServlet implements Controller {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
@@ -45,4 +45,10 @@ public class UpdateUserController extends HttpServlet {
         user.update(updateUser);
         resp.sendRedirect("/");
     }
+
+	@Override
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

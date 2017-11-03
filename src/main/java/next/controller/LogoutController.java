@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet("/users/logout")
-public class LogoutController extends HttpServlet {
+public class LogoutController extends HttpServlet implements Controller{
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -19,4 +19,10 @@ public class LogoutController extends HttpServlet {
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
         resp.sendRedirect("/");
     }
+
+	@Override
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
