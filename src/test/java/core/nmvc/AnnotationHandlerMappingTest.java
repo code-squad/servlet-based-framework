@@ -14,6 +14,7 @@ public class AnnotationHandlerMappingTest {
         handlerMapping.initialize();
     }
 
+
     @Test
     public void getHandler() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/users/findUserId");

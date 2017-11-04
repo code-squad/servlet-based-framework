@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,21 @@ public class ReflectionTest {
     }
     
     @Test
+    public void useConstructorFromReflection() {
+    		Class<Student> parsedClass = Student.class;
+    		Student stu = null;
+    		
+    		try {
+				stu = (Student) Arrays.asList(parsedClass.getDeclaredConstructors()).stream().findFirst().get().newInstance((Object[]) null);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | SecurityException e) {
+				logger.error(e.getMessage());
+			}
+    		
+    		assertTrue(stu instanceof Student);
+    }
+    
+    @Test
     public void privateFieldAccess() {
     		Student stu = new Student();
     		Class<Student> parsedClass = Student.class;
@@ -38,7 +54,7 @@ public class ReflectionTest {
 				nameField.set(stu, "재성");
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
     		logger.debug(stu.getName());
     		assertEquals("재성", stu.getName());
