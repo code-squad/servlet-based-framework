@@ -2,6 +2,8 @@ package next.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -27,5 +29,12 @@ public class QuestionDaoTest {
         expected.setQuestionId(questionDao.insert(expected));
         Question actual = questionDao.findByQuestionId(expected.getQuestionId());
         assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void findAll() throws Exception {
+    		QuestionDao questionDao = QuestionDao.getInstance();
+        List<Question> users = questionDao.findAll();
+        assertEquals(8, users.size());
     }
 }

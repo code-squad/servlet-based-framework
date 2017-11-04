@@ -1,5 +1,7 @@
 package next.dao;
 
+import java.util.List;
+
 import next.model.Question;
 
 public class QuestionDao {
@@ -24,5 +26,15 @@ public class QuestionDao {
 	                	return new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"), null,
 	                            rs.getTimestamp("createdDate"), rs.getInt("countOfAnswer"));
                 }, questionId);
+	}
+
+	public List<Question> findAll() {
+		// TODO Auto-generated method stub
+		JdbcTemplate selectTemplate = JdbcTemplate.getInstance();
+		return selectTemplate.query("SELECT questionId, writer, title, createdDate, countOfAnswer FROM QUESTIONS "
+                + "order by questionId desc" , (rs) -> {
+	                	return new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"), null,
+	                            rs.getTimestamp("createdDate"), rs.getInt("countOfAnswer"));
+                });
 	}
 }

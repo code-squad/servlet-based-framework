@@ -7,6 +7,7 @@ public class RequestMapping {
 	private static final Map<RequestMethod, Controller> requestMap;
 	static {
 		requestMap = new HashMap<RequestMethod, Controller>();
+		requestMap.put(new RequestMethod("/", "GET"), new HomeController());
 		requestMap.put(new RequestMethod("/users", "GET"), new ListUserController());
 		requestMap.put(new RequestMethod("/users/loginForm", "GET"), new ForwardController("/user/login"));
 		requestMap.put(new RequestMethod("/users/logout", "GET"), new LogoutController());
