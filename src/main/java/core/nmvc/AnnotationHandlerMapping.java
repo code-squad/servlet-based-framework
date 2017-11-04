@@ -24,21 +24,17 @@ public class AnnotationHandlerMapping {
 
 	@SuppressWarnings("unchecked")
 	public void initialize() {
-
 		ControllerScanner cs = new ControllerScanner(this.basePackage);
 		cs.findControllers();
 
-		Set<Class<?>> controllerClasses = cs.getAnnotatedClasses();
+		cs.getAnnotatedClasses().stream().forEach(c -> {
+			ReflectionUtils.getAllMethods(c, ReflectionUtils.withAnnotation(RequestMapping.class)).stream()
+					.forEach(m -> {
+						RequestMapping rm = m.getAnnotation(RequestMapping.class);
+						this.handlerExecutions.put(new HandlerKey(rm.value(), rm.method()), new HandlerExecution(c, m));
+					});
 
-		for (Class<?> c : controllerClasses) {
-			Set<Method> annotatedMethods = ReflectionUtils.getAllMethods(c,
-					ReflectionUtils.withAnnotation(RequestMapping.class));
-			for (Method m : annotatedMethods) {
-				RequestMapping rm = m.getAnnotation(RequestMapping.class);
-
-				this.handlerExecutions.put(new HandlerKey(rm.value(), rm.method()), new HandlerExecution(c, m));
-			}
-		}
+		});
 	}
 
 	public HandlerExecution getHandler(HttpServletRequest request) {

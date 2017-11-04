@@ -17,7 +17,7 @@ public class ControllerScannerTest {
 	@Test
 	public void test() {
 		cs.findControllers();
-		assertTrue(cs.getControllers(MyController.class) instanceof MyController);
+		assertTrue(cs.getControllersInstance(MyController.class) instanceof MyController);
 	}
 
 }
