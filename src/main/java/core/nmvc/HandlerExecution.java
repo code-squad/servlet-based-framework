@@ -18,6 +18,6 @@ public class HandlerExecution {
 
 	public ModelAndView handle(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		return (ModelAndView) this.method.invoke(this.controllerClass.newInstance(), req, res);
+		return (ModelAndView) this.method.invoke(this.controllerClass.newInstance(), req);
 	}
 }

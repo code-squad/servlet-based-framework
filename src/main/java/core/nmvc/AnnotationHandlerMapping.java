@@ -34,6 +34,7 @@ public class AnnotationHandlerMapping {
 					});
 
 		});
+		System.err.println("count of indexed controllers : " + cs.getAnnotatedClasses().size());
 	}
 
 	public HandlerExecution getHandler(HttpServletRequest request) {

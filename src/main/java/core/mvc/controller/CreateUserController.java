@@ -7,7 +7,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class CreateUserController implements Controller {
+public class CreateUserController implements LegacyControllerInterface {
 
 	@Override
 	public ModelAndView run(HttpServletRequest req) {

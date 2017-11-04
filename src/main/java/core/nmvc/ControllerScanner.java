@@ -22,7 +22,7 @@ public class ControllerScanner {
 
 	public void findControllers() {
 
-		this.annotated = new Reflections(this.basepackages[0]).getTypesAnnotatedWith(Controller.class);
+		this.annotated = new Reflections(basepackages[0]).getTypesAnnotatedWith(Controller.class);
 
 		this.annotated.stream().forEach(c -> {
 			try {
