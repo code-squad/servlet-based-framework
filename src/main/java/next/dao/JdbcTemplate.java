@@ -16,17 +16,17 @@ public class JdbcTemplate {
 		return jdbcTemplate;
 	}
 	
-	public void update(String query, PreparedStatementSetter pstmtSetter) {
+	public int update(String query, PreparedStatementSetter pstmtSetter) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
 			pstmtSetter.setValues(pstmt);
-			pstmt.executeUpdate();
+			return pstmt.executeUpdate();
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
-	public void update(String query, Object ...obj) {
-		update(query, createPreparedStatementSetter(obj));
+	public int update(String query, Object ...obj) {
+		return update(query, createPreparedStatementSetter(obj));
 	}
 	
 	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter){
