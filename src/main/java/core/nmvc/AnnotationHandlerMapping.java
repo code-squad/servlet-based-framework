@@ -1,8 +1,7 @@
 package core.nmvc;
 
-import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 

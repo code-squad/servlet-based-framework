@@ -11,7 +11,7 @@ import core.annotation.RequestMethod;
 import core.mvc.ModelAndView;
 import core.mvc.controller.Controller;
 import core.mvc.requestmapping.RequestLine;
-import core.mvc.requestmapping.RequestMapping;
+import core.mvc.requestmapping.LegacyRequestMapping;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
@@ -19,12 +19,12 @@ public class DispatcherServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private RequestMapping rm;
+	private LegacyRequestMapping rm;
 
 	@Override
 	public void init() {
 		System.out.println("hi. I just initialized a new RequestMapping instance! Yay!");
-		this.rm = RequestMapping.getInstance();
+		this.rm = LegacyRequestMapping.getInstance();
 		rm.initialize();
 	}
 

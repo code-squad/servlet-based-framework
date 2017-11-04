@@ -11,18 +11,18 @@ import core.mvc.controller.LoginController;
 import core.mvc.controller.LoginPostController;
 import core.mvc.controller.UserJoinFormController;
 
-public class RequestMapping {
+public class LegacyRequestMapping {
 
-	private static RequestMapping rm;
+	private static LegacyRequestMapping rm;
 	private Map<RequestLine, Controller> controllers = new HashMap<>();
 
-	private RequestMapping() {
+	private LegacyRequestMapping() {
 
 	}
 
-	public static RequestMapping getInstance() {
+	public static LegacyRequestMapping getInstance() {
 		if (rm == null) {
-			rm = new RequestMapping();
+			rm = new LegacyRequestMapping();
 		}
 		return rm;
 	}
