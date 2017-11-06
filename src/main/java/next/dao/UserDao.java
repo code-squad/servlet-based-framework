@@ -35,4 +35,8 @@ public class UserDao {
 					rs.getString("email"));
 		}, userId);
 	}
+	public void delete(User user) {
+		JdbcTemplate deleteTemplate = JdbcTemplate.getInstance();
+		deleteTemplate.update("DELETE FROM USERS WHERE userId=?", user.getUserId());
+	}
 }

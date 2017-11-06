@@ -1,6 +1,7 @@
 package next.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import next.model.User;
 
 public class UserDaoTest {
     @Before
-    public void setup() {
+    public void setUp() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
@@ -33,8 +34,11 @@ public class UserDaoTest {
         userDao.update(expected);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
+        
+        userDao.delete(expected);
+        assertNull(userDao.findByUserId(expected.getUserId()));
     }
-
+    
     @Test
     public void findAll() throws Exception {
         UserDao userDao = UserDao.getInstance();

@@ -32,7 +32,9 @@ public class Question {
     public long getQuestionId() {
         return questionId;
     }
-
+    public void setQuestionId(long questionId) {
+    		this.questionId = questionId;
+    }
     public String getWriter() {
         return writer;
     }

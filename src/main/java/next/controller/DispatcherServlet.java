@@ -25,6 +25,7 @@ public class DispatcherServlet extends HttpServlet {
 			Controller controller = requestMapper.getMatchController(new RequestMethod(req.getRequestURI(), req.getMethod()));
 			controller = controller==null ? new ForwardController(req.getRequestURI()) : controller;
 			String url = controller.execute(req, resp);
+			log.debug("get controller uri : " + url);
 			sendStrategy sendStrategy = url.contains("redirect") ? new Redirect() : new Forward();
 			sendStrategy.excuteSend(req, resp, url);
 		} catch (Exception e) {

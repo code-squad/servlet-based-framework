@@ -16,17 +16,18 @@ public class JdbcTemplate {
 		return jdbcTemplate;
 	}
 	
-	public void update(String query, PreparedStatementSetter pstmtSetter) {
+	public long update(String query, PreparedStatementSetter pstmtSetter) {
 		try(Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);){
 			pstmtSetter.setValues(pstmt);
 			pstmt.executeUpdate();
+			return getResultSetKeyId(pstmt);
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
-	public void update(String query, Object ...obj) {
-		update(query, createPreparedStatementSetter(obj));
+	public long update(String query, Object ...obj) {
+		return update(query, createPreparedStatementSetter(obj));
 	}
 	
 	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter){
@@ -67,6 +68,18 @@ public class JdbcTemplate {
 				lists.add(rm.mapRow(rs));
 			}
 			return lists;
+		}catch(SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+	
+	public long getResultSetKeyId(PreparedStatement pstmt) {
+		try(ResultSet rs = pstmt.getGeneratedKeys()){
+			long id = 0;
+			while(rs.next()) {
+				id = rs.getLong(1);
+			}
+			return id;
 		}catch(SQLException e) {
 			throw new DataAccessException(e);
 		}
