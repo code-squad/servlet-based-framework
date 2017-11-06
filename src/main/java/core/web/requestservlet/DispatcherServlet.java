@@ -1,62 +1,48 @@
 package core.web.requestservlet;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import core.annotation.RequestMethod;
+import com.google.common.collect.Sets;
+
 import core.mvc.ModelAndView;
-import core.mvc.controller.LegacyControllerInterface;
-import core.mvc.requestmapping.RequestLine;
-import core.nmvc.AnnotationHandlerMapping;
-import core.mvc.requestmapping.LegacyRequestMapping;
+import core.nmvc.HandlerAdapter;
+import core.nmvc.HandlerExecutionAdapter;
+import core.nmvc.HandlerMapping;
+import core.nmvc.HandlerMappingFactory;
+import core.nmvc.LegacyControllerAdapter;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	private LegacyRequestMapping rm;
-	private AnnotationHandlerMapping ahm;
+	private Set<HandlerMapping> mappers = Sets.newHashSet();
+	private Set<HandlerAdapter> adapters = Sets.newHashSet();
 
 	@Override
 	public void init() {
-		System.out.println("hi. I just initialized a new RequestMapping instance! Yay!");
-		this.rm = LegacyRequestMapping.getInstance();
-		rm.initialize();
-
-		ahm = new AnnotationHandlerMapping("core.mvc.controller");
-		ahm.initialize();
+		this.mappers = HandlerMappingFactory.getSets("core.mvc.controller");
+		this.adapters.add(new HandlerExecutionAdapter());
+		this.adapters.add(new LegacyControllerAdapter());
 	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		RequestLine requestedLine = generateRequestLine(req);
-		LegacyControllerInterface controller = rm.getController(requestedLine);
+		Object controller = mappers.stream().filter(h -> h.getController(req) != null)
+				.findFirst().get()
+				.getController(req);
 		try {
-		ModelAndView mav = annotationBasedControllerDispatcher(req, res);
-		mav.getView().render(mav.getModel(), req, res);
-		
-		
-		} catch(Exception e) {
-			e.printStackTrace(System.err);
+			ModelAndView mav = adapters.stream().filter(a -> a.supports(controller))
+					.findFirst().get().run(controller,req, res);	
+			mav.getView().render(mav.getModel(), req, res);
+		} catch (Exception e) {
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			e.printStackTrace();
 		}
-		
-		
 	}
-
-	private RequestLine generateRequestLine(HttpServletRequest req) {
-		return new RequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod()));
-	}
-
-	private ModelAndView annotationBasedControllerDispatcher(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		System.err.println("someone called annotation-based controllers!");
-		return this.ahm.getHandler(req).handle(req, res);
-
-	}
-
 }

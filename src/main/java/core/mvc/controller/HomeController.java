@@ -12,7 +12,6 @@ public class HomeController implements LegacyControllerInterface{
 	@Override
 	@RequestMapping("/fuckyou")
 	public ModelAndView run(HttpServletRequest req) {
-		System.out.print("someone has awakened my logic.");
 		return new ModelAndView(new JspView("index.jsp"));
 	}
 }

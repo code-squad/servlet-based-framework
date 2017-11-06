@@ -3,6 +3,8 @@ package core.mvc.requestmapping;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import core.annotation.RequestMethod;
 import core.mvc.controller.LegacyControllerInterface;
 import core.mvc.controller.CreateUserController;
@@ -10,20 +12,18 @@ import core.mvc.controller.HomeController;
 import core.mvc.controller.LoginController;
 import core.mvc.controller.LoginPostController;
 import core.mvc.controller.UserJoinFormController;
+import core.nmvc.HandlerMapping;
 
-public class LegacyRequestMapping {
+public class LegacyRequestMapping implements HandlerMapping {
 
-	private static LegacyRequestMapping rm;
+	private static final LegacyRequestMapping rm = new LegacyRequestMapping();
 	private Map<RequestLine, LegacyControllerInterface> controllers = new HashMap<>();
 
 	private LegacyRequestMapping() {
-
 	}
 
 	public static LegacyRequestMapping getInstance() {
-		if (rm == null) {
-			rm = new LegacyRequestMapping();
-		}
+		rm.initialize();
 		return rm;
 	}
 
@@ -31,8 +31,9 @@ public class LegacyRequestMapping {
 		this.controllers.put(line, controller);
 	}
 
-	public LegacyControllerInterface getController(RequestLine line) {
-		return this.controllers.get(line);
+	public LegacyControllerInterface getController(HttpServletRequest req) {
+		return this.controllers
+				.get(new RequestLine(req.getRequestURI(), RequestMethod.valueOf(req.getMethod().toUpperCase())));
 	}
 
 	public void initialize() {
