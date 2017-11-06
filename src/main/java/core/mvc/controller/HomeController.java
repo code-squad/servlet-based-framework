@@ -10,7 +10,7 @@ import core.annotation.*;
 public class HomeController implements LegacyControllerInterface{
 
 	@Override
-	@RequestMapping("/fuckyou")
+	@RequestMapping("/home")
 	public ModelAndView run(HttpServletRequest req) {
 		return new ModelAndView(new JspView("index.jsp"));
 	}

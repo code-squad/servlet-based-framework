@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Sets;
 
 import core.mvc.ModelAndView;
@@ -21,6 +24,8 @@ import core.nmvc.LegacyControllerAdapter;
 public class DispatcherServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+	
 	private Set<HandlerMapping> mappers = Sets.newHashSet();
 	private Set<HandlerAdapter> adapters = Sets.newHashSet();
 
@@ -42,7 +47,7 @@ public class DispatcherServlet extends HttpServlet {
 			mav.getView().render(mav.getModel(), req, res);
 		} catch (Exception e) {
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 }
