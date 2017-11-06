@@ -1,22 +1,19 @@
 package next.controller;
 
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import core.db.DataBase;
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
+import next.dao.QuestionDao;
 
 public class HomeController implements Controller {
-    private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return "index.jsp";
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        QuestionDao questionDao = new QuestionDao();
+        request.setAttribute("question", questionDao.findAll());
+		return new ModelAndView(new JspView("index.jsp"));
 	}
 }
