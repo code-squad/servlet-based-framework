@@ -8,7 +8,7 @@ import core.mvc.ModelAndView;
 import core.annotation.*;
 
 @Controller
-public class HomeController implements LegacyControllerInterface{
+public class HomeController implements LegacyControllerInterface {
 
 	@Override
 	@RequestMapping("/home")

@@ -34,7 +34,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 					});
 
 		});
-		log.debug("count of indexed controllers : " + cs.getAnnotatedClasses().size());
+		log.info("count of annotation-based controllers : {}" , cs.getAnnotatedClasses().size());
 	}
 
 	@Override

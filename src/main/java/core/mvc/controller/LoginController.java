@@ -8,8 +8,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
 @Controller
-public class LoginController implements LegacyControllerInterface{
-
+public class LoginController implements LegacyControllerInterface {
 
 	@Override
 	@RequestMapping("/users/loginForm")
