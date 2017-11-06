@@ -12,7 +12,6 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import core.jdbc.ConnectionManager;
 import next.model.Question;
-import next.model.User;
 
 public class QuestionDaoTest {
 	@Before
@@ -26,6 +25,7 @@ public class QuestionDaoTest {
     public void crud() throws Exception {
     		Question expected = new Question("xmfpes", "hello", "hello, my name is kyunam");
         QuestionDao questionDao = QuestionDao.getInstance();
+        System.out.println(expected);
         expected.setQuestionId(questionDao.insert(expected));
         Question actual = questionDao.findByQuestionId(expected.getQuestionId());
         assertEquals(expected, actual);
@@ -36,5 +36,11 @@ public class QuestionDaoTest {
     		QuestionDao questionDao = QuestionDao.getInstance();
         List<Question> users = questionDao.findAll();
         assertEquals(8, users.size());
+    }
+    
+    @Test
+    public void addAnswerCount() throws Exception {
+    	 	QuestionDao questionDao = QuestionDao.getInstance();
+        questionDao.editCountOfAnswer(6, 1);
     }
 }

@@ -55,10 +55,6 @@
         <c:otherwise>
         <li><a href="/users/loginForm" role="button">로그인</a></li>
         <li><a href="/users/form" role="button">회원가입</a></li>
-        <!--
-        <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
-        <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
-        -->
         </c:otherwise>
         </c:choose>
       </ul>
