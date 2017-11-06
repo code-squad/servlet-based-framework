@@ -9,6 +9,7 @@ import next.model.User;
 
 public class UpdateUserController implements LegacyControllerInterface {
 
+
 	@Override
 	public ModelAndView run(HttpServletRequest req) {
 		User user = DataBase.findUserById(req.getParameter("userId"));

@@ -9,6 +9,7 @@ import next.model.User;
 
 public class UpdateFormController implements LegacyControllerInterface{
 
+
 	@Override
 	public ModelAndView run(HttpServletRequest req) {
 		String userId = req.getParameter("userId");

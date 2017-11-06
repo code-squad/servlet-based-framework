@@ -12,6 +12,7 @@ import core.mvc.ModelAndView;
 import next.model.User;
 
 public class LoginPostController implements LegacyControllerInterface {
+
 	private static final Logger log = LoggerFactory.getLogger(LoginPostController.class);
 
 	@Override

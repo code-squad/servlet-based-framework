@@ -8,6 +8,7 @@ import core.mvc.ModelAndView;
 
 public class LogoutController implements LegacyControllerInterface {
 
+
 	@Override
 	public ModelAndView run(HttpServletRequest req) {
 		HttpSession session = req.getSession();

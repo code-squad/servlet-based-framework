@@ -7,6 +7,7 @@ import core.mvc.ModelAndView;
 
 public class LoginController implements LegacyControllerInterface{
 
+
 	@Override
 	public ModelAndView run(HttpServletRequest req) {
 		return new ModelAndView(new JspView("/user/login.jsp"));
