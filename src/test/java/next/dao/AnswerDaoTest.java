@@ -15,7 +15,7 @@ import next.model.Answer;
 
 public class AnswerDaoTest {
 	@Before
-    public void setup() {
+    public void setUp() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());

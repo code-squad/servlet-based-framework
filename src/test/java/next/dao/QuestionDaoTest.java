@@ -15,7 +15,7 @@ import next.model.Question;
 
 public class QuestionDaoTest {
 	@Before
-    public void setup() {
+    public void setUp() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
@@ -41,6 +41,8 @@ public class QuestionDaoTest {
     @Test
     public void addAnswerCount() throws Exception {
     	 	QuestionDao questionDao = QuestionDao.getInstance();
+    	 	int currentCount = questionDao.getCountOfAnswer(6);
         questionDao.editCountOfAnswer(6, 1);
+        assertEquals(currentCount + 1, questionDao.getCountOfAnswer(6));
     }
 }
