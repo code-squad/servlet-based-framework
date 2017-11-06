@@ -13,11 +13,11 @@ import core.mvc.ModelAndView;
 import core.mvc.controller.LegacyControllerInterface;
 
 public class LegacyRequestMappingTest {
-	LegacyRequestMapping lrm;
-	MockTestController mtc = new MockTestController();
+	private LegacyRequestMapping lrm;
+	private MockTestController mtc = new MockTestController();
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		this.lrm = LegacyRequestMapping.getInstance();
 		this.lrm.addController(mtc, new RequestLine("/test", RequestMethod.GET));
 	}

@@ -10,7 +10,7 @@ public class ControllerScannerTest {
 	private ControllerScanner cs;
 	
 	@Before
-	public void setup() {
+	public void setUp() {
 		cs = new ControllerScanner("core.nmvc");
 	}
 

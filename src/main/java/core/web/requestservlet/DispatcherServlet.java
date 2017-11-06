@@ -51,6 +51,4 @@ public class DispatcherServlet extends HttpServlet {
 			log.error(e.getMessage());
 		}
 	}
-
-
 }
