@@ -41,7 +41,7 @@ $(document).ready(function(){/* jQuery toggle layout */
 					console.log(data);
 				},
 				success(data) {
-					Console.log(data);
+					console.log(data);
 					if (data.status) {
 						deleteBtn.closest("article").remove();
 					}
