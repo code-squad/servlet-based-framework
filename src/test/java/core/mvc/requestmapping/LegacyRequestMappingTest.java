@@ -19,11 +19,10 @@ public class LegacyRequestMappingTest {
 	@Before
 	public void setUp() {
 		this.lrm = LegacyRequestMapping.getInstance();
-		this.lrm.addController(mtc, new RequestLine("/test", RequestMethod.GET));
+		this.lrm.addControllerTest(new RequestLine("/test", RequestMethod.GET), mtc);
 	}
 
 	@Test
-
 	public void test() {
 		assertEquals(mtc, this.lrm.getController(new MockHttpServletRequest("GET", "/test")));
 	}
@@ -36,5 +35,4 @@ public class LegacyRequestMappingTest {
 		}
 
 	}
-
 }

@@ -25,7 +25,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 	@SuppressWarnings("unchecked")
 	public void initialize() {
 		ControllerScanner cs = new ControllerScanner(this.basePackage);
-		cs.findControllers();
 		cs.getAnnotatedClasses().stream().forEach(c -> {
 			ReflectionUtils.getAllMethods(c, ReflectionUtils.withAnnotation(RequestMapping.class)).stream()
 					.forEach(m -> {

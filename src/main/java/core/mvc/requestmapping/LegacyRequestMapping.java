@@ -30,6 +30,10 @@ public class LegacyRequestMapping implements HandlerMapping {
 	private void addController(RequestLine line, LegacyControllerInterface controller) {
 		this.controllers.put(line, controller);
 	}
+	
+	public void addControllerTest(RequestLine line, LegacyControllerInterface controller) {
+		this.controllers.put(line, controller);
+	}
 
 	public LegacyControllerInterface getController(HttpServletRequest req) {
 		return this.controllers

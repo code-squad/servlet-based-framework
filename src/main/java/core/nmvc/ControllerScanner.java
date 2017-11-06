@@ -18,10 +18,10 @@ public class ControllerScanner {
 
 	public ControllerScanner(Object... basePackages) {
 		this.basepackages = basePackages;
+		scanControllers();
 	}
 
-	public void findControllers() {
-
+	private void scanControllers() {
 		this.annotated = new Reflections(basepackages[0]).getTypesAnnotatedWith(Controller.class);
 
 		this.annotated.stream().forEach(c -> {

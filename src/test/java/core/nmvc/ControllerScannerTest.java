@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ControllerScannerTest {
-	
+
 	private ControllerScanner cs;
-	
+
 	@Before
 	public void setUp() {
 		cs = new ControllerScanner("core.nmvc");
@@ -16,7 +16,6 @@ public class ControllerScannerTest {
 
 	@Test
 	public void test() {
-		cs.findControllers();
 		assertTrue(cs.getControllersInstance(MyController.class) instanceof MyController);
 	}
 
