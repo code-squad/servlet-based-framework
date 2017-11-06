@@ -14,11 +14,12 @@ public class AnnotationHandlerMappingTest {
         handlerMapping.initialize();
     }
 
+
     @Test
     public void getHandler() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/users/findUserId");
         MockHttpServletResponse response = new MockHttpServletResponse();
-        HandlerExecution execution = handlerMapping.getHandler(request);
+        HandlerExecution execution = handlerMapping.getController(request);
         execution.handle(request, response);
     }
 }
