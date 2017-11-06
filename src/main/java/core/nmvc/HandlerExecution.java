@@ -3,7 +3,6 @@ package core.nmvc;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.ModelAndView;
 
@@ -16,7 +15,7 @@ public class HandlerExecution {
 		this.method = method;
 	}
 
-	public ModelAndView handle(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView handle(HttpServletRequest req) throws Exception {
 		return (ModelAndView) this.method.invoke(controllerClass.newInstance(), req);
 	}
 }

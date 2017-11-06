@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.ModelAndView;
 
-public class HandlerExecutionAdapter implements HandlerAdapter{
+public class HandlerExecutionAdapter implements HandlerAdapter {
 
 	@Override
 	public boolean supports(Object handler) {
@@ -14,9 +14,8 @@ public class HandlerExecutionAdapter implements HandlerAdapter{
 
 	@Override
 	public ModelAndView run(Object handler, HttpServletRequest req, HttpServletResponse res) throws Exception {
-		HandlerExecution controller = (HandlerExecution)handler;
-		
-		return controller.handle(req, res);
+		HandlerExecution controller = (HandlerExecution) handler;
+		return controller.handle(req);
 	}
 
 }

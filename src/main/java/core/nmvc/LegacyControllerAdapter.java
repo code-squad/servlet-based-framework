@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.ModelAndView;
 import core.mvc.controller.LegacyControllerInterface;
 
-public class LegacyControllerAdapter implements HandlerAdapter{
+public class LegacyControllerAdapter implements HandlerAdapter {
 
 	@Override
 	public boolean supports(Object handler) {
@@ -15,8 +15,7 @@ public class LegacyControllerAdapter implements HandlerAdapter{
 
 	@Override
 	public ModelAndView run(Object handler, HttpServletRequest req, HttpServletResponse res) throws Exception {
-		LegacyControllerInterface controller = (LegacyControllerInterface)handler;
-		
+		LegacyControllerInterface controller = (LegacyControllerInterface) handler;
 		return controller.run(req);
 	}
 
