@@ -21,15 +21,19 @@ public class AddAnswerController implements Controller{
 	public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		// TODO Auto-generated method stub
 		log.debug("add Answer Controller");
-		long questionId = Long.parseLong(req.getParameter("questionId"));
-		Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents"), questionId);
-		AnswerDao answerDao = AnswerDao.getInstance();
-		QuestionDao questionDao = QuestionDao.getInstance();
-		long answerId = answerDao.insert(answer);
-		Answer savedAnswer = answerDao.findByAnswerId(answerId);
-		resp.setContentType("application/json;charset=UTF-8");
-		responseJson(resp.getWriter(), savedAnswer);
-		questionDao.editCountOfAnswer(questionId, 1);
+		try {
+			long questionId = Long.parseLong(req.getParameter("questionId"));
+			Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents"), questionId);
+			AnswerDao answerDao = AnswerDao.getInstance();
+			QuestionDao questionDao = QuestionDao.getInstance();
+			long answerId = answerDao.insert(answer);
+			Answer savedAnswer = answerDao.findByAnswerId(answerId);
+			resp.setContentType("application/json;charset=UTF-8");
+			responseJson(resp.getWriter(), savedAnswer);
+			questionDao.editCountOfAnswer(questionId, 1);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	public void responseJson(PrintWriter pw, Answer answer) throws JsonProcessingException {
