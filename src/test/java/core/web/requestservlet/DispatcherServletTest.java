@@ -24,7 +24,6 @@ public class DispatcherServletTest {
 		try {
 			ds.service(mhsr, new MockHttpServletResponse());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

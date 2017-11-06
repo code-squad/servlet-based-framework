@@ -21,11 +21,9 @@ public class JdbcManager {
 	private Connection conn = ConnectionManager.getConnection();
 
 	private JdbcManager() {
-
 	}
 
 	public static JdbcManager getInstance() {
-
 		return jdbm;
 	}
 
@@ -124,7 +122,6 @@ public class JdbcManager {
 					break;
 				}
 			}
-
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}
@@ -132,7 +129,6 @@ public class JdbcManager {
 
 	private String generateQueryStatement(Class<?> targetClass) {
 		Field[] allFields = targetClass.getDeclaredFields();
-
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("(");
