@@ -11,5 +11,7 @@ public enum RequestMethod {
     		return Arrays.asList(RequestMethod.values()).stream()
     				.filter(e -> e.toString().equalsIgnoreCase(req.getMethod()))
     				.findFirst().get();
+    				
+    				
     }
 }

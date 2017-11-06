@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -11,6 +13,7 @@ import com.google.common.collect.Sets;
 import core.annotation.Controller;
 
 public class ControllerScanner {
+	private static final Logger log = LoggerFactory.getLogger(ControllerScanner.class);
 
 	private Map<Class<?>, Object> controllers = Maps.newHashMap();
 	private Set<Class<?>> annotated = Sets.newHashSet();
@@ -26,6 +29,7 @@ public class ControllerScanner {
 
 		this.annotated.stream().forEach(c -> {
 			try {
+				log.info("CURRENTLY SCANNING AN ANNOTATED CONTROLLER : {}" , c.getName());
 				this.controllers.put(c, c.newInstance());
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
