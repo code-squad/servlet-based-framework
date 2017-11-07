@@ -7,6 +7,7 @@ import java.util.List;
 
 import core.jdbc.ConnectionManager;
 import core.jdbc.JdbcTemplate;
+import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 import next.model.User;
 
@@ -16,14 +17,16 @@ public class UserDao {
 	public void insert(User user) {
 		JdbcTemplate template = new JdbcTemplate();
 		String sql = "INSERT INTO USERS (password, name, email, userId) VALUES (?, ?, ?, ?)";
-		template.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+		KeyHolder keyHolder = new KeyHolder();
+		template.update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 
 	}
 
 	public void update(User user) {
 		JdbcTemplate template = new JdbcTemplate();
 		String sql = "UPDATE USERS SET password=?,name=?,email=? WHERE userId=?";
-		template.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+		KeyHolder keyHolder = new KeyHolder();
+		template.update(sql,keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
 	public <T> List<T> findAll() {
