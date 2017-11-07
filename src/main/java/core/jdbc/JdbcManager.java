@@ -15,7 +15,6 @@ import core.db.exceptions.MultipleDataException;
 
 public class JdbcManager {
 
-
 	private static final JdbcManager jdbm = new JdbcManager();
 
 	private Connection conn = ConnectionManager.getConnection();
