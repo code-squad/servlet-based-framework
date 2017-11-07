@@ -12,9 +12,9 @@ import next.dao.QuestionDao;
 
 public class HomeController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		// TODO Auto-generated method stub
 		ModelAndView mav = new ModelAndView(new JspView("home"));
 		log.debug("home controller");
 		QuestionDao questionDao = QuestionDao.getInstance();

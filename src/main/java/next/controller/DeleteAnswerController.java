@@ -14,8 +14,9 @@ import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Result;
 
-public class DeleteAnswerController implements Controller{
+public class DeleteAnswerController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ModelAndView mav = new ModelAndView(new JsonView());
@@ -28,9 +29,8 @@ public class DeleteAnswerController implements Controller{
 			QuestionDao questionDao = QuestionDao.getInstance();
 			questionDao.editCountOfAnswer(questionId, -1);
 			mav.addObject("status", Result.ok());
-		} catch(Exception e) {
-			PrintWriter pw = resp.getWriter();
-			pw.print(Result.fail("fail"));
+		} catch (Exception e) {
+			mav.addObject("status", Result.fail("fail"));
 		}
 		return mav;
 	}

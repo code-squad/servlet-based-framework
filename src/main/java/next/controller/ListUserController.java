@@ -12,9 +12,9 @@ public class ListUserController implements Controller {
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		ModelAndView mav = new ModelAndView(new JspView("/user/list.jsp"));
 		if (!UserSessionUtils.isLogined(req.getSession())) {
-            return new ModelAndView(new JspView("redirect:/users/loginForm"));
-        }
-        mav.addObject("users", DataBase.findAll());
+			return new ModelAndView(new JspView("redirect:/users/loginForm"));
+		}
+		mav.addObject("users", DataBase.findAll());
 		return new ModelAndView(new JspView("/user/list.jsp"));
 	}
 }

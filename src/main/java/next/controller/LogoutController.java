@@ -12,11 +12,12 @@ import core.mvc.ModelAndView;
 
 public class LogoutController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		log.debug("logout");
 		HttpSession session = req.getSession();
-        session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
+		session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
 		return new ModelAndView(new JspView("redirect:/"));
 	}
 }

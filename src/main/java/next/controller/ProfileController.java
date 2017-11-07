@@ -13,16 +13,17 @@ import next.model.User;
 
 public class ProfileController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		log.debug("get user profile");
 		ModelAndView mav = new ModelAndView(new JspView("/user/profile.jsp"));
 		String userId = req.getParameter("userId");
-        User user = DataBase.findUserById(userId);
-        if (user == null) {
-            throw new NullPointerException("사용자를 찾을 수 없습니다.");
-        }
-        mav.addObject("user", user);
+		User user = DataBase.findUserById(userId);
+		if (user == null) {
+			throw new NullPointerException("사용자를 찾을 수 없습니다.");
+		}
+		mav.addObject("user", user);
 		return new ModelAndView(new JspView("/user/profile.jsp"));
 	}
 }

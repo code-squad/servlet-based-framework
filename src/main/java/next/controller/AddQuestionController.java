@@ -13,10 +13,11 @@ import next.model.Question;
 
 public class AddQuestionController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(AddQuestionController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		// TODO Auto-generated method stub
-		Question expected = new Question(req.getParameter("writer"), req.getParameter("title"), req.getParameter("contents"));
+		Question expected = new Question(req.getParameter("writer"), req.getParameter("title"),
+				req.getParameter("contents"));
 		QuestionDao questionDao = QuestionDao.getInstance();
 		questionDao.insert(expected);
 		log.debug("insert succeess");

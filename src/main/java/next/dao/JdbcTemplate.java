@@ -11,76 +11,82 @@ import core.jdbc.ConnectionManager;
 
 public class JdbcTemplate {
 	private static final JdbcTemplate jdbcTemplate = new JdbcTemplate();
-	private JdbcTemplate() {}
+
+	private JdbcTemplate() {
+	}
+
 	public static JdbcTemplate getInstance() {
 		return jdbcTemplate;
 	}
-	
+
 	public long update(String query, PreparedStatementSetter pstmtSetter) {
-		try(Connection con = ConnectionManager.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(query);){
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(query);) {
 			pstmtSetter.setValues(pstmt);
 			pstmt.executeUpdate();
 			return getResultSetKeyId(pstmt);
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
-	public long update(String query, Object ...obj) {
+
+	public long update(String query, Object... obj) {
 		return update(query, createPreparedStatementSetter(obj));
 	}
-	
-	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter){
-		try(Connection con = ConnectionManager.getConnection(); 
-				PreparedStatement pstmt = con.prepareStatement(query);){	
+
+	public <T> List<T> query(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter) {
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(query);) {
 			pstmtSetter.setValues(pstmt);
 			return getResultSetData(pstmt, rm);
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
-	public <T> List<T> query(String query, RowMapper<T> rm, Object...obj){
+
+	public <T> List<T> query(String query, RowMapper<T> rm, Object... obj) {
 		return query(query, rm, createPreparedStatementSetter(obj));
 	}
-	
+
 	public <T> T queryForObject(String query, RowMapper<T> rm, PreparedStatementSetter pstmtSetter) {
 		List<T> list = query(query, rm, pstmtSetter);
 		return list.isEmpty() ? null : list.get(0);
 	}
-	public <T> T queryForObject(String query, RowMapper<T> rm, Object...obj){
+
+	public <T> T queryForObject(String query, RowMapper<T> rm, Object... obj) {
 		List<T> list = query(query, rm, obj);
 		return list.isEmpty() ? null : list.get(0);
 	}
-	
-	public PreparedStatementSetter createPreparedStatementSetter(Object...obj) {
+
+	public PreparedStatementSetter createPreparedStatementSetter(Object... obj) {
 		return (pstmt) -> {
 			int index = 1;
-			for(Object o : obj) {
+			for (Object o : obj) {
 				pstmt.setObject(index++, o);
 			}
 		};
 	}
-	
-	public <T> List<T> getResultSetData(PreparedStatement pstmt, RowMapper<T> rm){
+
+	public <T> List<T> getResultSetData(PreparedStatement pstmt, RowMapper<T> rm) {
 		List<T> lists = new ArrayList<T>();
-		try(ResultSet rs = pstmt.executeQuery()){
-			while(rs.next()) {
+		try (ResultSet rs = pstmt.executeQuery()) {
+			while (rs.next()) {
 				lists.add(rm.mapRow(rs));
 			}
 			return lists;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
-	
+
 	public long getResultSetKeyId(PreparedStatement pstmt) {
-		try(ResultSet rs = pstmt.getGeneratedKeys()){
+		try (ResultSet rs = pstmt.getGeneratedKeys()) {
 			long id = 0;
-			while(rs.next()) {
+			while (rs.next()) {
 				id = rs.getLong(1);
 			}
 			return id;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}

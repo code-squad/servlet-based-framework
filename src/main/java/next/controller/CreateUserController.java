@@ -13,10 +13,12 @@ import next.model.User;
 
 public class CreateUserController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		log.debug("user create start");
-		User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"), req.getParameter("email"));
+		User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
+				req.getParameter("email"));
 		DataBase.addUser(user);
 		return new ModelAndView(new JspView("redirect:/"));
 	}

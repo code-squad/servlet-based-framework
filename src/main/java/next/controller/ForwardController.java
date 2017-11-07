@@ -9,9 +9,11 @@ import core.mvc.ModelAndView;
 public class ForwardController implements Controller {
 
 	private String url;
+
 	public ForwardController(String url) {
 		this.url = url;
 	}
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		return new ModelAndView(new JspView(url + ".jsp"));
