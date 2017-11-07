@@ -106,6 +106,13 @@
 			<version>${tomcat.version}</version>
 			<scope>provided</scope>
 		</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>2.5.6</version>
+</dependency>
+		
 	</dependencies>
 
 	<build>
