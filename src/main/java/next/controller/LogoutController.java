@@ -7,13 +7,16 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
+
 public class LogoutController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
 	@Override
-	public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		log.debug("logout");
 		HttpSession session = req.getSession();
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-		return "redirect:/";
+		return new ModelAndView(new JspView("redirect:/"));
 	}
 }

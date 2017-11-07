@@ -6,17 +6,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 
 public class HomeController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 	@Override
-	public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		// TODO Auto-generated method stub
+		ModelAndView mav = new ModelAndView(new JspView("home"));
 		log.debug("home controller");
 		QuestionDao questionDao = QuestionDao.getInstance();
-		req.setAttribute("questions", questionDao.findAll());
-		return "home";
+		mav.addObject("questions", questionDao.findAll());
+		return mav;
 	}
 
 }
