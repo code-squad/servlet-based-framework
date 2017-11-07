@@ -18,11 +18,12 @@ import next.controller.ShowQuestionController;
 import next.controller.UpdateUserController;
 
 public class RequestMapping {
-	private Map<String, Controller> controllers ;
+	private Map<String, Controller> controllers;
 
-	public 	RequestMapping(){
+	public RequestMapping() {
 		init();
 	}
+
 	public void init() {
 		controllers = Maps.newHashMap();
 		controllers.clear();
@@ -35,14 +36,14 @@ public class RequestMapping {
 		controllers.put("/users/profile", new ProfileController());
 		controllers.put("/users", new ListUserController());
 		controllers.put("/users/update", new UpdateUserController());
-		controllers.put("/users/updateForm" , new UpdateUserController());
+		controllers.put("/users/updateForm", new UpdateUserController());
 		controllers.put("/qna/show", new ShowController());
 		controllers.put("/api/qna/addanswer", new AddAnswerController());
 		controllers.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 		controllers.put("/api/questions", new ShowQuestionController());
 	}
-	
+
 	public Controller getController(String path) {
-			return controllers.get(path);
+		return controllers.get(path);
 	}
 }

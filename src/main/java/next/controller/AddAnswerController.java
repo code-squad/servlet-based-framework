@@ -11,7 +11,7 @@ import next.dao.AnswerDao;
 import next.model.Answer;
 
 public class AddAnswerController implements Controller {
-	  private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
+	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -22,7 +22,7 @@ public class AddAnswerController implements Controller {
 		AnswerDao answerDao = new AnswerDao();
 		Answer savedAnswer = answerDao.insert(answer);
 		ModelAndView mav = new ModelAndView(new JsonView());
-		mav.addObject("answer",savedAnswer);
+		mav.addObject("answer", savedAnswer);
 		return mav;
 	}
 }

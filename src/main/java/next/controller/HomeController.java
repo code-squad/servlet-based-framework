@@ -12,8 +12,8 @@ public class HomeController implements Controller {
 
 	@Override
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        QuestionDao questionDao = new QuestionDao();
-        request.setAttribute("question", questionDao.findAll());
+		QuestionDao questionDao = new QuestionDao();
+		request.setAttribute("question", questionDao.findAll());
 		return new ModelAndView(new JspView("index.jsp"));
 	}
 }

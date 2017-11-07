@@ -15,22 +15,11 @@ import core.jdbc.RowMapper;
 
 public class AnswerDao {
 	public Answer insert(Answer answer) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
-		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
-		PreparedStatementCreator psc = new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, answer.getWriter());
-				pstmt.setString(2, answer.getContents());
-				pstmt.setTimestamp(3, new Timestamp(answer.getTimeFromCreateDate()));
-				pstmt.setLong(4, answer.getQuestionId());
-				return pstmt;
-			}
-		};
-
+		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
-		jdbcTemplate.update(psc, keyHolder);
+		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
+		template.update(sql, keyHolder, answer.getWriter(), answer.getContents(),
+				new Timestamp(answer.getTimeFromCreateDate()), answer.getQuestionId());
 		return findById(keyHolder.getId());
 	}
 
@@ -38,14 +27,8 @@ public class AnswerDao {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE answerId = ?";
 
-		RowMapper<Answer> rm = new RowMapper<Answer>() {
-			@Override
-			public Answer mapRow(ResultSet rs) throws SQLException {
-				return new Answer(rs.getLong("answerId"), rs.getString("writer"), rs.getString("contents"),
-						rs.getTimestamp("createdDate"), rs.getLong("questionId"));
-			}
-		};
-
+		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
+				rs.getString("contents"), rs.getTimestamp("createdDate"), rs.getLong("questionId")));
 		return jdbcTemplate.queryForObject(sql, rm, answerId);
 	}
 
@@ -54,45 +37,23 @@ public class AnswerDao {
 		String sql = "SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
 				+ "order by answerId desc";
 
-		RowMapper<Answer> rm = new RowMapper<Answer>() {
-			@Override
-			public Answer mapRow(ResultSet rs) throws SQLException {
-				return new Answer(rs.getLong("answerId"), rs.getString("writer"), rs.getString("contents"),
-						rs.getTimestamp("createdDate"), questionId);
-			}
-		};
+		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
+				rs.getString("contents"), rs.getTimestamp("createdDate"), questionId));
 		return jdbcTemplate.query(sql, rm, questionId);
 	}
 
 	public void delete(Answer answer) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
-		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		PreparedStatementCreator psc = new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement pstmt = con.prepareStatement(sql);
-				pstmt.setLong(1, answer.getAnswerId());
-				return pstmt;
-			}
-		};
+		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
-		jdbcTemplate.update(psc, keyHolder);
+		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
+		template.update(sql, keyHolder, answer.getAnswerId());
 
 	}
 
 	public void delete(Long answerId) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
-		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		PreparedStatementCreator psc = new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement pstmt = con.prepareStatement(sql);
-				pstmt.setLong(1, answerId);
-				return pstmt;
-			}
-		};
+		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
-		jdbcTemplate.update(psc, keyHolder);
-
+		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
+		template.update(sql, keyHolder, answerId);
 	}
 }

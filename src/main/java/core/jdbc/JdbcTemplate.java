@@ -7,18 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class JdbcTemplate {
 
-
-	public <T> List<T> query(String sql,RowMapper<T> rowmapper, Object...parameter) {
+	public <T> List<T> query(String sql, RowMapper<T> rowmapper, Object... parameter) {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
-			for (int i = 0; i < parameter.length; i++) {
-				pstmt.setObject(i+1,  parameter[i]);
-			}
+			setParameter(pstmt, parameter);
 			return setReponseQuery(rowmapper, pstmt);
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
+		}
+	}
+
+	private void setParameter(PreparedStatement pstmt, Object... parameter) throws SQLException {
+		for (int i = 0; i < parameter.length; i++) {
+			pstmt.setObject(i + 1, parameter[i]);
 		}
 	}
 
@@ -32,8 +34,8 @@ public class JdbcTemplate {
 		rs.close();
 		return values;
 	}
-	
-	public <T> T queryForObject(String sql, RowMapper<T> rowmapper, Object...parameter) {
+
+	public <T> T queryForObject(String sql, RowMapper<T> rowmapper, Object... parameter) {
 		List<T> result = query(sql, rowmapper, parameter);
 		if (result.isEmpty()) {
 			return null;
@@ -41,31 +43,22 @@ public class JdbcTemplate {
 		return result.get(0);
 
 	}
-	public void update(String sql, Object...values) {
-		try (Connection con = ConnectionManager.getConnection();PreparedStatement pstmt = con.prepareStatement(sql); ) {
-			
-			for (int i = 0; i < values.length; i++) {
-				pstmt.setString(i+1, (String) values[i]);
-			}
+
+	public void update(String sql, KeyHolder keyHolder, Object... parameter) {
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
+
+			setParameter(pstmt, parameter);
 			pstmt.executeUpdate();
+
+			ResultSet rs = pstmt.getGeneratedKeys();
+			if (rs.next()) {
+				keyHolder.setId(rs.getLong(1));
+			}
+			rs.close();
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
-		
+
 	}
 
-    public void update(PreparedStatementCreator psc, KeyHolder holder) {
-        try (Connection conn = ConnectionManager.getConnection()) {
-            PreparedStatement ps = psc.createPreparedStatement(conn);
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                holder.setId(rs.getLong(1));
-            }
-            rs.close();
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
 }

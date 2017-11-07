@@ -21,9 +21,8 @@ public class ShowQuestionController implements Controller {
 
 		QuestionDao QuestionDao = new QuestionDao();
 		List<Question> savedQuestion = QuestionDao.findAll();
-		ModelAndView mav = new ModelAndView();
-		JsonView view = new JsonView();
-		view.render(mav.getModel(), req, resp);
+		ModelAndView mav = new ModelAndView(new JsonView());
+		mav.addObject("question", savedQuestion);
 		return mav;
 	}
 }
