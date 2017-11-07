@@ -14,7 +14,7 @@ public class JdbcTemplate {
 	public <T> List<T> query(String sql,RowMapper<T> rowmapper, Object...parameter) {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
 			for (int i = 0; i < parameter.length; i++) {
-				pstmt.setString(i+1, (String) parameter[i]);
+				pstmt.setObject(i+1,  parameter[i]);
 			}
 			return setReponseQuery(rowmapper, pstmt);
 		} catch (SQLException e) {
@@ -43,6 +43,7 @@ public class JdbcTemplate {
 	}
 	public void update(String sql, Object...values) {
 		try (Connection con = ConnectionManager.getConnection();PreparedStatement pstmt = con.prepareStatement(sql); ) {
+			
 			for (int i = 0; i < values.length; i++) {
 				pstmt.setString(i+1, (String) values[i]);
 			}
@@ -53,5 +54,18 @@ public class JdbcTemplate {
 		
 	}
 
+    public void update(PreparedStatementCreator psc, KeyHolder holder) {
+        try (Connection conn = ConnectionManager.getConnection()) {
+            PreparedStatement ps = psc.createPreparedStatement(conn);
+            ps.executeUpdate();
 
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                holder.setId(rs.getLong(1));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
 }
