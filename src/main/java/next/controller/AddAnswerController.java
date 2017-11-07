@@ -30,7 +30,7 @@ public class AddAnswerController implements Controller {
 			return mav;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("댓글을 추가할 수 없습니다.");
+			throw new DataAccessException("댓글을 추가할 수 없습니다.");
 		}
 	}
 }
