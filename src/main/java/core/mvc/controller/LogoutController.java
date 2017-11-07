@@ -6,7 +6,8 @@ import javax.servlet.http.HttpSession;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
-public class LogoutController implements Controller {
+public class LogoutController implements LegacyControllerInterface {
+
 
 	@Override
 	public ModelAndView run(HttpServletRequest req) {

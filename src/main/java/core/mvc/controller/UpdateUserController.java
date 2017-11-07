@@ -7,7 +7,8 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class UpdateUserController implements Controller {
+public class UpdateUserController implements LegacyControllerInterface {
+
 
 	@Override
 	public ModelAndView run(HttpServletRequest req) {

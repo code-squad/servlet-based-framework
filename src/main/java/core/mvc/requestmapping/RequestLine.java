@@ -1,5 +1,7 @@
 package core.mvc.requestmapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 import core.annotation.RequestMethod;
 
 public class RequestLine {
@@ -10,6 +12,11 @@ public class RequestLine {
 	public RequestLine(String path, RequestMethod method) {
 		this.path = path;
 		this.method = method;
+	}
+	
+	public RequestLine(HttpServletRequest req) {
+		this.path = req.getRequestURI();
+		this.method = RequestMethod.getMethodEnum(req);
 	}
 
 	public String getPath() {

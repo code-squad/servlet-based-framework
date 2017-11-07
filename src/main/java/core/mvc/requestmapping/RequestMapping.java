@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import core.annotation.RequestMethod;
-import core.mvc.controller.Controller;
 import core.mvc.controller.CreateUserController;
 import core.mvc.controller.HomeController;
+import core.mvc.controller.LegacyControllerInterface;
 import core.mvc.controller.LoginController;
 import core.mvc.controller.LoginPostController;
 import core.mvc.controller.UserJoinFormController;
@@ -14,7 +14,7 @@ import core.mvc.controller.UserJoinFormController;
 public class RequestMapping {
 
 	private static RequestMapping rm;
-	private Map<RequestLine, Controller> controllers = new HashMap<>();
+	private Map<RequestLine, LegacyControllerInterface> controllers = new HashMap<>();
 
 	private RequestMapping() {
 
@@ -27,11 +27,11 @@ public class RequestMapping {
 		return rm;
 	}
 
-	public void addController(Controller controller, RequestLine line) {
+	public void addController(LegacyControllerInterface controller, RequestLine line) {
 		this.controllers.put(line, controller);
 	}
 
-	public Controller getController(RequestLine line) {
+	public LegacyControllerInterface getController(RequestLine line) {
 		return this.controllers.get(line);
 	}
 

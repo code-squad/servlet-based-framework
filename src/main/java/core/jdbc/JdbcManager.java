@@ -15,21 +15,19 @@ import core.db.exceptions.MultipleDataException;
 
 public class JdbcManager {
 
-	private static JdbcManager jdbm;
+	private static final JdbcManager jdbm = new JdbcManager();
+
 	private Connection conn = ConnectionManager.getConnection();
 
 	private JdbcManager() {
-
 	}
 
 	public static JdbcManager getInstance() {
-		if (jdbm == null) {
-			jdbm = new JdbcManager();
-		}
 		return jdbm;
 	}
 
-	public void insertObject(String sql, Object... objects) {
+	public final void insertObject(final String sql, Object... objects) {
+
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -42,6 +40,7 @@ public class JdbcManager {
 	}
 
 	public void insertObject(String tableName, Object object) {
+
 		PreparedStatement pstmt = null;
 
 		StringBuilder queryBuilder = new StringBuilder();
@@ -122,7 +121,6 @@ public class JdbcManager {
 					break;
 				}
 			}
-
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}
@@ -130,7 +128,6 @@ public class JdbcManager {
 
 	private String generateQueryStatement(Class<?> targetClass) {
 		Field[] allFields = targetClass.getDeclaredFields();
-
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("(");
