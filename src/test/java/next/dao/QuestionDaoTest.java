@@ -1,7 +1,6 @@
 package next.dao;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import core.jdbc.ConnectionManager;
-import next.model.User;
+import next.model.Question;
 
-public class UserDaoTest {
+public class QuestionDaoTest {
 	@Before
 	public void setUp() {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -24,25 +23,25 @@ public class UserDaoTest {
 
 	@Test
 	public void crud() throws Exception {
-		User expected = new User("userId", "password", "name", "javajigi@email.com");
-		UserDao userDao = UserDao.getInstance();
-		userDao.insert(expected);
-		User actual = userDao.findByUserId(expected.getUserId());
+		Question expected = new Question("xmfpes", "hello", "hello, my name is kyunam");
+		QuestionDao questionDao = QuestionDao.getInstance();
+		expected = questionDao.insert(expected);
+		Question actual = questionDao.findByQuestionId(expected.getQuestionId());
 		assertEquals(expected, actual);
-
-		expected.update(new User("userId", "password2", "name2", "sanjigi@email.com"));
-		userDao.update(expected);
-		actual = userDao.findByUserId(expected.getUserId());
-		assertEquals(expected, actual);
-
-		userDao.delete(expected);
-		assertNull(userDao.findByUserId(expected.getUserId()));
 	}
 
 	@Test
 	public void findAll() throws Exception {
-		UserDao userDao = UserDao.getInstance();
-		List<User> users = userDao.findAll();
-		assertEquals(1, users.size());
+		QuestionDao questionDao = QuestionDao.getInstance();
+		List<Question> users = questionDao.findAll();
+		assertEquals(8, users.size());
+	}
+
+	@Test
+	public void addAnswerCount() throws Exception {
+		QuestionDao questionDao = QuestionDao.getInstance();
+		int currentCount = questionDao.getCountOfAnswer(6);
+		questionDao.editCountOfAnswer(6, 1);
+		assertEquals(currentCount + 1, questionDao.getCountOfAnswer(6));
 	}
 }

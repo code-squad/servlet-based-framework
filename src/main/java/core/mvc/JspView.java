@@ -1,38 +1,60 @@
 package core.mvc;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class JspView implements View {
-    private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
+	private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
 
-    private String viewName;
+	private String viewName;
 
-    public JspView(String viewName) {
-        if (viewName == null) {
-            throw new NullPointerException("viewName is null. 이동할 URL을 입력하세요.");
-        }
-        this.viewName = viewName;
-    }
+	public JspView(String viewName) {
+		if (viewName == null) {
+			throw new NullPointerException("viewName is null. 이동할 URL을 입력하세요.");
+		}
+		this.viewName = viewName;
+	}
 
-    @Override
-    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        if (viewName.startsWith(DEFAULT_REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
-            return;
-        }
+	@Override
+	public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		boolean sendType = viewName.startsWith(DEFAULT_REDIRECT_PREFIX);
+		SendStrategy sendStrategy = sendType ? new Redirect() : new Forward();
+		if (sendType)
+			sendStrategy.excuteSend(req, resp, viewName);
+		Set<String> keys = model.keySet();
+		for (String key : keys) {
+			req.setAttribute(key, model.get(key));
+		}
+		sendStrategy.excuteSend(req, resp, viewName);
+	}
 
-        Set<String> keys = model.keySet();
-        for (String key : keys) {
-            request.setAttribute(key, model.get(key));
-        }
+	private interface SendStrategy {
+		public void excuteSend(HttpServletRequest req, HttpServletResponse resp, String url)
+				throws ServletException, IOException;
+	}
 
-        RequestDispatcher rd = request.getRequestDispatcher(viewName);
-        rd.forward(request, response);
-    }
+	private class Redirect implements SendStrategy {
+		@Override
+		public void excuteSend(HttpServletRequest req, HttpServletResponse resp, String url)
+				throws ServletException, IOException {
+			int idx = url.indexOf(":");
+			String redirectUrl = url.substring(idx + 1);
+			resp.sendRedirect(redirectUrl);
+		}
+	}
+
+	private class Forward implements SendStrategy {
+		@Override
+		public void excuteSend(HttpServletRequest req, HttpServletResponse resp, String url)
+				throws ServletException, IOException {
+			RequestDispatcher rd = req.getRequestDispatcher(url);
+			rd.forward(req, resp);
+		}
+	}
 }
