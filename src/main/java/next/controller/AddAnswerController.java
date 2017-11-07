@@ -24,9 +24,8 @@ public class AddAnswerController implements Controller{
 			Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents"), questionId);
 			AnswerDao answerDao = AnswerDao.getInstance();
 			QuestionDao questionDao = QuestionDao.getInstance();
-			long answerId = answerDao.insert(answer);
+			mav.addObject("answer", answerDao.insert(answer));
 			questionDao.editCountOfAnswer(questionId, 1);
-			mav.addObject("answer", answerDao.findByAnswerId(answerId));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

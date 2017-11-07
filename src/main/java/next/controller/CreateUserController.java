@@ -18,7 +18,6 @@ public class CreateUserController implements Controller {
 		log.debug("user create start");
 		User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"), req.getParameter("email"));
 		DataBase.addUser(user);
-		log.debug("user create success : " + user);
 		return new ModelAndView(new JspView("redirect:/"));
 	}
 }

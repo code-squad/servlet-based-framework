@@ -26,7 +26,7 @@ public class QuestionDaoTest {
     		Question expected = new Question("xmfpes", "hello", "hello, my name is kyunam");
         QuestionDao questionDao = QuestionDao.getInstance();
         System.out.println(expected);
-        expected.setQuestionId(questionDao.insert(expected));
+        expected = questionDao.insert(expected);
         Question actual = questionDao.findByQuestionId(expected.getQuestionId());
         assertEquals(expected, actual);
     }

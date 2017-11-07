@@ -11,11 +11,11 @@ public class QuestionDao {
 		return questionDao;
 	}
 
-	public long insert(Question question) {
+	public Question insert(Question question) {
 		// TODO Auto-generated method stub
 		JdbcTemplate insertTemplate = JdbcTemplate.getInstance();
-		return insertTemplate.update("INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?)", question.getWriter(), 
-				question.getTitle(), question.getContents(), question.getCreatedDate(), question.getCountOfComment()); 
+		return findByQuestionId(insertTemplate.update("INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?)", question.getWriter(), 
+				question.getTitle(), question.getContents(), question.getCreatedDate(), question.getCountOfComment())); 
 	}
 
 	public Question findByQuestionId(long questionId) {

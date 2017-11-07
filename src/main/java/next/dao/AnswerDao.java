@@ -9,15 +9,15 @@ public class AnswerDao {
 	public static AnswerDao getInstance() {
 		return answerDao;
 	}
-	public long insert(Answer answer) {
+	public Answer insert(Answer answer) {
 		// TODO Auto-generated method stub
 		JdbcTemplate insertTemplate = JdbcTemplate.getInstance();
-		return insertTemplate.update("INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)", (pstmt) -> {
+		return findByAnswerId(insertTemplate.update("INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)", (pstmt) -> {
 			pstmt.setString(1, answer.getWriter());
             pstmt.setString(2, answer.getContents());
             pstmt.setTimestamp(3, new Timestamp(answer.getTimeFromCreateDate()));
             pstmt.setLong(4, answer.getQuestionId());
-		});
+		}));
 	}
 
 	public Answer findByAnswerId(long insert) {

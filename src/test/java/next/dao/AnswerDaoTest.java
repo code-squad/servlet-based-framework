@@ -42,9 +42,10 @@ public class AnswerDaoTest {
     		long questionId = 1L;
         Answer answer = new Answer("javajigi", "answer contents", questionId);
         AnswerDao answerDao = AnswerDao.getInstance();
-        long answerId = answerDao.insert(answer);
-        Answer insertedAnswer = answerDao.findByAnswerId(answerId);
-        answerDao.delete(insertedAnswer.getAnswerId());
+        
+        Answer insertedAnswer = answerDao.insert(answer);
+        long answerId = insertedAnswer.getAnswerId();
+        answerDao.delete(answerId);
         assertNull(answerDao.findByAnswerId(answerId));
         
     }
