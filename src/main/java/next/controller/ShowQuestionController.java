@@ -14,8 +14,6 @@ import next.dao.QuestionDao;
 import next.model.Question;
 
 public class ShowQuestionController implements Controller {
-	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
-
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 

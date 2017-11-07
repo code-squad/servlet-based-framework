@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonView implements View {
-	Map<String, Object> model ;
+	private Map<String, Object> model ;
 
 
 	@Override
