@@ -9,10 +9,15 @@ import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 
 public class AnswerDao {
+	private static AnswerDao answerDao = new AnswerDao();
+	public static AnswerDao getInstance() {
+		return answerDao;
+	}
+	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
 	public Answer insert(Answer answer) {
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
-		JdbcTemplate.getInstance().update(sql, keyHolder, answer.getWriter(), answer.getContents(),
+		jdbcTemplate.update(sql, keyHolder, answer.getWriter(), answer.getContents(),
 				new Timestamp(answer.getTimeFromCreateDate()), answer.getQuestionId());
 		return findById(keyHolder.getId());
 	}
@@ -22,7 +27,7 @@ public class AnswerDao {
 
 		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
 				rs.getString("contents"), rs.getTimestamp("createdDate"), rs.getLong("questionId")));
-		return JdbcTemplate.getInstance().queryForObject(sql, rm, answerId);
+		return jdbcTemplate.queryForObject(sql, rm, answerId);
 	}
 
 	public List<Answer> findAllByQuestionId(long questionId) {
@@ -31,19 +36,19 @@ public class AnswerDao {
 
 		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
 				rs.getString("contents"), rs.getTimestamp("createdDate"), questionId));
-		return JdbcTemplate.getInstance().query(sql, rm, questionId);
+		return jdbcTemplate.query(sql, rm, questionId);
 	}
 
 	public void delete(Answer answer) {
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		JdbcTemplate.getInstance().update(sql, keyHolder, answer.getAnswerId());
+		jdbcTemplate.update(sql, keyHolder, answer.getAnswerId());
 
 	}
 
 	public void delete(Long answerId) {
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		JdbcTemplate.getInstance().update(sql, keyHolder, answerId);
+		jdbcTemplate.update(sql, keyHolder, answerId);
 	}
 }
