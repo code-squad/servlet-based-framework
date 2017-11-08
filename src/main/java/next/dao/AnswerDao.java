@@ -9,17 +9,22 @@ import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 
 public class AnswerDao {
+	private static AnswerDao answerDao = AnswerDao.getInstance();
+	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+
+	public static AnswerDao getInstance() {
+		return answerDao;
+	}
+
 	public Answer insert(Answer answer) {
-		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
-		template.update(sql, keyHolder, answer.getWriter(), answer.getContents(),
+		jdbcTemplate.update(sql, keyHolder, answer.getWriter(), answer.getContents(),
 				new Timestamp(answer.getTimeFromCreateDate()), answer.getQuestionId());
 		return findById(keyHolder.getId());
 	}
 
 	public Answer findById(long answerId) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE answerId = ?";
 
 		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
@@ -28,7 +33,6 @@ public class AnswerDao {
 	}
 
 	public List<Answer> findAllByQuestionId(long questionId) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		String sql = "SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
 				+ "order by answerId desc";
 
@@ -38,17 +42,15 @@ public class AnswerDao {
 	}
 
 	public void delete(Answer answer) {
-		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		template.update(sql, keyHolder, answer.getAnswerId());
+		jdbcTemplate.update(sql, keyHolder, answer.getAnswerId());
 
 	}
 
 	public void delete(Long answerId) {
-		JdbcTemplate template = new JdbcTemplate();
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
-		template.update(sql, keyHolder, answerId);
+		jdbcTemplate.update(sql, keyHolder, answerId);
 	}
 }

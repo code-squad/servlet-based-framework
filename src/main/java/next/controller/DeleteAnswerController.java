@@ -8,10 +8,10 @@ import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 
 public class DeleteAnswerController implements Controller {
+	private AnswerDao answerDao = AnswerDao.getInstance();
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		Long answerId = Long.parseLong(req.getParameter("answerId"));
-		AnswerDao answerDao = new AnswerDao();
 		answerDao.delete(answerId);
 		return new ModelAndView(new JsonView());
 	}

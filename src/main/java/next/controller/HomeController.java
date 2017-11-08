@@ -9,10 +9,9 @@ import next.dao.QuestionDao;
 
 public class HomeController implements Controller {
 	private static final long serialVersionUID = 1L;
-
+	private QuestionDao questionDao = QuestionDao.getInstance();
 	@Override
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		QuestionDao questionDao = new QuestionDao();
 		request.setAttribute("question", questionDao.findAll());
 		return new ModelAndView(new JspView("index.jsp"));
 	}

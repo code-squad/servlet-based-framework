@@ -12,14 +12,14 @@ import next.model.Answer;
 
 public class AddAnswerController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
-
+	private AnswerDao answerDao = AnswerDao.getInstance(); 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents"),
 				Long.parseLong(req.getParameter("questionId")));
 		log.debug("answer : {}", answer);
 
-		AnswerDao answerDao = new AnswerDao();
+		
 		Answer savedAnswer = answerDao.insert(answer);
 		ModelAndView mav = new ModelAndView(new JsonView());
 		mav.addObject("answer", savedAnswer);

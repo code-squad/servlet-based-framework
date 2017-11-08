@@ -14,11 +14,12 @@ import next.dao.QuestionDao;
 import next.model.Question;
 
 public class ShowQuestionController implements Controller {
+	private QuestionDao questionDao = QuestionDao.getInstance();
+
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
-		QuestionDao QuestionDao = new QuestionDao();
-		List<Question> savedQuestion = QuestionDao.findAll();
+		List<Question> savedQuestion = questionDao.findAll();
 		ModelAndView mav = new ModelAndView(new JsonView());
 		mav.addObject("question", savedQuestion);
 		return mav;

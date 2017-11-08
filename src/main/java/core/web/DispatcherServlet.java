@@ -13,7 +13,7 @@ import next.controller.Controller;
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 	private RequestMapping requestmapping;
-
+	
 	@Override
 	public void init() {
 		requestmapping = new RequestMapping();
