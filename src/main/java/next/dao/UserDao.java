@@ -15,25 +15,21 @@ public class UserDao {
 	private Connection con = ConnectionManager.getConnection();
 
 	public void insert(User user) {
-		JdbcTemplate template = new JdbcTemplate();
 		String sql = "INSERT INTO USERS (password, name, email, userId) VALUES (?, ?, ?, ?)";
 		KeyHolder keyHolder = new KeyHolder();
-		template.update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+		JdbcTemplate.getInstance().update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 
 	}
 
 	public void update(User user) {
-		JdbcTemplate template = new JdbcTemplate();
 		String sql = "UPDATE USERS SET password=?,name=?,email=? WHERE userId=?";
 		KeyHolder keyHolder = new KeyHolder();
-		template.update(sql,keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+		JdbcTemplate.getInstance().update(sql,keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
 	public <T> List<T> findAll() {
-		JdbcTemplate template = new JdbcTemplate();
-
 		String sql = "SELECT * FROM USERS";
-		return template.query(sql, new RowMapper() {
+		return JdbcTemplate.getInstance().query(sql, new RowMapper() {
 
 			@Override
 			public User mapRow(ResultSet rs) throws SQLException {
@@ -45,10 +41,8 @@ public class UserDao {
 	}
 
 	public <T> T findByUserId(String userId) {
-		JdbcTemplate template = new JdbcTemplate();
-
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId=?";
-		return (T) template.queryForObject(sql, new RowMapper() {
+		return (T) JdbcTemplate.getInstance().queryForObject(sql, new RowMapper() {
 
 			@Override
 			public User mapRow(ResultSet rs) throws SQLException {

@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
-
+	private static JdbcTemplate template = new JdbcTemplate();
+	public static JdbcTemplate getInstance() {
+		return template;
+	}
 	public <T> List<T> query(String sql, RowMapper<T> rowmapper, Object... parameter) {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
 			setParameter(pstmt, parameter);
