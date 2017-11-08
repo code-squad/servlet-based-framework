@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.ModelAndView;
 import next.controller.Controller;
-import next.dao.AnswerDao;
-import next.dao.QuestionDao;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
