@@ -14,12 +14,13 @@ import next.model.User;
 public class UserDao {
 	private Connection con = ConnectionManager.getConnection();
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
-	
+
 	private static UserDao userDao = new UserDao();
+
 	public static UserDao getInstance() {
 		return userDao;
 	}
-	
+
 	public void insert(User user) {
 		String sql = "INSERT INTO USERS (password, name, email, userId) VALUES (?, ?, ?, ?)";
 		KeyHolder keyHolder = new KeyHolder();
@@ -30,7 +31,7 @@ public class UserDao {
 	public void update(User user) {
 		String sql = "UPDATE USERS SET password=?,name=?,email=? WHERE userId=?";
 		KeyHolder keyHolder = new KeyHolder();
-		jdbcTemplate.update(sql,keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+		jdbcTemplate.update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
 	public <T> List<T> findAll() {

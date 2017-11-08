@@ -9,11 +9,13 @@ import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 
 public class AnswerDao {
-	private static AnswerDao answerDao = new AnswerDao();
+	private static AnswerDao answerDao = AnswerDao.getInstance();
+	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+
 	public static AnswerDao getInstance() {
 		return answerDao;
 	}
-	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+
 	public Answer insert(Answer answer) {
 		KeyHolder keyHolder = new KeyHolder();
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";

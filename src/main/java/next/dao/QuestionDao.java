@@ -8,10 +8,12 @@ import core.jdbc.RowMapper;
 
 public class QuestionDao {
 	private static QuestionDao questionDao = new QuestionDao();
+	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+
 	public static QuestionDao getInstance() {
 		return questionDao;
 	}
-	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+
 	public List<Question> findAll() {
 		String sql = "SELECT questionId, writer, title, createdDate, countOfAnswer FROM QUESTIONS "
 				+ "order by questionId desc";
