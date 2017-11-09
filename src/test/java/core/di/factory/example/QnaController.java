@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import core.annotation.Controller;
 import core.annotation.Inject;
 import core.annotation.RequestMapping;
-import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
 @Controller
@@ -24,6 +23,6 @@ public class QnaController {
 
     @RequestMapping("/questions")
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ModelAndView(new JspView("/qna/list.jsp"));
+        return new ModelAndView(new MockView());
     }
 }
