@@ -20,7 +20,7 @@ import core.di.factory.example.QnaController;
 public class BeanFactoryTest {
 	private Reflections reflections;
 	private BeanFactory beanFactory;
-
+	
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setup() {
