@@ -11,7 +11,7 @@ import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 import next.model.Question;
 
-public class AddQuestionController implements Controller {
+public class AddQuestionController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(AddQuestionController.class);
 
 	@Override

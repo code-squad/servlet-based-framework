@@ -11,12 +11,12 @@ public class Junit3TestRunner {
 	public void run() throws Exception {
 		Class<Junit3Test> clazz = Junit3Test.class;
 		Method[] methods = clazz.getDeclaredMethods();
-		Arrays.stream(methods).filter(m -> m.getName().startsWith("test")).forEach(m -> {
+		Arrays.stream(methods)
+		.filter(m -> m.getName().startsWith("test"))
+		.forEach(m -> {
 			try {
 				m.invoke(clazz.newInstance());
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| InstantiationException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});

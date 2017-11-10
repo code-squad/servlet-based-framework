@@ -11,7 +11,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class ProfileController implements Controller {
+public class ProfileController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
 	@Override

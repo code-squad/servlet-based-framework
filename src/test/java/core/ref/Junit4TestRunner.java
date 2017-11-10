@@ -11,11 +11,12 @@ public class Junit4TestRunner {
 	public void run() throws Exception {
 		Class<Junit4Test> clazz = Junit4Test.class;
 		Method[] methods = clazz.getMethods();
-		Arrays.stream(methods).filter(m -> m.isAnnotationPresent(MyTest.class)).forEach(m -> {
+		Arrays.stream(methods)
+		.filter(m -> m.isAnnotationPresent(MyTest.class))
+		.forEach(m -> {
 			try {
 				m.invoke(clazz.newInstance());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});

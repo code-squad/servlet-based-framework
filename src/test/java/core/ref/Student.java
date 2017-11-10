@@ -1,5 +1,8 @@
 package core.ref;
 
+import core.annotation.Controller;
+
+@Controller
 public class Student {
     private String name;
 

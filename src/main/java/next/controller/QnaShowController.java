@@ -12,7 +12,7 @@ import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
 
-public class QnaShowController implements Controller {
+public class QnaShowController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(QnaShowController.class);
 
 	@Override

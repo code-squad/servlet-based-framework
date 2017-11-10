@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
-public class LogoutController implements Controller {
+public class LogoutController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
 
 	@Override

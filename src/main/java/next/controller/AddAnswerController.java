@@ -13,7 +13,7 @@ import next.dao.DataAccessException;
 import next.dao.QuestionDao;
 import next.model.Answer;
 
-public class AddAnswerController implements Controller {
+public class AddAnswerController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 
 	@Override
