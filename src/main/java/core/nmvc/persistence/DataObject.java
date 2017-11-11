@@ -1,4 +1,4 @@
-package core.nmvc.factory;
+package core.nmvc.persistence;
 
 public interface DataObject {
 
