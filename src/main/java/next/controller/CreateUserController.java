@@ -11,7 +11,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class CreateUserController implements Controller {
+public class CreateUserController implements LegacyController {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 

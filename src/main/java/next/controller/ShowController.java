@@ -8,7 +8,9 @@ import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 
-public class ShowController implements Controller {
+
+public class ShowController implements LegacyController {
+
 	private QuestionDao questionDao = QuestionDao.getInstance();
 	private AnswerDao answerDao = AnswerDao.getInstance();
 	@Override
