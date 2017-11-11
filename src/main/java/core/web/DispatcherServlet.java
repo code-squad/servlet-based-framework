@@ -27,12 +27,14 @@ import next.controller.LegacyController;
 
 @WebServlet(name = "dispatcher", urlPatterns = { "", "/" }, loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
+
 	private LegacyHandlerMapping lhm;
 	private AnnotationHandlerMapping ahm;
 	
 	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 	private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
+
 
 	@Override
 	public void init() {
