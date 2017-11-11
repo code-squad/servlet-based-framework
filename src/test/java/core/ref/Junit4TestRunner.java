@@ -1,6 +1,5 @@
 package core.ref;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Junit4TestRunner {
-	private static final Logger logger = LoggerFactory.getLogger(Junit4TestRunner.class);
 
 	@Test
 	public void run() throws Exception {

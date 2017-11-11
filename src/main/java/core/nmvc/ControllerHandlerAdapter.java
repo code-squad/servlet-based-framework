@@ -1,6 +1,5 @@
 package core.nmvc;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +16,7 @@ public class ControllerHandlerAdapter implements HandlerAdapter {
 	@Override
 	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
+
 		return ((LegacyController) handler).execute(request, response);
 	}
 

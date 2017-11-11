@@ -3,7 +3,6 @@ package core.web;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,19 +19,16 @@ import core.mvc.ModelAndView;
 import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.ControllerHandlerAdapter;
 import core.nmvc.HandlerAdapter;
-import core.nmvc.HandlerExecution;
 import core.nmvc.HandlerExecutionHandlerAdapter;
 import core.nmvc.HandlerMapping;
-import next.controller.LegacyController;
 
 @WebServlet(name = "dispatcher", urlPatterns = { "", "/" }, loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 	private LegacyHandlerMapping lhm;
 	private AnnotationHandlerMapping ahm;
-	
+
 	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
-	private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
 	@Override
 	public void init() {
@@ -51,17 +47,16 @@ public class DispatcherServlet extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Object handler = getHandler(req);
 		try {
-			ModelAndView mav = execute(handler, req, resp);
-			if(mav != null) {
+			ModelAndView mav = execute(handler);
+			if (mav != null) {
 				mav.getView().render(mav.getModel(), req, resp);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
 	}
 
-	private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+	private ModelAndView execute(Object handler) throws Exception {
 		return (ModelAndView) handlerAdapters.stream().filter(ha -> ha.supports(handler)).findFirst().get();
 	}
 

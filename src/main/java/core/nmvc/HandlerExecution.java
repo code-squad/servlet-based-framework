@@ -5,13 +5,12 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
 public class HandlerExecution {
-	HandlerKey handerKey;
-	Method m;
-	Object instance;
+	private HandlerKey handerKey;
+	private Method m;
+	private Object instance;
 
 	public HandlerExecution(Method m, Object instance) {
 		this.m = m;

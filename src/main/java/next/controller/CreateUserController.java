@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import core.annotation.Controller;
 import core.db.DataBase;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
