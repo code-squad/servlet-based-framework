@@ -7,7 +7,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 
-public class HomeController implements Controller {
+public class HomeController implements LegacyController {
 	private static final long serialVersionUID = 1L;
 	private QuestionDao questionDao = QuestionDao.getInstance();
 	@Override
