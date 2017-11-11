@@ -26,4 +26,5 @@ public class QnaController {
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return new ModelAndView(new JspView("/qna/list.jsp"));
     }
+    
 }
