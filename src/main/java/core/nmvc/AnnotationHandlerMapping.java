@@ -9,17 +9,20 @@ import org.reflections.ReflectionUtils;
 
 import com.google.common.collect.Maps;
 
+import core.annotation.ComponentScan;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import next.controller.LegacyController;
 
+@ComponentScan({"next.controller","core.nmvc"})
 public class AnnotationHandlerMapping implements HandlerMapping {
 	private Object[] basePackage;
 	
 	private Map<HandlerKey, HandlerExecution> handlerExecutions = Maps.newHashMap();
 
-	public AnnotationHandlerMapping(Object... basePackage) {
-		this.basePackage = basePackage;
+	public AnnotationHandlerMapping() {
+		ComponentScan cs = this.getClass().getAnnotation(ComponentScan.class);
+		this.basePackage = cs.value();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -7,7 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import next.controller.AddAnswerController;
-import next.controller.AddQuestionController;
+import next.controller.QuestionController;
 import next.controller.DeleteAnswerController;
 import next.controller.ForwardController;
 import next.controller.LegacyController;
@@ -31,7 +31,6 @@ public class LegacyHandlerMapping implements HandlerMapping {
 		requestMap.put(new RequestMethod("/users/form", "GET"), new ForwardController("/user/form"));
 		requestMap.put(new RequestMethod("/qna/show", "GET"), new QnaShowController());
 
-		requestMap.put(new RequestMethod("/qna/form", "POST"), new AddQuestionController());
 		requestMap.put(new RequestMethod("/api/qna/deleteAnswer", "POST"), new DeleteAnswerController());
 		requestMap.put(new RequestMethod("/api/qna/addanswer", "POST"), new AddAnswerController());
 		requestMap.put(new RequestMethod("/users/login", "POST"), new LoginController());
