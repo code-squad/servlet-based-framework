@@ -3,6 +3,8 @@ package core.nmvc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,20 +37,24 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp){
-		Object handler = lhm.getHandler(req)
-				.orElse(ahm.getHandler(req).orElseGet(PageNotFoundHandlingController::new));
 		try {
-			Optional<ModelAndView> mav = getModelAndViewInHandlerAdapter(req, resp, handler);
-			if(mav.isPresent()) {
+			Optional<ModelAndView> mav = getModelAndViewInHandlerAdapter(req, resp);
+			if(mav.isPresent()) 
 				mav.get().render(req, resp);
-			}
 		} catch (Exception e) {
 			throw new DispatcherServletException();
 		}
 	}
 	
-	public Optional<ModelAndView> getModelAndViewInHandlerAdapter(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
-			return Optional.ofNullable(handlerAdapters.stream().filter(h -> h.supports(handler))
-					.findFirst().get().handle(req, resp, handler));
+	public Optional<ModelAndView> getModelAndViewInHandlerAdapter(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		Object handler = getHandler(req);
+		return Optional.ofNullable(handlerAdapters.stream().filter(h -> h.supports(handler))
+				.findFirst().get().handle(req, resp, handler));
+	}
+	
+	public Object getHandler(HttpServletRequest req) throws Exception {
+		return lhm.getHandler(req)
+				.orElse(ahm.getHandler(req)
+				.orElseGet(PageNotFoundHandlingController::new));
 	}
 }
