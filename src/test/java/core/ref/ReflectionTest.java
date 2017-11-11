@@ -1,6 +1,8 @@
 package core.ref;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,9 +14,36 @@ public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
 
     @Test
+    public void privateFieldAccess() throws Exception {
+        Class<Student> clazz = Student.class;
+        logger.debug(clazz.getName());
+        Field f = clazz.getDeclaredField("name");
+        f.setAccessible(true);
+        Student student = new Student();
+        f.set(student, "재성");
+        logger.debug("student : "+student.getName());
+
+    }
+    @Test
     public void showClass() {
         Class<Question> clazz = Question.class;
         logger.debug(clazz.getName());
+        Field[] f = clazz.getDeclaredFields();
+        logger.debug("필드 추우ㄹ력!!");
+        for (Field field : f) {
+			logger.debug(field.getName());
+		}
+        Constructor[] c = clazz.getDeclaredConstructors();
+        logger.debug("생성자 출력 !!");
+        for (Constructor constructor : c) {
+			logger.debug(constructor.getName());
+		}
+        logger.debug("메서드 출력!!!!!!!!!!!!!!!!!!!!!!!!");
+        Method[] m = clazz.getMethods();
+        for (Method method : m) {
+        	logger.debug(method.getName());
+			
+		}
     }
 
     @Test

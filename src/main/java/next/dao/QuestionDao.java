@@ -7,8 +7,9 @@ import core.jdbc.JdbcTemplate;
 import core.jdbc.RowMapper;
 
 public class QuestionDao {
-	private static QuestionDao questionDao = new QuestionDao();
+
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+	private static QuestionDao questionDao = new QuestionDao();
 
 	public static QuestionDao getInstance() {
 		return questionDao;
