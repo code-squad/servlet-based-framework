@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.ModelAndView;
 
 public class HandlerExecution {
-	private HandlerKey handerKey;
 	private Method m;
 	private Object instance;
 

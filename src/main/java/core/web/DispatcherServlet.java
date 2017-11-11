@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
 
 import core.mvc.ModelAndView;
@@ -24,8 +21,6 @@ import core.nmvc.HandlerMapping;
 
 @WebServlet(name = "dispatcher", urlPatterns = { "", "/" }, loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
-	private LegacyHandlerMapping lhm;
-	private AnnotationHandlerMapping ahm;
 
 	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
@@ -34,9 +29,11 @@ public class DispatcherServlet extends HttpServlet {
 	public void init() {
 		handlerAdapters.add(new ControllerHandlerAdapter());
 		handlerAdapters.add(new HandlerExecutionHandlerAdapter());
-		lhm = new LegacyHandlerMapping();
+		
+		LegacyHandlerMapping lhm = new LegacyHandlerMapping();
+		AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("next.controller");
+
 		lhm.initMapping();
-		ahm = new AnnotationHandlerMapping("next.controller");
 		ahm.initialize();
 
 		mappings.add(lhm);

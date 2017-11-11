@@ -14,17 +14,6 @@ public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
 
     @Test
-    public void privateFieldAccess() throws Exception {
-        Class<Student> clazz = Student.class;
-        logger.debug(clazz.getName());
-        Field f = clazz.getDeclaredField("name");
-        f.setAccessible(true);
-        Student student = new Student();
-        f.set(student, "재성");
-        logger.debug("student : "+student.getName());
-
-    }
-    @Test
     public void showClass() {
         Class<Question> clazz = Question.class;
         logger.debug(clazz.getName());

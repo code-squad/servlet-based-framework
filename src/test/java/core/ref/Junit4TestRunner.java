@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Junit4TestRunner {
 
