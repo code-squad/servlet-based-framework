@@ -13,7 +13,9 @@ import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 import next.model.Question;
 
-public class ShowQuestionController implements Controller {
+
+public class ShowQuestionController implements LegacyController {
+
 	private QuestionDao questionDao = QuestionDao.getInstance();
 
 	@Override
