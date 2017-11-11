@@ -16,4 +16,5 @@ public class HomeController implements LegacyControllerInterface {
 	public ModelAndView run(HttpServletRequest req) {
 		return new ModelAndView(new JspView("index.jsp"));
 	}
+	
 }
