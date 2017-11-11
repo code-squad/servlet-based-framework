@@ -32,9 +32,9 @@ public class BeanFactory {
 		this.preInstantiateBeans.stream().forEach(c -> {
 			instantiateClass(c);
 		});
-		logger.debug("number of beans : {} " , this.beans.size());
+		logger.debug("number of beans : {} ", this.beans.size());
 		this.beans.values().stream().forEach(b -> {
-			logger.debug("name of created bean : {}" , b.getClass().getName());
+			logger.debug("name of created bean : {}", b.getClass().getName());
 		});
 	}
 
@@ -45,32 +45,32 @@ public class BeanFactory {
 		}
 
 		if (BeanFactoryUtils.getInjectedConstructor(clazz) != null) {
-			logger.debug("start recursion for class : {}" , clazz.getName());
+			logger.debug("start recursion for class : {}", clazz.getName());
 			this.beans.put(clazz, instantiateConstructor(BeanFactoryUtils.getInjectedConstructor(clazz)));
 			return this.beans.get(clazz);
 		}
 
 		try {
-			logger.debug("now instantiating : {} " , clazz.getName());
-			
+			logger.debug("now instantiating : {} ", clazz.getName());
+
 			this.beans.put(clazz, clazz.newInstance());
 			return this.beans.get(clazz);
 		} catch (InstantiationException | IllegalAccessException e) {
-			logger.error("something unexpected has occured : {} " , e.getMessage());
+			logger.error("something unexpected has occured : {} ", e.getMessage());
 			return null;
 		}
 	}
 
 	private Object instantiateConstructor(Constructor<?> constructor) {
-		Class<?> [] parameterTypes = constructor.getParameterTypes();
+		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		logger.debug("required arguments : {}", Arrays.asList(parameterTypes).toString());
 		List<Object> args = Lists.newArrayList();
-		
+
 		for (Class<?> clazz : parameterTypes) {
-			
+
 			args.add(instantiateClass(clazz));
 		}
-		logger.debug("size of arguments : {} " , args.size());
+		logger.debug("size of arguments : {} ", args.size());
 		logger.debug(args.toString());
 		return BeanFactoryUtils.instantiateClass(constructor, args.toArray());
 	}
