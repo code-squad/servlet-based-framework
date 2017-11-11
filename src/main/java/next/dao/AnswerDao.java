@@ -9,8 +9,10 @@ import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 
 public class AnswerDao {
+
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
 	private static AnswerDao answerDao = new AnswerDao();
+
 
 	public static AnswerDao getInstance() {
 		return answerDao;
