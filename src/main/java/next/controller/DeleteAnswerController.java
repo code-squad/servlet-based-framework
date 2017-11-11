@@ -8,6 +8,7 @@ import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 
 public class DeleteAnswerController implements LegacyController {
+
 	private AnswerDao answerDao = AnswerDao.getInstance();
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
