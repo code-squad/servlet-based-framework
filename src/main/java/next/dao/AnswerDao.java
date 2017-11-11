@@ -9,8 +9,8 @@ import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 
 public class AnswerDao {
-	private static AnswerDao answerDao = AnswerDao.getInstance();
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+	private static AnswerDao answerDao = new AnswerDao();
 
 	public static AnswerDao getInstance() {
 		return answerDao;
@@ -35,7 +35,6 @@ public class AnswerDao {
 	public List<Answer> findAllByQuestionId(long questionId) {
 		String sql = "SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
 				+ "order by answerId desc";
-
 		RowMapper<Answer> rm = (rs -> new Answer(rs.getLong("answerId"), rs.getString("writer"),
 				rs.getString("contents"), rs.getTimestamp("createdDate"), questionId));
 		return jdbcTemplate.query(sql, rm, questionId);
