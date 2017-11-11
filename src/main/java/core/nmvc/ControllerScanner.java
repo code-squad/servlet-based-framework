@@ -18,10 +18,10 @@ public class ControllerScanner {
 	}
 	public ControllerScanner(Object[] obj) {
 		Reflections reflections = new Reflections(obj);			
-		InstantiateControllers(reflections.getTypesAnnotatedWith(Controller.class));
+		instantiateControllers(reflections.getTypesAnnotatedWith(Controller.class));
 	}
 
-	private void InstantiateControllers(Set<Class<?>> annotated) {
+	private void instantiateControllers(Set<Class<?>> annotated) {
 		controllerMap.putAll(annotated.stream().collect(Collectors.toMap(a -> a, a -> {
 			try { return a.newInstance(); } catch (Exception e) { throw new ControllerInstantiationException(); }
 			}))

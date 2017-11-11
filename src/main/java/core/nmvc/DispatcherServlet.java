@@ -1,10 +1,7 @@
 package core.nmvc;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,8 +36,10 @@ public class DispatcherServlet extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp){
 		try {
 			Optional<ModelAndView> mav = getModelAndViewInHandlerAdapter(req, resp);
-			if(mav.isPresent()) 
+			if(mav.isPresent()) {
 				mav.get().render(req, resp);
+				log.debug("LegacyController / HandlerExecution render success");
+			}
 		} catch (Exception e) {
 			throw new DispatcherServletException();
 		}

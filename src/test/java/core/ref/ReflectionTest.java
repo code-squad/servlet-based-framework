@@ -1,5 +1,9 @@
 package core.ref;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -57,22 +61,21 @@ public class ReflectionTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        
-        System.out.println(st.getAge());
-        System.out.println(st.getName());
+        assertEquals(30, st.getAge());
+        assertEquals("pobi", st.getName());
     }
 	@Test
 	public void createUserTest() {
 		Class<User> clazz = User.class;
-		
 		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 		Arrays.stream(constructors).forEach(c -> {
 			try {
 				User user = (User) c.newInstance("kyunam", "hello", "hi", "haha");
-				System.out.println(user);
+				assertNotNull(user);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
+		
 	}
 }

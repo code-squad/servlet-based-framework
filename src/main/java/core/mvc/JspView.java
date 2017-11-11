@@ -30,6 +30,7 @@ public class JspView implements View {
 		SendStrategy sendStrategy = sendType ? new Redirect() : new Forward();
 		if(!sendType) {
 			setAttributeInKeys(req, model);
+			log.debug("setting Attribute complete");
 		}
 		sendStrategy.excuteSend(req, resp, viewName);
 	}

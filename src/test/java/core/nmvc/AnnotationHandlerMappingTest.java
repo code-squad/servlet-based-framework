@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import next.controller.LegacyController;
-
 public class AnnotationHandlerMappingTest {
 	private AnnotationHandlerMapping handlerMapping;
 
