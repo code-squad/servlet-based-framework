@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -67,14 +68,12 @@ public class ReflectionTest {
 	public void createUserTest() {
 		Class<User> clazz = User.class;
 		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-		Arrays.stream(constructors).forEach(c -> {
-			try {
-				User user = (User) c.newInstance("kyunam", "hello", "hi", "haha");
-				assertNotNull(user);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-		
+		User user = null;
+		try {
+			user = (User) constructors[0].newInstance("kyunam", "hello", "hi", "haha");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertEquals("kyunam", user.getUserId());
 	}
 }
