@@ -1,5 +1,6 @@
 package core.nmvc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -34,11 +35,13 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp){
-		Object handler = lhm.getHandler(req).
-				orElse(ahm.getHandler(req).orElseGet(PageNotFoundHandlingController::new));
+		Object handler = lhm.getHandler(req)
+				.orElse(ahm.getHandler(req).orElseGet(PageNotFoundHandlingController::new));
 		try {
-			getModelAndViewInHandlerAdapter(req, resp, handler)
-			.filter(m -> m!=null).get().render(req, resp);
+			Optional<ModelAndView> mav = getModelAndViewInHandlerAdapter(req, resp, handler);
+			if(mav.isPresent()) {
+				mav.get().render(req, resp);
+			}
 		} catch (Exception e) {
 			throw new DispatcherServletException();
 		}
