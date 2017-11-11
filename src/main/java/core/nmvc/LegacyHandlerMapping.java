@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import next.controller.AddAnswerController;
-import next.controller.QuestionController;
 import next.controller.DeleteAnswerController;
 import next.controller.ForwardController;
 import next.controller.LegacyController;
@@ -37,7 +36,7 @@ public class LegacyHandlerMapping implements HandlerMapping {
 	}
 
 	@Override
-	public Optional<LegacyController> getHandler(HttpServletRequest request) {
+	public Optional<Object> getHandler(HttpServletRequest request) {
 		RequestMethod rm = new RequestMethod(request.getRequestURI(), request.getMethod());
 		return Optional.ofNullable(requestMap.get(rm));
 	}

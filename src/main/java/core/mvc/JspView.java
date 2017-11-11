@@ -28,8 +28,9 @@ public class JspView implements View {
 	public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		boolean sendType = viewName.startsWith(DEFAULT_REDIRECT_PREFIX);
 		SendStrategy sendStrategy = sendType ? new Redirect() : new Forward();
-		if(!sendType)
+		if(!sendType) {
 			setAttributeInKeys(req, model);
+		}
 		sendStrategy.excuteSend(req, resp, viewName);
 	}
 	

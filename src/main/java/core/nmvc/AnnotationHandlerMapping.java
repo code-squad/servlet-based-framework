@@ -12,7 +12,6 @@ import com.google.common.collect.Maps;
 import core.annotation.ComponentScan;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
-import next.controller.LegacyController;
 
 @ComponentScan({"next.controller","core.nmvc"})
 public class AnnotationHandlerMapping implements HandlerMapping {
@@ -38,7 +37,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 		});
 	}
 
-	public Optional<LegacyController> getHandler(HttpServletRequest request) {
+	public Optional<Object> getHandler(HttpServletRequest request) {
 		String requestUri = request.getRequestURI();
 		RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
 		return Optional.ofNullable(handlerExecutions.get(new HandlerKey(requestUri, rm)));

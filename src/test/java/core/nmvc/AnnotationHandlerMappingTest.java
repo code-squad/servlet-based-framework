@@ -22,7 +22,7 @@ public class AnnotationHandlerMappingTest {
 	public void getHandler() throws Exception {
 		MockHttpServletRequest req = new MockHttpServletRequest("GET", "/users/findUserId");
 		MockHttpServletResponse resp = new MockHttpServletResponse();
-		Optional<LegacyController> execution = handlerMapping.getHandler(req);
-		execution.get().execute(req, resp);
+		Optional<Object> execution = handlerMapping.getHandler(req);
+		((HandlerExecution) execution.get()).handle(req, resp);
 	}
 }
