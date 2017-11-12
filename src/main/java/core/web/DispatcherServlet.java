@@ -22,6 +22,7 @@ import core.nmvc.HandlerMapping;
 @WebServlet(name = "dispatcher", urlPatterns = { "", "/" }, loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
+
 	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 
