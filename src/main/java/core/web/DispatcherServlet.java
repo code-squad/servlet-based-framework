@@ -42,9 +42,10 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Object handler = getHandler(req);
+		
+		
 		try {
-			ModelAndView mav = execute(handler);
+			ModelAndView mav = execute(req,resp);
 			if (mav != null) {
 				mav.getView().render(mav.getModel(), req, resp);
 			}
@@ -53,8 +54,9 @@ public class DispatcherServlet extends HttpServlet {
 		}
 	}
 
-	private ModelAndView execute(Object handler) throws Exception {
-		return (ModelAndView) handlerAdapters.stream().filter(ha -> ha.supports(handler)).findFirst().get();
+	private ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		Object handler = getHandler(req);
+		return (ModelAndView) handlerAdapters.stream().filter(ha -> ha.supports(handler)).findFirst().get().handle(req, resp, handler);
 	}
 
 	private Object getHandler(HttpServletRequest req) {
