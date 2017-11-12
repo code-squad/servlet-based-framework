@@ -11,7 +11,7 @@ import core.mvc.ModelAndView;
 import next.dao.UserDao;
 import next.model.User;
 
-public class UpdateUserController implements Controller {
+public class UpdateUserController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 	private UserDao userDao = UserDao.getInstance();
 
