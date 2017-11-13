@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
-public class LogoutController implements Controller {
+public class LogoutController implements LegacyController {
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		HttpSession session = req.getSession();

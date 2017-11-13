@@ -9,8 +9,9 @@ import core.mvc.JsonView;
 import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.model.Answer;
+import core.annotation.*;
 
-public class AddAnswerController implements Controller {
+public class AddAnswerController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 	private AnswerDao answerDao = AnswerDao.getInstance(); 
 	@Override
