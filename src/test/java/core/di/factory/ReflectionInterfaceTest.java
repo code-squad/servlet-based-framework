@@ -1,8 +1,8 @@
 package core.di.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import org.junit.Before;
@@ -11,9 +11,6 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.Service;
-
-import core.annotation.Controller;
 import core.annotation.Repository;
 import core.di.factory.example.JdbcUserRepository;
 import core.di.factory.example.UserRepository;

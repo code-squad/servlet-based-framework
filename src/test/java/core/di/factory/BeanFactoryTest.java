@@ -1,6 +1,6 @@
 package core.di.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -19,7 +19,6 @@ import core.annotation.Repository;
 import core.annotation.Service;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.QnaController;
-import core.di.factory.example.QuestionRepository;
 
 public class BeanFactoryTest {
 	private static final Logger logger = LoggerFactory.getLogger(BeanFactoryTest.class);
