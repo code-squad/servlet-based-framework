@@ -10,10 +10,6 @@ import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.diogonunes.jcdp.color.ColoredPrinter;
-import com.diogonunes.jcdp.color.api.Ansi.BColor;
-import com.diogonunes.jcdp.color.api.Ansi.FColor;
-
 public class WebServerLauncher {
     private static final Logger logger = LoggerFactory.getLogger(WebServerLauncher.class);
     private static final int PORT_NUMBER = 8080;
@@ -37,8 +33,7 @@ public class WebServerLauncher {
 		try {
 			file = new RandomAccessFile("src/main/resources/banner.txt", "r");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		try {
