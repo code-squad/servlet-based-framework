@@ -12,7 +12,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class LoginController implements Controller {
+public class LoginController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@Override

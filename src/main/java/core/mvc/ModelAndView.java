@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public class ModelAndView {
 	private View view;
 	private Map<String, Object> model = new HashMap<String, Object>();
@@ -23,8 +26,8 @@ public class ModelAndView {
 	public Map<String, Object> getModel() {
 		return Collections.unmodifiableMap(model);
 	}
-
-	public View getView() {
-		return view;
+	
+	public void render(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		this.view.render(model, req, resp);
 	}
 }

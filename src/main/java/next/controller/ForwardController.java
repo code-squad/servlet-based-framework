@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
-public class ForwardController implements Controller {
+public class ForwardController implements LegacyController {
 
 	private String url;
 

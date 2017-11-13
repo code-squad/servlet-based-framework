@@ -12,7 +12,7 @@ import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Result;
 
-public class DeleteAnswerController implements Controller {
+public class DeleteAnswerController implements LegacyController {
 	private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
 
 	@Override
