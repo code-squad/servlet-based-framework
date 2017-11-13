@@ -5,13 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import core.di.factory.BeanScanner;
+
 public class ControllerScannerTest {
 
-	private ControllerScanner cs;
+	private BeanScanner cs;
 
 	@Before
 	public void setUp() {
-		cs = new ControllerScanner("core.nmvc");
+		cs = new BeanScanner("core.nmvc");
 	}
 
 	@Test

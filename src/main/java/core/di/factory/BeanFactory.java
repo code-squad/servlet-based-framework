@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import core.annotation.Controller;
+import core.di.exceptions.NoBeanException;
+
 public class BeanFactory {
 	private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
@@ -42,14 +45,21 @@ public class BeanFactory {
 		});
 	}
 
+	public Map<Class<?>, Object> getControllers() {
+		Map<Class<?>, Object> controllers = Maps.newHashMap();
+		this.preInstantiateBeans.stream().filter(b -> b.isAnnotationPresent(Controller.class))
+		.forEach(b -> {
+				controllers.put(b, this.beans.get(b));
+		});
+		return controllers;
+	}
+
 	private Object instantiateClass(Class<?> clazz) {
 
 		if (clazz.isInterface()) {
-			Object o = this.beans.values().stream().filter(b -> clazz.isAssignableFrom(b.getClass())).findFirst()
-					.orElse(instantiateClass(this.preInstantiateBeans.stream()
-							.filter(b -> clazz.isAssignableFrom(b)).findFirst()
-							.orElseThrow(() -> new RuntimeException("검색된 콩이 없습니다."))));
-			return o;
+			return this.beans.values().stream().filter(b -> clazz.isAssignableFrom(b.getClass())).findFirst()
+					.orElse(instantiateClass(this.preInstantiateBeans.stream().filter(b -> clazz.isAssignableFrom(b))
+							.findFirst().orElseThrow(() -> new NoBeanException(clazz))));
 		}
 
 		if (this.beans.containsKey(clazz)) {

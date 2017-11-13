@@ -1,13 +1,16 @@
 package core.di.factory;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
@@ -19,6 +22,7 @@ import core.di.factory.example.QnaController;
 import core.di.factory.example.QuestionRepository;
 
 public class BeanFactoryTest {
+	private static final Logger logger = LoggerFactory.getLogger(BeanFactoryTest.class);
     private Reflections reflections;
     private BeanFactory beanFactory;
 
@@ -39,8 +43,19 @@ public class BeanFactoryTest {
         assertNotNull(qnaController.getQnaService());
 
         MyQnaService qnaService = qnaController.getQnaService();
+        logger.debug("injected UserRepository impl is : {}" , qnaService.getUserRepository().getClass().getName());
+        logger.debug("injected QuestionRepository impl is : {}", qnaService.getQuestionRepository().getClass().getName());
         assertNotNull(qnaService.getUserRepository());
         assertNotNull(qnaService.getQuestionRepository());
+        
+        
+    }
+    
+    @Test
+    public void find_annotated_controllers() throws Exception { 
+    	
+    		Map<Class<?>, Object> controllers = beanFactory.getControllers();
+    		controllers.values().stream().forEach(c -> logger.debug("야생의 컨트롤러이(가) 등장했다! 이름은 : {}", c.getClass().getName()));
     }
 
 
