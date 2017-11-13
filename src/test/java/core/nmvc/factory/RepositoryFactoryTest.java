@@ -23,4 +23,5 @@ public class RepositoryFactoryTest {
 		assertEquals(1, interfacesCount);
 	}
 	
+
 }

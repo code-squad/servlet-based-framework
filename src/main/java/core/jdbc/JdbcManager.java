@@ -26,6 +26,7 @@ import core.db.exceptions.MultipleDataException;
 public class JdbcManager {
 
 	private static final JdbcManager jdbm = new JdbcManager();
+
 	private Connection conn = ConnectionManager.getConnection();
 	private static final Logger logger = LoggerFactory.getLogger(JdbcManager.class);
 
@@ -50,6 +51,7 @@ public class JdbcManager {
 	}
 
 	public void insertObject(String tableName, Object object) {
+
 		PreparedStatement pstmt = null;
 
 		StringBuilder queryBuilder = new StringBuilder();

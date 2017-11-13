@@ -14,6 +14,7 @@ import core.annotation.RequestMethod;
 import core.di.factory.BeanFactory;
 import core.di.factory.BeanScanner;
 
+
 public class AnnotationHandlerMapping implements HandlerMapping {
 	private final static Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 	
@@ -29,6 +30,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 		BeanScanner cs = new BeanScanner(this.basePackage);
 		BeanFactory bf = new BeanFactory(cs.getAnnotatedClasses());
 		bf.getControllers().keySet().stream().forEach(c -> {
+
 			ReflectionUtils.getAllMethods(c, ReflectionUtils.withAnnotation(RequestMapping.class)).stream()
 					.forEach(m -> {
 						RequestMapping rm = m.getAnnotation(RequestMapping.class);

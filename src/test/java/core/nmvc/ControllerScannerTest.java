@@ -14,6 +14,7 @@ public class ControllerScannerTest {
 	@Before
 	public void setUp() {
 		cs = new BeanScanner("core.nmvc");
+
 	}
 
 	@Test
