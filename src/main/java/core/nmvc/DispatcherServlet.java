@@ -22,21 +22,21 @@ public class DispatcherServlet extends HttpServlet {
 	private LegacyHandlerMapping lhm;
 	private AnnotationHandlerMapping ahm;
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
-	  
+
 	@Override
 	public void init() throws ServletException {
 		lhm = new LegacyHandlerMapping();
 		ahm = new AnnotationHandlerMapping();
 		ahm.initialize();
 		handlerAdapters.add(new ControllerHandlerAdapter());
-	    handlerAdapters.add(new HandlerExecutionHandlerAdapter());
+		handlerAdapters.add(new HandlerExecutionHandlerAdapter());
 	}
 
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp){
+	protected void service(HttpServletRequest req, HttpServletResponse resp) {
 		try {
 			Optional<ModelAndView> mav = getModelAndViewInHandlerAdapter(req, resp);
-			if(mav.isPresent()) {
+			if (mav.isPresent()) {
 				mav.get().render(req, resp);
 				log.debug("LegacyController / HandlerExecution render success");
 			}
@@ -44,16 +44,15 @@ public class DispatcherServlet extends HttpServlet {
 			throw new DispatcherServletException();
 		}
 	}
-	
-	public Optional<ModelAndView> getModelAndViewInHandlerAdapter(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+
+	public Optional<ModelAndView> getModelAndViewInHandlerAdapter(HttpServletRequest req, HttpServletResponse resp)
+			throws Exception {
 		Object handler = getHandler(req);
-		return Optional.ofNullable(handlerAdapters.stream().filter(h -> h.supports(handler))
-				.findFirst().get().handle(req, resp, handler));
+		return Optional.ofNullable(
+				handlerAdapters.stream().filter(h -> h.supports(handler)).findFirst().get().handle(req, resp, handler));
 	}
-	
+
 	public Object getHandler(HttpServletRequest req) throws Exception {
-		return lhm.getHandler(req)
-				.orElse(ahm.getHandler(req)
-				.orElseGet(PageNotFoundHandlingController::new));
+		return lhm.getHandler(req).orElse(ahm.getHandler(req).orElseGet(PageNotFoundHandlingController::new));
 	}
 }

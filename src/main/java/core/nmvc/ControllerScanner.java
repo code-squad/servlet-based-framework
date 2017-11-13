@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.reflections.Reflections;
 
 import core.annotation.Controller;
-import core.exception.ControllerInstantiationException;
+import core.exception.HandlerControllerInstantiationException;
 
 
 public class ControllerScanner {
@@ -20,15 +20,13 @@ public class ControllerScanner {
 		Reflections reflections = new Reflections(obj);			
 		instantiateControllers(reflections.getTypesAnnotatedWith(Controller.class));
 	}
-
+	
 	private void instantiateControllers(Set<Class<?>> annotated) {
-		controllerMap.putAll(annotated.stream().collect(Collectors.toMap(a -> a, a -> {
-			try { return a.newInstance(); } catch (Exception e) { throw new ControllerInstantiationException(); }
-			}))
-		);	
+		controllerMap.putAll(annotated.stream().collect(Collectors.toMap(a -> a, a -> new HandlerControllerInstantiationException())));
 	}
 
 	public Object getControllerInstance(Class<?> clazz) {
 		return controllerMap.get(clazz);
 	}
+	
 }
