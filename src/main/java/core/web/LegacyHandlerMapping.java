@@ -2,10 +2,13 @@ package core.web;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.common.collect.Maps;
 
+import core.nmvc.HandlerMapping;
 import next.controller.AddAnswerController;
-import next.controller.Controller;
+import next.controller.LegacyController;
 import next.controller.CreateUserController;
 import next.controller.DeleteAnswerController;
 import next.controller.HomeController;
@@ -17,14 +20,14 @@ import next.controller.ShowController;
 import next.controller.ShowQuestionController;
 import next.controller.UpdateUserController;
 
-public class RequestMapping {
-	private Map<String, Controller> controllers;
+public class LegacyHandlerMapping implements HandlerMapping {
+	private Map<String, LegacyController> controllers;
 
-	public RequestMapping() {
-		init();
+	public LegacyHandlerMapping() {
+		initMapping();
 	}
 
-	public void init() {
+	public void initMapping() {
 		controllers = Maps.newHashMap();
 		controllers.clear();
 		controllers.put("/", new HomeController());
@@ -34,7 +37,7 @@ public class RequestMapping {
 		controllers.put("/users/loginForm", new LoginController());
 		controllers.put("/users/logout", new LogoutController());
 		controllers.put("/users/profile", new ProfileController());
-		controllers.put("/users", new ListUserController());
+//		controllers.put("/users", new ListUserController());
 		controllers.put("/users/update", new UpdateUserController());
 		controllers.put("/users/updateForm", new UpdateUserController());
 		controllers.put("/qna/show", new ShowController());
@@ -43,7 +46,9 @@ public class RequestMapping {
 		controllers.put("/api/questions", new ShowQuestionController());
 	}
 
-	public Controller getController(String path) {
-		return controllers.get(path);
+
+	@Override
+	public Object getHandler(HttpServletRequest request) {
+		return controllers.get(request.getRequestURI());
 	}
 }

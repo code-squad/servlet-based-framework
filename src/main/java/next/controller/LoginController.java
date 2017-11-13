@@ -9,7 +9,7 @@ import core.mvc.JspView;
 import core.mvc.ModelAndView;
 import next.model.User;
 
-public class LoginController implements Controller {
+public class LoginController implements LegacyController {
 	private static final long serialVersionUID = 1L;
 
 	@Override
