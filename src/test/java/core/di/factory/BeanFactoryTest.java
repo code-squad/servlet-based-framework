@@ -51,9 +51,10 @@ public class BeanFactoryTest {
     }
     
     @Test
-    public void find_annotated_controllers() throws Exception { 
+    public void findAnnotatedControllers() throws Exception { 
     	
     		Map<Class<?>, Object> controllers = beanFactory.getControllers();
+    		assertNotNull(controllers);
     		controllers.values().stream().forEach(c -> logger.debug("야생의 컨트롤러이(가) 등장했다! 이름은 : {}", c.getClass().getName()));
     }
 

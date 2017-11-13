@@ -1,8 +1,6 @@
 package core.jdbc;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,18 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import core.db.exceptions.MultipleDataException;
+import core.di.exceptions.FieldAccessException;
 
 public class JdbcManager {
 
@@ -127,7 +119,7 @@ public class JdbcManager {
 				pstmt.setString(index, f.get(o).toString());
 				index++;
 			} catch (Exception e) {
-				throw new RuntimeException(e.getMessage());
+				throw new FieldAccessException(e.getMessage());
 			}
 		}
 	}

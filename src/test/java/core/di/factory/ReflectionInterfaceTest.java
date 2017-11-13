@@ -27,7 +27,7 @@ public class ReflectionInterfaceTest {
 	}
 
 	@Test
-	public void initialize_test() {
+	public void initializeTest() {
 		Set<Class<?>> clazz = r.getTypesAnnotatedWith(Repository.class);
 		assertEquals(2, clazz.size());
 		clazz.stream().forEach(c -> {
@@ -36,7 +36,7 @@ public class ReflectionInterfaceTest {
 	}
 	
 	@Test
-	public void simple_reflections_Test() {
+	public void simpleReflectionsTest() {
 		Object repo = new JdbcUserRepository();
 		assertTrue(UserRepository.class.isAssignableFrom(repo.getClass()));
 	}

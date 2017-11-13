@@ -21,8 +21,8 @@ public class JdbcManagerTest {
 	}
 	
 	@Test
-	public void GENERATE_QUERYSTRING_BY_OBJECT() {
-		User user = new User("pobi", "1234", "김규남", "pobi@naver.com");
+	public void generateQueryStringByObject() {
+		User user = new User("pobi", "1234", "박재성", "pobi@naver.com");
 		this.jdbm.insertObject("USERS", user);
 		assertEquals(ud.findByUserId("pobi"), user);
 	}	
