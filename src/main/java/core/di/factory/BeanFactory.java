@@ -46,9 +46,7 @@ public class BeanFactory {
 	public Map<Class<?>, Object> getControllers() {
 		Map<Class<?>, Object> controllers = Maps.newHashMap();
 		this.preInstantiateBeans.stream().filter(b -> b.isAnnotationPresent(Controller.class))
-		.forEach(b -> {
-				controllers.put(b, this.beans.get(b));
-		});
+		.forEach(b -> controllers.put(b, this.beans.get(b)));
 		return controllers;
 	}
 
@@ -62,7 +60,6 @@ public class BeanFactory {
 
 		if (this.beans.containsKey(clazz)) {
 			logger.debug("returns existing beans : {}", this.beans.get(clazz).getClass().getName());
-
 			return this.beans.get(clazz);
 		}
 

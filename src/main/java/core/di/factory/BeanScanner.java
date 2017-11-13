@@ -18,25 +18,25 @@ import core.annotation.Service;
 public class BeanScanner {
 	private static final Logger log = LoggerFactory.getLogger(BeanScanner.class);
 
-	private Map<Class<?>, Object> controllers = Maps.newHashMap();
+	private Map<Class<?>, Object> beans = Maps.newHashMap();
 	private Set<Class<?>> annotated = Sets.newHashSet();
 	private Reflections r;
 	private Object[] basepackages;
 
 	public BeanScanner(Object... basePackages) {
 		this.basepackages = basePackages;
-		scanControllers();
+		scanBeans();
 	}
 
 	@SuppressWarnings("unchecked")
-	private void scanControllers() {
+	private void scanBeans() {
 		this.r = new Reflections(basepackages[0]);
 		this.annotated = getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
 
 		this.annotated.stream().forEach(c -> {
 			try {
-				log.info("CURRENTLY SCANNING AN ANNOTATED CONTROLLER : {}" , c.getName());
-				this.controllers.put(c, c.newInstance());
+				log.info("CURRENTLY SCANNING AN ANNOTATED BEANS : {}" , c.getName());
+				this.beans.put(c, c.newInstance());
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -57,7 +57,7 @@ public class BeanScanner {
 	}
 
 	public Object getControllersInstance(Class<?> targetClass) {
-		return this.controllers.get(targetClass);
+		return this.beans.get(targetClass);
 	}
 
 }

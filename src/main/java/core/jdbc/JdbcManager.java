@@ -25,10 +25,10 @@ import core.db.exceptions.MultipleDataException;
 
 public class JdbcManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(JdbcManager.class);
 	private static final JdbcManager jdbm = new JdbcManager();
 
 	private Connection conn = ConnectionManager.getConnection();
-	private static final Logger logger = LoggerFactory.getLogger(JdbcManager.class);
 
 	private JdbcManager() {
 	}
@@ -126,8 +126,8 @@ public class JdbcManager {
 				logger.debug(f.get(o).toString());
 				pstmt.setString(index, f.get(o).toString());
 				index++;
-			} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException(e.getMessage());
 			}
 		}
 	}

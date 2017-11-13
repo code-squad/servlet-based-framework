@@ -64,8 +64,7 @@ public class BeanFactoryUtils {
 		try {
 			log.debug("something has invoked instantiateClass method.");
 			return constructor.newInstance(args);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			return null;
 		}
