@@ -25,9 +25,10 @@ public class RepositoryFactory {
 	}
 	
 	public int implementMethods() {
+		//TODO 잠시 구현을 멈추고 있는 리포지토리 프레임워크를 계속 구현한다. 
+		
 		this.umimplementedMethods.stream().forEach(m -> this.umimplementedMethods.add(m));
-		
-		
+		return 0;
 	}
 	
 	private void execute() {
