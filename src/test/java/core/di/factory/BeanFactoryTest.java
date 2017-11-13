@@ -16,6 +16,7 @@ import core.annotation.Repository;
 import core.annotation.Service;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.QnaController;
+import core.di.factory.example.QuestionRepository;
 
 public class BeanFactoryTest {
     private Reflections reflections;
@@ -41,6 +42,7 @@ public class BeanFactoryTest {
         assertNotNull(qnaService.getUserRepository());
         assertNotNull(qnaService.getQuestionRepository());
     }
+
 
     @SuppressWarnings("unchecked")
     private Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation>... annotations) {

@@ -9,7 +9,7 @@ public class MyQnaService {
     private QuestionRepository questionRepository;
 
     @Inject
-    public MyQnaService(JdbcUserRepository userRepository, JdbcQuestionRepository questionRepository) {
+    public MyQnaService(UserRepository userRepository, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
     }

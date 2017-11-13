@@ -2,9 +2,11 @@ package core.di.factory;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,8 @@ public class BeanFactory {
 	}
 
 	public void initialize() {
+		this.preInstantiateBeans.stream()
+				.forEach(b -> logger.debug("you have not-yet instantiated bean, named : {}", b.getName()));
 		this.preInstantiateBeans.stream().forEach(c -> {
 			instantiateClass(c);
 		});
@@ -39,8 +43,18 @@ public class BeanFactory {
 	}
 
 	private Object instantiateClass(Class<?> clazz) {
+
+		if (clazz.isInterface()) {
+			Object o = this.beans.values().stream().filter(b -> clazz.isAssignableFrom(b.getClass())).findFirst()
+					.orElse(instantiateClass(this.preInstantiateBeans.stream()
+							.filter(b -> clazz.isAssignableFrom(b)).findFirst()
+							.orElseThrow(() -> new RuntimeException("검색된 콩이 없습니다."))));
+			return o;
+		}
+
 		if (this.beans.containsKey(clazz)) {
 			logger.debug("returns existing beans : {}", this.beans.get(clazz).getClass().getName());
+
 			return this.beans.get(clazz);
 		}
 
@@ -52,7 +66,6 @@ public class BeanFactory {
 
 		try {
 			logger.debug("now instantiating : {} ", clazz.getName());
-
 			this.beans.put(clazz, clazz.newInstance());
 			return this.beans.get(clazz);
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -66,10 +79,8 @@ public class BeanFactory {
 		logger.debug("required arguments : {}", Arrays.asList(parameterTypes).toString());
 		List<Object> args = Lists.newArrayList();
 
-		for (Class<?> clazz : parameterTypes) {
+		Arrays.stream(parameterTypes).forEach(c -> args.add(instantiateClass(c)));
 
-			args.add(instantiateClass(clazz));
-		}
 		logger.debug("size of arguments : {} ", args.size());
 		logger.debug(args.toString());
 		return BeanFactoryUtils.instantiateClass(constructor, args.toArray());
