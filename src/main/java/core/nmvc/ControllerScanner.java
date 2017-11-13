@@ -27,14 +27,17 @@ public class ControllerScanner {
 
 	private Map<Class<?>, Object> instantiateControllers(Set<Class<?>> annotated) {
 		Map<Class<?>, Object> mapper = new HashMap<>();
-		annotated.stream().forEach(clazz -> Arrays.stream(clazz.getDeclaredMethods()).forEach(m -> {
-			try {
-				mapper.put(clazz, clazz.newInstance());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}));
+		annotated.stream().forEach(
+				clazz -> Arrays.stream(clazz.getDeclaredMethods()).forEach(m -> wrappedMethodForPuttingClass(mapper, clazz)));
 		return mapper;
+	}
+
+	private void wrappedMethodForPuttingClass(Map<Class<?>, Object> mapper, Class<?> clazz) {
+		try {
+			mapper.put(clazz, clazz.newInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
