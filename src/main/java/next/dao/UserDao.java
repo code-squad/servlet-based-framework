@@ -24,6 +24,7 @@ public class UserDao {
 	public void insert(User user) {
 		String sql = "INSERT INTO USERS (password, name, email, userId) VALUES (?, ?, ?, ?)";
 		KeyHolder keyHolder = new KeyHolder();
+
 		jdbcTemplate.update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 
 	}
@@ -31,11 +32,14 @@ public class UserDao {
 	public void update(User user) {
 		String sql = "UPDATE USERS SET password=?,name=?,email=? WHERE userId=?";
 		KeyHolder keyHolder = new KeyHolder();
+
 		jdbcTemplate.update(sql, keyHolder, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
+
 	}
 
 	public <T> List<T> findAll() {
 		String sql = "SELECT * FROM USERS";
+
 		return jdbcTemplate.query(sql, new RowMapper() {
 
 			@Override
@@ -49,6 +53,7 @@ public class UserDao {
 
 	public <T> T findByUserId(String userId) {
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userId=?";
+
 		return (T) jdbcTemplate.queryForObject(sql, new RowMapper() {
 
 			@Override
