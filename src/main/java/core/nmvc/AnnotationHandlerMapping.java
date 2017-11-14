@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.reflections.ReflectionUtils;
-
 import com.google.common.collect.Maps;
 
 import core.annotation.ComponentScan;
@@ -30,12 +29,13 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 	public void initialize() {
 		BeanScanner beanScanner = new BeanScanner(basePackage);
 		BeanFactory beanFactory = new BeanFactory(beanScanner.getAnnotationHandleKeySets());
-		beanFactory.getControllerInBeansFactory().keySet().stream()
+		Map<Class<?>, Object> controllerBeans = beanFactory.getControllerInBeansFactory();
+		controllerBeans.keySet().stream()
 		.forEach(clazz -> {
 			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
 			.forEach(classMethod -> {
 				RequestMapping rm = classMethod.getAnnotation(RequestMapping.class);
-				handlerExecutions.put(new HandlerKey(rm.value(), rm.method()), new HandlerExecution(clazz, classMethod));
+				handlerExecutions.put(new HandlerKey(rm.value(), rm.method()), new HandlerExecution(controllerBeans.get(clazz), classMethod));
 			});
 		});
 	}

@@ -25,6 +25,7 @@ public class BeanFactory {
 
 	public BeanFactory(Set<Class<?>> preInstanticateBeans) {
 		this.preInstanticateBeans = preInstanticateBeans;
+		initialize();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,6 +67,7 @@ public class BeanFactory {
 	    Map<Class<?>, Object> controllers = Maps.newHashMap();
 	    for (Class<?> clazz : preInstanticateBeans) {
 	        if (clazz.isAnnotationPresent(Controller.class)) {
+	        		logger.debug("create bean : " + clazz + " bean value : " + beans.get(clazz));
 	            controllers.put(clazz, beans.get(clazz));
 	        }
 	    }

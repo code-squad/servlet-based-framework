@@ -8,15 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.ModelAndView;
 
 public class HandlerExecution {
-	private Class<?> handleClass;
+	private Object handleClassBean;
 	private Method handleMethod;
-	public HandlerExecution(Class<?> handleClass, Method handleMethod) {
-		this.handleClass = handleClass;
+	public HandlerExecution(Object handleClassBean, Method handleMethod) {
+		this.handleClassBean = handleClassBean;
 		this.handleMethod = handleMethod;
 	}
 	
 	public ModelAndView handle(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		Object[] parameterArrays = {req, resp};
-		return (ModelAndView)handleMethod.invoke(handleClass.newInstance(), parameterArrays);
+		return (ModelAndView)handleMethod.invoke(handleClassBean, parameterArrays);
 	}
 }
