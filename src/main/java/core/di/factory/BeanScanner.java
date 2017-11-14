@@ -5,15 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.reflections.Reflections;
-
 import com.google.common.collect.Sets;
-
 import core.annotation.Controller;
 import core.annotation.Repository;
 import core.annotation.Service;
-
 
 public class BeanScanner {
 	private Set<Class<?>> annotationHandleSet = Sets.newHashSet();
