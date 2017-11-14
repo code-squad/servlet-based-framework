@@ -1,10 +1,6 @@
 package core.nmvc.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Value implements KeyValue{
-	private static final Logger log = LoggerFactory.getLogger(Value.class);
 	
 	private int columnIndex = 0;
 	private Object columnValue = null;
@@ -27,6 +23,11 @@ public class Value implements KeyValue{
 	@Override
 	public int compareTo(Object o) {
 		return 0;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("value object = %s order in column = %d", this.columnValue instanceof String ? this.columnValue.toString() : this.columnValue.getClass().getName(), this.columnIndex);
 	}
 
 }

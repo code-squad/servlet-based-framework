@@ -41,4 +41,10 @@ public class PrimaryKey implements KeyValue {
 	public int compareTo(Object o) {
 		return 0;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Primary Key object = %s order in column = 1", this.object instanceof String ? this.object.toString() : this.object.getClass().getName());
+
+	}
 }
