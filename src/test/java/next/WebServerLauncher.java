@@ -37,8 +37,8 @@ public class WebServerLauncher {
 		try {
 			file = new RandomAccessFile("src/main/resources/banner.txt", "r");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
+
 		}
 
 		try {

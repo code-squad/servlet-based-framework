@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import core.nmvc.persistence.RepositoryFactory;
+
 public class RepositoryFactoryTest {
 	
 	private RepositoryFactory rf;
@@ -21,9 +23,5 @@ public class RepositoryFactoryTest {
 		assertEquals(1, interfacesCount);
 	}
 	
-	@Test
-	public void parsing_unimplemented_methods() {
-		assertEquals(1,rf.implementMethods());
-	}
 
 }
