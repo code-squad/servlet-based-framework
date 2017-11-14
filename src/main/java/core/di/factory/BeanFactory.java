@@ -18,9 +18,7 @@ import core.exception.BeanInstantiateException;
 
 public class BeanFactory {
 	private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
-	
 	private Set<Class<?>> preInstanticateBeans;
-	
 	private Map<Class<?>, Object> beans = Maps.newHashMap();
 
 	public BeanFactory(Set<Class<?>> preInstanticateBeans) {
@@ -72,5 +70,4 @@ public class BeanFactory {
 		}
 		return controllers;
 	}
-	
 }
