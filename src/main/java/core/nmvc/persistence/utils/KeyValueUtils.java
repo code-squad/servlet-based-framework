@@ -4,11 +4,11 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import core.nmvc.persistence.Key;
+import core.nmvc.persistence.KeyValue;
 
 public class KeyValueUtils {
 	
-	public static Set<Key> keyValueParser(Object o) {
+	public static Set<KeyValue> keyValueParser(Object o) {
 		return Sets.newHashSet();
 	}
 

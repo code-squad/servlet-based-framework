@@ -3,7 +3,7 @@ package core.nmvc.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Value implements Key{
+public class Value implements KeyValue{
 	private static final Logger log = LoggerFactory.getLogger(Value.class);
 	
 	private int columnIndex = 0;

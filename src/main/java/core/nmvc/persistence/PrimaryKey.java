@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import core.di.exceptions.NoPrimaryKeyException;
 
-public class PrimaryKey implements Key {
+public class PrimaryKey implements KeyValue {
 
 	private final static Logger log = LoggerFactory.getLogger(PrimaryKey.class);
 	private final static int PRIMARY_KEY_COLUMN_INDEX = 1;
