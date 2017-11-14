@@ -30,7 +30,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 	public void initialize() {
 		BeanScanner beanScanner = new BeanScanner(basePackage);
 		BeanFactory beanFactory = new BeanFactory(beanScanner.getAnnotationHandleKeySets());
-		beanFactory.getControllerKeySets().stream()
+		beanFactory.getControllerInBeansFactory().keySet().stream()
 		.forEach(clazz -> {
 			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
 			.forEach(classMethod -> {

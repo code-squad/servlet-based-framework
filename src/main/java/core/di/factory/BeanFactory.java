@@ -62,13 +62,13 @@ public class BeanFactory {
 		return BeanUtils.instantiateClass(constructor, args.toArray());
 	}
 	
-	public Set<Class<?>> getControllerKeySets() {
+	public  Map<Class<?>, Object> getControllerInBeansFactory() {
 	    Map<Class<?>, Object> controllers = Maps.newHashMap();
 	    for (Class<?> clazz : preInstanticateBeans) {
 	        if (clazz.isAnnotationPresent(Controller.class)) {
 	            controllers.put(clazz, beans.get(clazz));
 	        }
 	    }
-	    return controllers.keySet();
+	    return controllers;
 	}
 }
