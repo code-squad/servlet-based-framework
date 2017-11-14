@@ -30,20 +30,19 @@ public class BeanFactory {
 	}
 
 	public void initialize() {
-		preInstanticateBeans.stream().filter(c -> !beans.containsKey(c))
-		.forEach(c -> { 
+		preInstanticateBeans.stream().filter(c -> !beans.containsKey(c)).forEach(c -> {
 			beans.put(c, instantiateClass(c));
 			logger.debug("bean create : " + c);
 		});
 	}
 
 	private Object instantiateClass(Class<?> clazz) {
-		if(beans.containsKey(clazz)) 
+		if (beans.containsKey(clazz))
 			return beans.get(clazz);
 		Class<?> implementsClass = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
 		Optional<Constructor<?>> cons = Optional.ofNullable(BeanFactoryUtils.getInjectedConstructor(implementsClass));
 		try {
-			return cons.isPresent() ?  instantiateConstructor(cons.get()) : implementsClass.newInstance();
+			return cons.isPresent() ? instantiateConstructor(cons.get()) : implementsClass.newInstance();
 		} catch (Exception e) {
 			throw new BeanInstantiateException();
 		}
@@ -58,15 +57,15 @@ public class BeanFactory {
 		});
 		return BeanUtils.instantiateClass(constructor, args.toArray());
 	}
-	
-	public  Map<Class<?>, Object> getControllerInBeansFactory() {
-	    Map<Class<?>, Object> controllers = Maps.newHashMap();
-	    for (Class<?> clazz : preInstanticateBeans) {
-	        if (clazz.isAnnotationPresent(Controller.class)) {
-	        		logger.debug("create bean : " + clazz + " bean value : " + beans.get(clazz));
-	            controllers.put(clazz, beans.get(clazz));
-	        }
-	    }
-	    return controllers;
+
+	public Map<Class<?>, Object> getControllerInBeansFactory() {
+		Map<Class<?>, Object> controllers = Maps.newHashMap();
+		for (Class<?> clazz : preInstanticateBeans) {
+			if (clazz.isAnnotationPresent(Controller.class)) {
+				logger.debug("create bean : " + clazz + " bean value : " + beans.get(clazz));
+				controllers.put(clazz, beans.get(clazz));
+			}
+		}
+		return controllers;
 	}
 }
