@@ -4,11 +4,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.reflections.ReflectionUtils;
+
 import com.google.common.collect.Maps;
+
 import core.annotation.ComponentScan;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import core.di.factory.BeanFactory;
+import core.di.factory.BeanScanner;
 
 @ComponentScan({"next.controller","core.nmvc"})
 public class AnnotationHandlerMapping implements HandlerMapping {
@@ -23,8 +28,9 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
 	@SuppressWarnings("unchecked")
 	public void initialize() {
-		ControllerScanner controllerScanner = new ControllerScanner(basePackage);
-		controllerScanner.getControllerKeySet().stream()
+		BeanScanner beanScanner = new BeanScanner(basePackage);
+		BeanFactory beanFactory = new BeanFactory(beanScanner.getAnnotationHandleKeySets());
+		beanFactory.getControllerKeySets().stream()
 		.forEach(clazz -> {
 			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
 			.forEach(classMethod -> {

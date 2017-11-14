@@ -14,13 +14,13 @@ import org.springframework.beans.BeanUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import core.annotation.Controller;
 import core.exception.BeanInstantiateException;
 
 public class BeanFactory {
 	private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
 	private Set<Class<?>> preInstanticateBeans;
-
 	private Map<Class<?>, Object> beans = Maps.newHashMap();
 
 	public BeanFactory(Set<Class<?>> preInstanticateBeans) {
@@ -60,5 +60,15 @@ public class BeanFactory {
 			args.add(obj);
 		});
 		return BeanUtils.instantiateClass(constructor, args.toArray());
+	}
+	
+	public Set<Class<?>> getControllerKeySets() {
+	    Map<Class<?>, Object> controllers = Maps.newHashMap();
+	    for (Class<?> clazz : preInstanticateBeans) {
+	        if (clazz.isAnnotationPresent(Controller.class)) {
+	            controllers.put(clazz, beans.get(clazz));
+	        }
+	    }
+	    return controllers.keySet();
 	}
 }
