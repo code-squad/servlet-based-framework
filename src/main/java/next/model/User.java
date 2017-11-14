@@ -1,9 +1,20 @@
 package next.model;
 
+import core.annotation.ColumnOrder;
+import core.annotation.PrimaryKey;
+
 public class User {
+	
+	@PrimaryKey
     private String userId;
+	
+	@ColumnOrder(order = 2)
     private String password;
+	
+	@ColumnOrder(order = 3)
     private String name;
+	
+	@ColumnOrder(order = 4)
     private String email;
 
     public User(String userId, String password, String name, String email) {
