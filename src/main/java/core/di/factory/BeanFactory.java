@@ -54,8 +54,7 @@ public class BeanFactory {
 		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		List<Object> args = Lists.newArrayList();
 		Arrays.stream(parameterTypes).forEach(param -> {
-			Object obj = instantiateClass(param);
-			args.add(obj);
+			args.add(instantiateClass(param));
 		});
 		return BeanUtils.instantiateClass(constructor, args.toArray());
 	}
