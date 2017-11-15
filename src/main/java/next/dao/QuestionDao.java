@@ -22,7 +22,7 @@ public class QuestionDao {
 
 		RowMapper<Question> rm = (rs -> new Question(rs.getLong("questionId"), rs.getString("writer"),
 				rs.getString("title"), null, rs.getTimestamp("createdDate"), rs.getInt("countOfAnswer")));
-		return jdbcTemplate.query(sql, rm);
+		return JdbcTemplate.getInstance().query(sql, rm);
 	}
 
 	public Question findById(long questionId) {
@@ -32,6 +32,6 @@ public class QuestionDao {
 		RowMapper<Question> rm = (rs -> new Question(rs.getLong("questionId"), rs.getString("writer"),
 				rs.getString("title"), rs.getString("contents"), rs.getTimestamp("createdDate"),
 				rs.getInt("countOfAnswer")));
-		return jdbcTemplate.queryForObject(sql, rm, questionId);
+		return JdbcTemplate.getInstance().queryForObject(sql, rm, questionId);
 	}
 }
