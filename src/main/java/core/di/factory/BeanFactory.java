@@ -1,22 +1,29 @@
 package core.di.factory;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.BeanUtils;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import core.annotation.Controller;
+import core.exception.BeanInstantiateException;
 
 public class BeanFactory {
 	private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
-
 	private Set<Class<?>> preInstanticateBeans;
-
 	private Map<Class<?>, Object> beans = Maps.newHashMap();
 
 	public BeanFactory(Set<Class<?>> preInstanticateBeans) {
 		this.preInstanticateBeans = preInstanticateBeans;
+		initialize();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -25,6 +32,42 @@ public class BeanFactory {
 	}
 
 	public void initialize() {
-
+		preInstanticateBeans.stream().filter(c -> !beans.containsKey(c)).forEach(c -> {
+			beans.put(c, instantiateClass(c));
+			logger.debug("bean create : " + c);
+		});
 	}
+
+	private Object instantiateClass(Class<?> clazz) {
+		if (beans.containsKey(clazz))
+			return beans.get(clazz);
+		Class<?> implementsClass = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
+		Optional<Constructor<?>> cons = Optional.ofNullable(BeanFactoryUtils.getInjectedConstructor(implementsClass));
+		try {
+			return cons.isPresent() ? instantiateConstructor(cons.get()) : implementsClass.newInstance();
+		} catch (Exception e) {
+			throw new BeanInstantiateException();
+		}
+	}
+
+	private Object instantiateConstructor(Constructor<?> constructor) {
+		Class<?>[] parameterTypes = constructor.getParameterTypes();
+		List<Object> args = Lists.newArrayList();
+		Arrays.stream(parameterTypes).forEach(param -> {
+			args.add(instantiateClass(param));
+		});
+		return BeanUtils.instantiateClass(constructor, args.toArray());
+	}
+
+	public Map<Class<?>, Object> getControllerInBeansFactory() {
+		Map<Class<?>, Object> controllers = Maps.newHashMap();
+		for (Class<?> clazz : preInstanticateBeans) {
+			if (clazz.isAnnotationPresent(Controller.class)) {
+				logger.debug("create bean : " + clazz + " bean value : " + beans.get(clazz));
+				controllers.put(clazz, beans.get(clazz));
+			}
+		}
+		return controllers;
+	}
+	
 }
