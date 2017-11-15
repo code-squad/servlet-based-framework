@@ -70,4 +70,5 @@ public class BeanFactory {
 		}
 		return controllers;
 	}
+	
 }
