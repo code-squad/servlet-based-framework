@@ -8,22 +8,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
-	public void update(String sql, PreparedStatementSetter setter) throws SQLException {
+	public void update(String sql, PreparedStatementSetter setter) throws DataAccessException {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
 			setter.setValues(pstmt);
-		}
-	}
-	public <T> List<T> query(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws SQLException {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
-			setter.setValues(pstmt);
-			return getResultSets(pstmt, rm);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
 		}
 	}
 
-	public <T> T queryForObject(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws SQLException {
+	public <T> List<T> query(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws DataAccessException {
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
+			setter.setValues(pstmt);
+			return getResultSets(pstmt, rm);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		}
+	}
+
+	public <T> T queryForObject(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws DataAccessException {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
 			setter.setValues(pstmt);
 			return getResultSet(pstmt, rm);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
 		}
 	}
 
@@ -42,5 +49,4 @@ public class JdbcTemplate {
 			return rm.mapRow(rs);
 		}
 	}
-
 }

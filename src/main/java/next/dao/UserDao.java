@@ -3,11 +3,12 @@ package next.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import core.jdbc.DataAccessException;
 import core.jdbc.JdbcTemplate;
 import next.model.User;
 
 public class UserDao {
-	public void insert(User user) throws SQLException {
+	public void insert(User user) throws DataAccessException {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", (pstmt) -> {
 			pstmt.setString(1, user.getUserId());
@@ -18,7 +19,7 @@ public class UserDao {
 		});
 	}
 
-	public void update(User user) throws SQLException {
+	public void update(User user) throws DataAccessException {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?", (pstmt) -> {
 			pstmt.setString(1, user.getPassword());
@@ -31,8 +32,7 @@ public class UserDao {
 
 	public List<User> findAll() throws SQLException {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
-		String sql = "SELECT userId, password, name, email FROM USERS";
-		return jdbcTemplate.query(sql, (a) -> {
+		return jdbcTemplate.query("SELECT userId, password, name, email FROM USERS", (a) -> {
 		}, (rs) -> {
 			User user = null;
 			if (rs.next()) {
@@ -44,9 +44,8 @@ public class UserDao {
 	}
 
 	public User findByUserId(String userId) throws SQLException {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(); 
-		String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-		return jdbcTemplate.queryForObject(sql, (pstmt) -> {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate();
+		return jdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", (pstmt) -> {
 			pstmt.setString(1, userId);
 		}, rs -> {
 			User user = null;
