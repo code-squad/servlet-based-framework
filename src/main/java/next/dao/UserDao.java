@@ -8,19 +8,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.jdbc.ConnectionManager;
-import core.jdbc.InsertJdbcTemplate;
-import core.jdbc.UpdateJdbcTemplate;
+import core.jdbc.JdbcTemplate;
 import next.model.User;
 
 public class UserDao {
 	public void insert(User user) throws SQLException {
-		InsertJdbcTemplate jdbcTemplate = new InsertJdbcTemplate();
-		jdbcTemplate.insert(user);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate() {
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, user.getUserId());
+				pstmt.setString(2, user.getPassword());
+				pstmt.setString(3, user.getName());
+				pstmt.setString(4, user.getEmail());
+				pstmt.executeUpdate();
+			}
+		};
+		jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)");
 	}
-	
+
 	public void update(User user) throws SQLException {
-		UpdateJdbcTemplate jdbcTemplate = new UpdateJdbcTemplate();
-		jdbcTemplate.update(user);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(){
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, user.getPassword());
+				pstmt.setString(2, user.getName());
+				pstmt.setString(3, user.getEmail());
+				pstmt.setString(4, user.getUserId());
+				pstmt.executeUpdate();
+			}
+		};
+		jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?");
 	}
 
 	public List<User> findAll() throws SQLException {
