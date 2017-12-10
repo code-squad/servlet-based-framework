@@ -9,6 +9,7 @@ import java.util.List;
 
 import core.jdbc.ConnectionManager;
 import core.jdbc.JdbcTemplate;
+import core.jdbc.SelectJdbcTemplate;
 import next.model.User;
 
 public class UserDao {
@@ -21,6 +22,10 @@ public class UserDao {
 				pstmt.setString(3, user.getName());
 				pstmt.setString(4, user.getEmail());
 				pstmt.executeUpdate();
+			}
+			@Override
+			public <T> T mapRow(ResultSet rs) throws SQLException {
+				return null;
 			}
 		};
 		jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)");
@@ -36,53 +41,56 @@ public class UserDao {
 				pstmt.setString(4, user.getUserId());
 				pstmt.executeUpdate();
 			}
+			@Override
+			public <T> T mapRow(ResultSet rs) throws SQLException {
+				return null;
+			}
 		};
 		jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?");
 	}
 
 	public List<User> findAll() throws SQLException {
-		ResultSet rs = null;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate() {
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+			}
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				User user = null;
+				if (rs.next()) {
+					user = new User(
+							rs.getString("userId"), 
+							rs.getString("password"), 
+							rs.getString("name"),
+							rs.getString("email"));
+				}
+				return user;
+			}
+		};
 		String sql = "SELECT userId, password, name, email FROM USERS";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)){
-			rs = pstmt.executeQuery();
-
-			List<User> users = new ArrayList<>();
-			while (rs.next()) {
-				users.add(new User(
-						rs.getString("userId"), 
-						rs.getString("password"), 
-						rs.getString("name"),
-						rs.getString("email")));
-			}
-			return users;
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-		}
+		return jdbcTemplate.query(sql);
 	}
 
 	public User findByUserId(String userId) throws SQLException {
-		ResultSet rs = null;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate() {
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				pstmt.setString(1, userId);
+			}
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				User user = null;
+				if (rs.next()) {
+					user = new User(
+							rs.getString("userId"), 
+							rs.getString("password"), 
+							rs.getString("name"),
+							rs.getString("email"));
+				}
+				return user;
+			}
+		};
 		String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)){
-			pstmt.setString(1, userId);
-
-			rs = pstmt.executeQuery();
-
-			User user = null;
-			if (rs.next()) {
-				user = new User(
-						rs.getString("userId"), 
-						rs.getString("password"), 
-						rs.getString("name"),
-						rs.getString("email"));
-			}
-			return user;
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-		}
+		return jdbcTemplate.queryForObject(sql);
 	}
 }
