@@ -7,6 +7,11 @@ import next.model.User;
 
 public class UserDao {
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private final static UserDao userDao = new UserDao();
+	
+	public static UserDao getInstance() {
+		return userDao;
+	}
 	
 	public void insert(User user) {
 		jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", pstmt -> {
