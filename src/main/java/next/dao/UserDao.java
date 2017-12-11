@@ -14,18 +14,12 @@ public class UserDao {
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getName());
 			pstmt.setString(4, user.getEmail());
-			pstmt.executeUpdate();
 		});
 	}
 
 	public void update(User user) {
-		jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?", pstmt -> {
-			pstmt.setString(1, user.getPassword());
-			pstmt.setString(2, user.getName());
-			pstmt.setString(3, user.getEmail());
-			pstmt.setString(4, user.getUserId());
-			pstmt.executeUpdate();
-		});
+		jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?", 
+				user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
 	}
 
 	public List<User> findAll() {
