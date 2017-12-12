@@ -14,6 +14,7 @@ public class QuestionDao {
 	public static QuestionDao getInstance() {
 		return questionDao;
 	}
+	
 	public void insert(Question question) {
 		String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, pstmt -> {
@@ -24,17 +25,16 @@ public class QuestionDao {
 			pstmt.setInt(5, question.getCountOfComment());
 		});
 	}
-//	public void insert(Question question) {
-//		String sql = "INSERT INTO QUESTIONS (questionId, writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?, ?)";
-//		jdbcTemplate.update(sql, pstmt -> {
-//			pstmt.setLong(1, question.getQuestionId());
-//			pstmt.setString(2, question.getWriter());
-//			pstmt.setString(3, question.getTitle());
-//			pstmt.setString(4, question.getContents());
-//			pstmt.setTimestamp(5, new Timestamp(question.getCreatedDate().getTime()));
-//			pstmt.setInt(6, question.getCountOfComment());
-//		});
-//	}
+	
+	public void update(Question question) {
+		String sql = "UPDATE QUESTIONS set writer = ?, title = ?, contents = ? WHERE questionId = ?";
+		jdbcTemplate.update(sql, (rs) -> {
+			rs.setString(1, question.getWriter());
+			rs.setString(2, question.getTitle());
+			rs.setString(3, question.getContents());
+			rs.setLong(4, question.getQuestionId());
+		});
+	}
 	
 	public Question findByQuestionId(long questionId) {
 		String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS WHERE questionId=?";
@@ -70,4 +70,5 @@ public class QuestionDao {
 			rs.setLong(1, questionId)
 		);
 	}
+	
 }
