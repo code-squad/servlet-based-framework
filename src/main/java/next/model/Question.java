@@ -48,7 +48,7 @@ public class Question {
     public Date getCreatedDate() {
         return createdDate;
     }
-
+    
     public long getTimeFromCreateDate() {
         return this.createdDate.getTime();
     }

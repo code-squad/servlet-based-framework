@@ -8,6 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
+	public void update(PreparedStatementCreator psc, KeyHolder holder) throws DataAccessException {
+	      try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = psc.createPreparedStatement(con)) {
+	          pstmt.executeUpdate();
+	          ResultSet rs = pstmt.getGeneratedKeys();
+	          if (rs.next()) {
+	              holder.setId(rs.getLong(1));
+	          	}
+	          rs.close();
+	      } catch (SQLException e) {
+	          throw new DataAccessException(e.getMessage());
+	      }
+	  }
+	
 	public void update(String sql, PreparedStatementSetter setter) throws DataAccessException {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
 			setter.setValues(pstmt);
