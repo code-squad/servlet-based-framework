@@ -28,7 +28,8 @@ public class UserDao {
 	}
 
 	public List<User> findAll() {
-		return jdbcTemplate.query("SELECT userId, password, name, email FROM USERS", rs ->
+		String sql = "SELECT userId, password, name, email FROM USERS";
+		return jdbcTemplate.query(sql , rs ->
 			 new User(
 					rs.getString("userId"), 
 					rs.getString("password"), 

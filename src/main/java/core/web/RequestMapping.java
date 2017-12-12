@@ -10,8 +10,10 @@ import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
 import next.controller.ProfileController;
+import next.controller.ShowQuestionController;
 import next.controller.UpdateUserController;
 import next.controller.UpdateUserFormController;
+import next.controller.CreateQuestionController;
 
 public class RequestMapping {
 	private Map<String, Controller> controllers;
@@ -28,13 +30,15 @@ public class RequestMapping {
 		Map<String, Controller> controllerMap = new HashMap<>();
 		controllerMap.put("/users/create", new CreateUserController());
 		controllerMap.put("/users/form", new ForwardController("/user/form"));
-		controllerMap.put("", new HomeController());
+		controllerMap.put("/", new HomeController());
 		controllerMap.put("/users", new ListUserController());
 		controllerMap.put("/users/login", new LoginController());
 		controllerMap.put("/users/loginForm", new ForwardController("/user/login"));
 		controllerMap.put("/users/profile", new ProfileController());
 		controllerMap.put("/users/update", new UpdateUserController());
 		controllerMap.put("/users/updateForm", new UpdateUserFormController());
+		controllerMap.put("/qna/show", new ShowQuestionController());
+		controllerMap.put("/qna/create", new CreateQuestionController());
 		return controllerMap;
 	}
 
