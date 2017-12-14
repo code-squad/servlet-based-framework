@@ -85,11 +85,11 @@
                               </div>
                           </article>
           				</c:forEach>
-                          <form class="submit-write">
+                          <form class="submit-write" action="/questions/answers/create?questionId=${question.questionId}" method="POST">
                               <div class="form-group" style="padding:14px;">
-                                  <textarea class="form-control" placeholder="Update your status"></textarea>
+                                  <textarea class="form-control" name="contents" placeholder="Update your status"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="button">Post</button>
+                              <button class="btn btn-success pull-right" type="submit">Post</button>
                               <div class="clearfix" />
                           </form>
                       </div>

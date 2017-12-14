@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import next.controller.Controller;
+import next.controller.CreateAnswerController;
 import next.controller.CreateUserController;
 import next.controller.ForwardController;
 import next.controller.HomeController;
@@ -39,6 +40,7 @@ public class RequestMapping {
 		controllerMap.put("/users/updateForm", new UpdateUserFormController());
 		controllerMap.put("/qna/show", new ShowQuestionController());
 		controllerMap.put("/qna/create", new CreateQuestionController());
+		controllerMap.put("/questions/answers/create", new CreateAnswerController());
 		return controllerMap;
 	}
 

@@ -16,6 +16,6 @@ public class CreateQuestionController implements Controller {
 				request.getParameter("title"),
 				request.getParameter("contents"));
 		question = questionDao.insert(question);
-		return "/qna/show?questionId=" + question.getQuestionId();
+		return "redirect:/qna/show?questionId=" + question.getQuestionId();
 	}
 }
