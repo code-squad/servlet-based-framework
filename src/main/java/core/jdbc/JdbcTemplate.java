@@ -17,7 +17,7 @@ public class JdbcTemplate {
 	          	}
 	          rs.close();
 	      } catch (SQLException e) {
-	          throw new DataAccessException(e.getMessage());
+	          throw new DataAccessException("답변을 삽입에서 문제 발생");
 	      }
 	  }
 	
@@ -40,7 +40,8 @@ public class JdbcTemplate {
 	}
 
 	public <T> T queryForObject(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws DataAccessException {
-		return query(sql, setter, rm).get(0);
+		List<T> list = query(sql, setter, rm);
+		return list.size() == 0 ? null : list.get(0);
 	}
 
 	public void update(String sql, Object... values) throws DataAccessException {

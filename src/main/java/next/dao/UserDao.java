@@ -9,6 +9,9 @@ public class UserDao {
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 	private final static UserDao userDao = new UserDao();
 	
+	private UserDao() {
+	}
+	
 	public static UserDao getInstance() {
 		return userDao;
 	}

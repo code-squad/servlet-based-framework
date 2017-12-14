@@ -26,11 +26,25 @@ public class QuestionDaoTest {
 	}
 
 	@Test
-	public void insertTest() {
+	public void crud() {
+		//insert
 		Question expected = new Question(9, "name1", "title1", "contents1", new Date(), 0);
 		questionDao.insert(expected);
+		//read
 		Question actual = questionDao.findByQuestionId(9);
 		assertEquals(expected, actual);
+
+		//update
+		expected.update("수정자", "new Title", "new Contents");
+		questionDao.update(expected);
+		actual = questionDao.findByQuestionId(expected.getQuestionId());
+		assertEquals(expected, actual);
+		assertEquals(actual.getTitle(), "new Title");
+		
+		//delete
+		questionDao.delete(9);
+		actual = questionDao.findByQuestionId(9);
+		assertNull(actual);
 	}
 
 	@Test
@@ -38,24 +52,4 @@ public class QuestionDaoTest {
 		List<Question> questions = questionDao.findAll();
 		assertEquals(8, questions.size());
 	}
-	
-	@Test
-	public void deleteTest() {
-		List<Question> questions = questionDao.findAll();
-		questionDao.delete(4);
-		questions = questionDao.findAll();
-		assertEquals(7, questions.size());
-	}
-	
-	@Test
-	public void updateTest() {
-		Question question = questionDao.findByQuestionId(3);
-		question.update("수정자","new Title", "new Contents");
-		questionDao.update(question);
-
-		Question modifyQuestion = questionDao.findByQuestionId(3);
-		assertEquals(question, modifyQuestion);
-		assertEquals(modifyQuestion.getTitle(),"new Title");
-	}
-
 }

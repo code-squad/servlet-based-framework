@@ -12,6 +12,14 @@ import next.model.Answer;
 
 public class AnswerDao {
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private final static AnswerDao answerDao = new AnswerDao();
+	
+	private AnswerDao() {
+	}
+	
+	public static AnswerDao getInstance() {
+		return answerDao;
+	}
 
 	public Answer insert(Answer answer) {
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
@@ -26,14 +34,21 @@ public class AnswerDao {
 				return pstmt;
 			}
 		};
-
 		KeyHolder keyHolder = new KeyHolder();
 		jdbcTemplate.update(psc, keyHolder);
 		return findById(keyHolder.getId());
 	}
 	
-	private Answer findById(long keyId) {
-		//아이디 값을 가지고 디비에 저장된 질문을 가져오는듯
-		return null;
+	public Answer findById(long keyId) {
+		String sql = "SELECT * FROM ANSWERS WHERE answerId=?";
+		return jdbcTemplate.queryForObject(sql, rs ->
+			new Answer(
+					rs.getLong("answerId"),
+					rs.getString("writer"),
+					rs.getString("contents"),
+					rs.getDate("createdDate"),
+					rs.getLong("questionId")
+					)
+			,keyId);
 	}
 }
