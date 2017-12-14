@@ -1,10 +1,15 @@
 package next.dao;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
 import core.jdbc.JdbcTemplate;
+import core.jdbc.KeyHolder;
+import core.jdbc.PreparedStatementCreator;
 import next.model.Question;
 
 public class QuestionDao {
@@ -15,17 +20,25 @@ public class QuestionDao {
 		return questionDao;
 	}
 	
-	public void insert(Question question) {
+	public Question insert(Question question) {
 		String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, pstmt -> {
+		PreparedStatementCreator psc = new PreparedStatementCreator() {
+		@Override
+		public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, question.getWriter());
 			pstmt.setString(2, question.getTitle());
 			pstmt.setString(3, question.getContents());
 			pstmt.setTimestamp(4, new Timestamp(question.getCreatedDate().getTime()));
 			pstmt.setInt(5, question.getCountOfComment());
-		});
+			return pstmt;
+		}
+	};
+	KeyHolder keyHolder = new KeyHolder();
+	jdbcTemplate.update(psc, keyHolder);
+	return findByQuestionId(keyHolder.getId());
 	}
-	
+
 	public void update(Question question) {
 		String sql = "UPDATE QUESTIONS set writer = ?, title = ?, contents = ? WHERE questionId = ?";
 		jdbcTemplate.update(sql, (rs) -> {
