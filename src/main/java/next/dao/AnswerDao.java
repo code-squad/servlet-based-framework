@@ -40,7 +40,7 @@ public class AnswerDao {
 		return findByAnswerId(keyHolder.getId());
 	}
 	
-	public Answer findByAnswerId(long keyId) {
+	public Answer findByAnswerId(long answerId) {
 		String sql = "SELECT * FROM ANSWERS WHERE answerId=?";
 		return jdbcTemplate.queryForObject(sql, rs ->
 			new Answer(
@@ -50,10 +50,10 @@ public class AnswerDao {
 					rs.getDate("createdDate"),
 					rs.getLong("questionId")
 					)
-			,keyId);
+			,answerId);
 	}
 
-	public List<Answer> findAllByQuestionId(long keyId) {
+	public List<Answer> findAllByQuestionId(long questionId) {
 		String sql = "SELECT * FROM ANSWERS WHERE questionId=?";
 		return jdbcTemplate.query(sql, rs ->
 			new Answer(
@@ -63,6 +63,13 @@ public class AnswerDao {
 					rs.getDate("createdDate"),
 					rs.getLong("questionId")
 					)
-			,keyId);	
+			,questionId);	
+	}
+
+	public void delete(long answerId) {
+		String sql = "DELETE FROM ANSWERS WHERE answerId=?";
+		jdbcTemplate.update(sql, 
+				rs -> rs.setLong(1, answerId)
+			);
 	}
 }

@@ -10,13 +10,13 @@ $(document).ready(function() {/* jQuery toggle layout */
 	});
 });
 
-$(".answerWrite button[type=button]").click(addAnswer);
+$(".answerWrite button[type='button']").on("click", addAnswer);
 
 function addAnswer(e) {
 	e.preventDefault();
 	var queryString = $("form[name=answer]").serialize();
 	var url = $(".answerWrite").attr("action");
-
+	
 	$.ajax({
 		type : 'post',
 		url : url,
@@ -46,12 +46,25 @@ String.prototype.format = function() {
 	});
 };
 
-$(".form-delete").click(deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", ".form-delete button[type='button']", deleteAnswer);
+
 
 function deleteAnswer(e) {
 	e.preventDefault();
-
 	var deleteBtn = $(this);
-	deleteBtn.closest("article").remove();
+	var url = deleteBtn.closest('form').attr("action");
 	
+	$.ajax({
+		type : 'post',
+		url : url,
+		dataType : 'json',
+		error : function(xhr, status) {
+			alert("error");
+		},
+		success : function(json, status) {
+			if (json.status) {
+				deleteBtn.closest('article').remove();
+			}
+		}
+	});
 }

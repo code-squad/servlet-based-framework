@@ -6,6 +6,7 @@ import java.util.Map;
 import next.controller.AddAnswerController;
 import next.controller.Controller;
 import next.controller.CreateUserController;
+import next.controller.DeleteAnswerController;
 import next.controller.ForwardController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
@@ -41,6 +42,7 @@ public class RequestMapping {
 		controllerMap.put("/qna/show", new ShowQuestionController());
 		controllerMap.put("/qna/create", new CreateQuestionController());
 		controllerMap.put("/api/qna/addanswer", new AddAnswerController());
+		controllerMap.put("/api/qna/deleteanswer", new DeleteAnswerController());
 		return controllerMap;
 	}
 

@@ -52,10 +52,10 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>${question.countOfComment}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
                       		<c:forEach items="${answers}" var="answer">
-                          <article class="article" id="answer-1406">
+                          <article class="article" id="answer-${answer.answerId}">
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -76,9 +76,9 @@
                                           <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
                                       </li>
                                       <li>
-                                          <form class="form-delete" action="/questions/413/answers/1405" method="POST">
+                                          <form class="form-delete" action="/api/qna/deleteanswer?answerId=${answer.answerId}" method="GET">
                                               <input type="hidden" name="_method" value="DELETE">
-                                              <button type="submit" class="link-delete-article">삭제</button>
+                                              <button type="button" class="link-delete-article">삭제</button>
                                           </form>
                                       </li>
                                   </ul>
@@ -114,16 +114,19 @@
 		<div class="article-doc comment-doc">
 			{2}
 		</div>
-		<div class="article-util">
-		<ul class="article-util-list">
-			<li>
-				<a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
-			</li>
-			<li>
-				<a class="link-delete-article" href="/api/questions/{3}/answers/{4}">삭제</a>
-			</li>
-		</ul>
-		</div>
+<div class="article-util">
+    <ul class="article-util-list">
+      <li>
+        <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
+      </li>
+      <li>
+          <form class="form-delete" action="/api/qna/deleteanswer?answerId={3}" method="GET">
+             <input type="hidden" name="_method" value="DELETE">
+             <button type="button" class="link-delete-article">삭제</button>
+          </form>
+      </li>
+     </ul>
+</div>
 	</article>
 </script>
 
