@@ -85,11 +85,11 @@
                               </div>
                           </article>
           				</c:forEach>
-                          <form class="submit-write" action="/questions/answers/create?questionId=${question.questionId}" method="POST">
+                          <form class="answerWrite" name="answer" action="/api/qna/addanswer?questionId=${question.questionId}" method="POST">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" name="contents" placeholder="Update your status"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="submit">Post</button>
+                              <button class="btn btn-success pull-right" type="button">Post</button>
                               <div class="clearfix" />
                           </form>
                       </div>
@@ -100,13 +100,32 @@
     </div>
 </div>
 
-<!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
-	</body>
-</html>
-
+<script type="text/template" id="answerTemplate">
+	<article class="article">
+		<div class="article-header">
+			<div class="article-header-thumb">
+				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+			</div>
+			<div class="article-header-text">
+				<a href="#" class="article-author-name">{0}</a>
+				<div class="article-header-time">{1}</div>
+			</div>
+		</div>
+		<div class="article-doc comment-doc">
+			{2}
+		</div>
+		<div class="article-util">
+		<ul class="article-util-list">
+			<li>
+				<a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
+			</li>
+			<li>
+				<a class="link-delete-article" href="/api/questions/{3}/answers/{4}">삭제</a>
+			</li>
+		</ul>
+		</div>
+	</article>
+</script>
 
 <%@ include file="/include/footer.jspf" %>
 </body>
