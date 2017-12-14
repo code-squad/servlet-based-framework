@@ -7,7 +7,7 @@ import next.dao.QuestionDao;
 import next.model.Question;
 
 public class CreateQuestionController implements Controller {
-	private QuestionDao questionDao = new QuestionDao();
+	private QuestionDao questionDao = QuestionDao.getInstance();
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

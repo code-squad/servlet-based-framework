@@ -16,6 +16,9 @@ public class QuestionDao {
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 	private final static QuestionDao questionDao = new QuestionDao();
 	
+	private QuestionDao() {
+	}
+	
 	public static QuestionDao getInstance() {
 		return questionDao;
 	}

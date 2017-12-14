@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import core.jdbc.JdbcTemplate;
 import core.jdbc.KeyHolder;
@@ -36,10 +37,10 @@ public class AnswerDao {
 		};
 		KeyHolder keyHolder = new KeyHolder();
 		jdbcTemplate.update(psc, keyHolder);
-		return findById(keyHolder.getId());
+		return findByAnswerId(keyHolder.getId());
 	}
 	
-	public Answer findById(long keyId) {
+	public Answer findByAnswerId(long keyId) {
 		String sql = "SELECT * FROM ANSWERS WHERE answerId=?";
 		return jdbcTemplate.queryForObject(sql, rs ->
 			new Answer(
@@ -50,5 +51,18 @@ public class AnswerDao {
 					rs.getLong("questionId")
 					)
 			,keyId);
+	}
+
+	public List<Answer> findAllByQuestionId(long keyId) {
+		String sql = "SELECT * FROM ANSWERS WHERE questionId=?";
+		return jdbcTemplate.query(sql, rs ->
+			new Answer(
+					rs.getLong("answerId"),
+					rs.getString("writer"),
+					rs.getString("contents"),
+					rs.getDate("createdDate"),
+					rs.getLong("questionId")
+					)
+			,keyId);	
 	}
 }
