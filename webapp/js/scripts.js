@@ -45,3 +45,13 @@ String.prototype.format = function() {
 		return typeof args[number] != 'undefined' ? args[number] : match;
 	});
 };
+
+$(".form-delete").click(deleteAnswer);
+
+function deleteAnswer(e) {
+	e.preventDefault();
+
+	var deleteBtn = $(this);
+	deleteBtn.closest("article").remove();
+	
+}
