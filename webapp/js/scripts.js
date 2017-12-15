@@ -1,3 +1,6 @@
+$(".answerWrite button[type='button']").on("click", addAnswer);
+$(".qna-comment-slipp-articles").on("click", ".form-delete button[type='button']", deleteAnswer);
+
 $(document).ready(function() {/* jQuery toggle layout */
 	$('#btnToggle').click(function() {
 		if ($(this).hasClass('on')) {
@@ -9,23 +12,6 @@ $(document).ready(function() {/* jQuery toggle layout */
 		}
 	});
 });
-
-$(".answerWrite button[type='button']").on("click", addAnswer);
-
-function addAnswer(e) {
-	e.preventDefault();
-	var queryString = $("form[name=answer]").serialize();
-	var url = $(".answerWrite").attr("action");
-
-	$.ajax({
-		type : 'post',
-		url : url,
-		data : queryString,
-		dataType : 'json',
-		error : onError,
-		success : onSuccess,
-	});
-}
 
 function onSuccess(json, status) {
 	var answerTemplate = $("#answerTemplate").html();
@@ -41,33 +27,44 @@ function onError(xhr, status) {
 	alert("error");
 }
 
+function addAnswer(e) {
+	e.preventDefault();
+	var queryString = $("form[name=answer]").serialize();
+	var url = $(".answerWrite").attr("action");
+
+	$.ajax({
+		type : "post",
+		url : url,
+		data : queryString,
+		dataType : "json",
+		error : onError,
+		success : onSuccess,
+	});
+}
+
 String.prototype.format = function() {
 	var args = arguments;
 	return this.replace(/{(\d+)}/g, function(match, number) {
-		return typeof args[number] != 'undefined' ? args[number] : match;
+		return typeof args[number] != "undefined" ? args[number] : match;
 	});
 };
-
-$(".qna-comment-slipp-articles").on("click",
-		".form-delete button[type='button']", deleteAnswer);
 
 function deleteAnswer(e) {
 	e.preventDefault();
 	var deleteBtn = $(this);
-	var url = deleteBtn.closest('form').attr("action");
+	var url = deleteBtn.closest("form").attr("action");
 
 	$.ajax({
-		type : 'post',
+		type : "post",
 		url : url,
-		dataType : 'json',
+		dataType : "json",
 		error : function(xhr, status) {
-			console.log(xhr);
 			alert("error");
 		},
 		success : function(json, status) {
-			result = json.result
+			var result = json.result;
 			if (result.status) {
-				deleteBtn.closest('article').remove();
+				deleteBtn.closest("article").remove();
 			}
 		}
 	});

@@ -14,10 +14,10 @@ import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public class UserDaoTest {
-    UserDao userDao;
+    private UserDao userDao;
 	
     @Before
-    public void setup() {
+    public void setUp() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
