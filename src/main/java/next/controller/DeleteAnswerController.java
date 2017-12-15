@@ -7,22 +7,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import core.jdbc.DataAccessException;
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.model.Result;
 
 public class DeleteAnswerController implements Controller {
-	AnswerDao answrDao = AnswerDao.getInstance();
+	private AnswerDao answerDao = AnswerDao.getInstance();
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String answerId = request.getParameter("answerId");
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Long answerId = Long.parseLong(request.getParameter("answerId"));
+		answerDao.delete(answerId);
 
+		request.setAttribute("result", Result.ok());
 		ObjectMapper mapper = new ObjectMapper();
 		response.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
-		answrDao.delete(Long.parseLong(answerId));
 		out.print(mapper.writeValueAsString(Result.ok()));
 		return null;
 	}

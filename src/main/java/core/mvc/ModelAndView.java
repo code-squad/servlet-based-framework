@@ -5,26 +5,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelAndView {
-    private View view;
-    private Map<String, Object> model = new HashMap<String, Object>();
+	private View view;
 
-    public ModelAndView() {
-    }
+	public ModelAndView(View view) {
+		this.view = view;
+	}
 
-    public ModelAndView(View view) {
-        this.view = view;
-    }
+	public View getView() {
+		return view;
+	}
 
-    public ModelAndView addObject(String attributeName, Object attributeValue) {
-        model.put(attributeName, attributeValue);
-        return this;
-    }
-
-    public Map<String, Object> getModel() {
-        return Collections.unmodifiableMap(model);
-    }
-
-    public View getView() {
-        return view;
-    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// private View view;
+	// private Map<String, Object> model = new HashMap<String, Object>();
+	//
+	// public ModelAndView() {
+	// }
+	//
+	// public ModelAndView(View view) {
+	// this.view = view;
+	// }
+	//
+	// public ModelAndView addObject(String attributeName, Object attributeValue) {
+	// model.put(attributeName, attributeValue);
+	// return this;
+	// }
+	//
+	// public Map<String, Object> getModel() {
+	// return Collections.unmodifiableMap(model);
+	// }
+	//
+	// public View getView() {
+	// return view;
+	// }
 }

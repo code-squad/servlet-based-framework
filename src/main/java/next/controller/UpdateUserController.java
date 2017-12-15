@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import next.dao.UserDao;
 import next.model.User;
 
@@ -14,7 +16,7 @@ public class UpdateUserController implements Controller {
 	private UserDao userDao = UserDao.getInstance();
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = userDao.findByUserId(request.getParameter("userId"));
 		if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
 			throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
@@ -27,7 +29,7 @@ public class UpdateUserController implements Controller {
 				request.getParameter("email"));
 		log.debug("Update User : {}", updateUser);
 		userDao.update(updateUser);
-		return "redirect:/";
+		return new ModelAndView(new JspView("redirect:/"));
 	}
 
 }

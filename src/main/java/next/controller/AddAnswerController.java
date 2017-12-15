@@ -11,30 +11,34 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.User;
 
 public class AddAnswerController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
-	AnswerDao answerDao = AnswerDao.getInstance();
+	private AnswerDao answerDao = AnswerDao.getInstance();
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse resp) throws Exception {
-		String questionId = request.getParameter("questionId");
-		String contents = request.getParameter("contents");
-		HttpSession session = request.getSession();
-		User user = UserSessionUtils.getUserFromSession(session);
-		Answer answer = new Answer(getUserName(user), contents, Long.valueOf(questionId));
-
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse resp) throws Exception {
+		Answer answer = createAnswer(request);
 		log.debug("answer : {}", answer);
-
 		Answer savedAnswer = answerDao.insert(answer);
+
 		ObjectMapper mapper = new ObjectMapper();
 		resp.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 		out.print(mapper.writeValueAsString(savedAnswer));
 		return null;
+	}
+	
+	private Answer createAnswer(HttpServletRequest request) {
+		Long questionId = Long.parseLong(request.getParameter("questionId"));
+		String contents = request.getParameter("contents");
+		HttpSession session = request.getSession();
+		User user = UserSessionUtils.getUserFromSession(session);
+		return new Answer(getUserName(user), contents, questionId);
 	}
 
 	// 실습 편의성을 위해 로그인 안된 유저는 임시 유저라는 이름으로 댓글 작성"

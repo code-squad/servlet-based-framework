@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.mvc.ModelAndView;
+import core.mvc.View;
 import next.controller.Controller;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
@@ -29,8 +31,9 @@ public class DispatcherServlet extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Controller controller = requestMapping.findController(req.getRequestURI());
 		try {
-			String path = controller.execute(req, resp);
-			send(req, resp, path);
+			ModelAndView mav = controller.execute(req, resp);
+			View view = mav.getView();
+			view.render(req, resp);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}

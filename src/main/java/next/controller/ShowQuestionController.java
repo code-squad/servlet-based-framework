@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.jdbc.DataAccessException;
+import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;
@@ -16,7 +18,7 @@ public class ShowQuestionController implements Controller {
 	private AnswerDao answerDao = AnswerDao.getInstance();
 	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String questionId = request.getParameter("questionId");
 		Question question = questionDao.findByQuestionId(Long.valueOf(questionId));
 		if (question == null) {
@@ -25,7 +27,7 @@ public class ShowQuestionController implements Controller {
 		List<Answer> answers = answerDao.findAllByQuestionId(question.getQuestionId());
 		request.setAttribute("question", question);
 		request.setAttribute("answers", answers);
-		return "/qna/show.jsp";
+		return new ModelAndView(new JspView("/qna/show.jsp"));
 	}
 
 }
