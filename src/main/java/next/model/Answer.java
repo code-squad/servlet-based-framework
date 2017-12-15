@@ -66,9 +66,7 @@ public class Answer {
 		if (getClass() != obj.getClass())
 			return false;
 		Answer other = (Answer) obj;
-		if (answerId != other.answerId)
-			return false;
-		return true;
+		return answerId == other.answerId;
 	}
 
 	@Override

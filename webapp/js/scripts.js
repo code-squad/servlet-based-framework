@@ -1,6 +1,3 @@
-$(".answerWrite button[type='button']").on("click", addAnswer);
-$(".qna-comment-slipp-articles").on("click", ".form-delete button[type='button']", deleteAnswer);
-
 $(document).ready(function() {/* jQuery toggle layout */
 	$('#btnToggle').click(function() {
 		if ($(this).hasClass('on')) {
@@ -42,6 +39,8 @@ function addAnswer(e) {
 	});
 }
 
+$(".answerWrite button[type='button']").on("click", addAnswer);
+
 String.prototype.format = function() {
 	var args = arguments;
 	return this.replace(/{(\d+)}/g, function(match, number) {
@@ -69,3 +68,5 @@ function deleteAnswer(e) {
 		}
 	});
 }
+
+$(".qna-comment-slipp-articles").on("click", ".form-delete button[type='button']", deleteAnswer);
