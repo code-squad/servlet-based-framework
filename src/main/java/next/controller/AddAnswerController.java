@@ -1,6 +1,5 @@
 package next.controller;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,13 +22,11 @@ public class AddAnswerController implements Controller {
 		Answer answer = createAnswer(request);
 		log.debug("answer : {}", answer);
 		Answer savedAnswer = answerDao.insert(answer);
-		
-//		request.setAttribute("answer", savedAnswer);
 		ModelAndView mav = new ModelAndView(new JsonView());
 		mav.setAttribute("answer", savedAnswer);
 		return mav;
 	}
-	
+
 	private Answer createAnswer(HttpServletRequest request) {
 		Long questionId = Long.parseLong(request.getParameter("questionId"));
 		String contents = request.getParameter("contents");

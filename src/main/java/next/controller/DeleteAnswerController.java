@@ -15,9 +15,6 @@ public class DeleteAnswerController implements Controller {
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Long answerId = Long.parseLong(request.getParameter("answerId"));
 		answerDao.delete(answerId);
-
-		// request.setAttribute("result", Result.ok());
-		// return new ModelAndView(new JsonView());
 		ModelAndView mav = new ModelAndView(new JsonView());
 		mav.setAttribute("result", Result.ok());
 		return mav;
