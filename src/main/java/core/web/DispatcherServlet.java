@@ -38,14 +38,4 @@ public class DispatcherServlet extends HttpServlet {
 			log.error(e.getMessage());
 		}
 	}
-
-	private void send(HttpServletRequest req, HttpServletResponse resp, String path)
-			throws IOException, ServletException {
-		if (path.startsWith("redirect:")) {
-			resp.sendRedirect(path.split(":")[1]);
-			return;
-		}
-		RequestDispatcher rd = req.getRequestDispatcher(path);
-		rd.forward(req, resp);
-	}
 }

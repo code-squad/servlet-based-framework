@@ -16,7 +16,7 @@ function addAnswer(e) {
 	e.preventDefault();
 	var queryString = $("form[name=answer]").serialize();
 	var url = $(".answerWrite").attr("action");
-	
+
 	$.ajax({
 		type : 'post',
 		url : url,
@@ -29,9 +29,11 @@ function addAnswer(e) {
 
 function onSuccess(json, status) {
 	var answerTemplate = $("#answerTemplate").html();
-	var template = answerTemplate.format(json.writer,
-			new Date(json.createdDate), json.contents, json.answerId,
-			json.answerId);
+	var answer = json.answer;
+
+	var template = answerTemplate.format(answer.writer, new Date(
+			answer.createdDate), answer.contents, answer.answerId,
+			answer.answerId);
 	$(".qna-comment-slipp-articles").prepend(template);
 }
 
@@ -46,23 +48,25 @@ String.prototype.format = function() {
 	});
 };
 
-$(".qna-comment-slipp-articles").on("click", ".form-delete button[type='button']", deleteAnswer);
-
+$(".qna-comment-slipp-articles").on("click",
+		".form-delete button[type='button']", deleteAnswer);
 
 function deleteAnswer(e) {
 	e.preventDefault();
 	var deleteBtn = $(this);
 	var url = deleteBtn.closest('form').attr("action");
-	
+
 	$.ajax({
 		type : 'post',
 		url : url,
 		dataType : 'json',
 		error : function(xhr, status) {
+			console.log(xhr);
 			alert("error");
 		},
 		success : function(json, status) {
-			if (json.status) {
+			result = json.result
+			if (result.status) {
 				deleteBtn.closest('article').remove();
 			}
 		}

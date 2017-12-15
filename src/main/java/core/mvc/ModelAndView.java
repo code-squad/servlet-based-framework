@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class ModelAndView {
 	private View view;
+	private Map<String, Object> model;
 
 	public ModelAndView(View view) {
 		this.view = view;

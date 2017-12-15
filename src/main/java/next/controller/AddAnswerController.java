@@ -1,6 +1,5 @@
 package next.controller;
 
-import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,8 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import core.mvc.JsonView;
 import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.model.Answer;
@@ -25,12 +23,9 @@ public class AddAnswerController implements Controller {
 		Answer answer = createAnswer(request);
 		log.debug("answer : {}", answer);
 		Answer savedAnswer = answerDao.insert(answer);
-
-		ObjectMapper mapper = new ObjectMapper();
-		resp.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = resp.getWriter();
-		out.print(mapper.writeValueAsString(savedAnswer));
-		return null;
+		
+		request.setAttribute("answer", savedAnswer);
+		return new ModelAndView(new JsonView());
 	}
 	
 	private Answer createAnswer(HttpServletRequest request) {
