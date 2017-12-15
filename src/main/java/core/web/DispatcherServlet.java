@@ -2,7 +2,6 @@ package core.web;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import core.mvc.ModelAndView;
-import core.mvc.View;
 import next.controller.Controller;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
@@ -32,8 +30,7 @@ public class DispatcherServlet extends HttpServlet {
 		Controller controller = requestMapping.findController(req.getRequestURI());
 		try {
 			ModelAndView mav = controller.execute(req, resp);
-			View view = mav.getView();
-			view.render(req, resp);
+			mav.render(req, resp);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}

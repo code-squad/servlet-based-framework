@@ -24,8 +24,10 @@ public class AddAnswerController implements Controller {
 		log.debug("answer : {}", answer);
 		Answer savedAnswer = answerDao.insert(answer);
 		
-		request.setAttribute("answer", savedAnswer);
-		return new ModelAndView(new JsonView());
+//		request.setAttribute("answer", savedAnswer);
+		ModelAndView mav = new ModelAndView(new JsonView());
+		mav.setAttribute("answer", savedAnswer);
+		return mav;
 	}
 	
 	private Answer createAnswer(HttpServletRequest request) {

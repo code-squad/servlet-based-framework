@@ -1,6 +1,5 @@
 package next.controller;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +16,10 @@ public class DeleteAnswerController implements Controller {
 		Long answerId = Long.parseLong(request.getParameter("answerId"));
 		answerDao.delete(answerId);
 
-		request.setAttribute("result", Result.ok());
-		return new ModelAndView(new JsonView());
+		// request.setAttribute("result", Result.ok());
+		// return new ModelAndView(new JsonView());
+		ModelAndView mav = new ModelAndView(new JsonView());
+		mav.setAttribute("result", Result.ok());
+		return mav;
 	}
 }
