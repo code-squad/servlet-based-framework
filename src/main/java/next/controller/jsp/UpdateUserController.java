@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.jsp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
+import next.controller.Controller;
 import next.dao.UserDao;
 import next.model.User;
 

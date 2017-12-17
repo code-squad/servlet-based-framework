@@ -3,19 +3,19 @@ package core.web;
 import java.util.HashMap;
 import java.util.Map;
 
-import next.controller.AddAnswerController;
 import next.controller.Controller;
-import next.controller.CreateUserController;
-import next.controller.DeleteAnswerController;
-import next.controller.ForwardController;
-import next.controller.HomeController;
-import next.controller.ListUserController;
-import next.controller.LoginController;
-import next.controller.ProfileController;
-import next.controller.ShowQuestionController;
-import next.controller.UpdateUserController;
-import next.controller.UpdateUserFormController;
-import next.controller.CreateQuestionController;
+import next.controller.json.AddAnswerController;
+import next.controller.json.DeleteAnswerController;
+import next.controller.jsp.CreateQuestionController;
+import next.controller.jsp.CreateUserController;
+import next.controller.jsp.ForwardController;
+import next.controller.jsp.HomeController;
+import next.controller.jsp.ListUserController;
+import next.controller.jsp.LoginController;
+import next.controller.jsp.ProfileController;
+import next.controller.jsp.ShowQuestionController;
+import next.controller.jsp.UpdateUserController;
+import next.controller.jsp.UpdateUserFormController;
 
 public class RequestMapping {
 	private Map<String, Controller> controllers;

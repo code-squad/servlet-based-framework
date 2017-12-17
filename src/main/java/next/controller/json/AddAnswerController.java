@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import core.mvc.JsonView;
 import core.mvc.ModelAndView;
+import next.controller.Controller;
+import next.controller.jsp.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.User;

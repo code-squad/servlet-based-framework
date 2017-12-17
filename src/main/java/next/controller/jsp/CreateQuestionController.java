@@ -1,10 +1,11 @@
-package next.controller;
+package next.controller.jsp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
+import next.controller.Controller;
 import next.dao.QuestionDao;
 import next.model.Question;
 

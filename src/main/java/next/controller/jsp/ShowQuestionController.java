@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.jsp;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import core.jdbc.DataAccessException;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
+import next.controller.Controller;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;

@@ -1,10 +1,11 @@
-package next.controller;
+package next.controller.json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.JsonView;
 import core.mvc.ModelAndView;
+import next.controller.Controller;
 import next.dao.AnswerDao;
 import next.model.Result;
 
