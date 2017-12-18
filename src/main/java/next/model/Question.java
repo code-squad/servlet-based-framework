@@ -48,7 +48,7 @@ public class Question {
     public Date getCreatedDate() {
         return createdDate;
     }
-
+    
     public long getTimeFromCreateDate() {
         return this.createdDate.getTime();
     }
@@ -84,4 +84,10 @@ public class Question {
             return false;
         return true;
     }
+
+	public void update(String writer, String title, String contents) {
+		this.writer = writer;
+		this.title = title;
+		this.contents = contents;
+	}
 }

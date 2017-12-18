@@ -7,6 +7,14 @@ import next.model.User;
 
 public class UserDao {
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private final static UserDao userDao = new UserDao();
+	
+	private UserDao() {
+	}
+	
+	public static UserDao getInstance() {
+		return userDao;
+	}
 	
 	public void insert(User user) {
 		jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", pstmt -> {
@@ -23,7 +31,8 @@ public class UserDao {
 	}
 
 	public List<User> findAll() {
-		return jdbcTemplate.query("SELECT userId, password, name, email FROM USERS", rs ->
+		String sql = "SELECT userId, password, name, email FROM USERS";
+		return jdbcTemplate.query(sql , rs ->
 			 new User(
 					rs.getString("userId"), 
 					rs.getString("password"), 
@@ -33,7 +42,8 @@ public class UserDao {
 	}
 
 	public User findByUserId(String userId) {
-		return jdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", rs -> 
+		String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
+		return jdbcTemplate.queryForObject(sql, rs -> 
 			new User(
 					rs.getString("userId"), 
 					rs.getString("password"), 
