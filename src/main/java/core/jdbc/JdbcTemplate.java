@@ -13,11 +13,11 @@ public class JdbcTemplate {
 	          pstmt.executeUpdate();
 	          ResultSet rs = pstmt.getGeneratedKeys();
 	          if (rs.next()) {
-	              holder.setId(rs.getLong(1));
+	        	  holder.setId(rs.getLong(1));
 	          	}
 	          rs.close();
 	      } catch (SQLException e) {
-	          throw new DataAccessException("답변을 삽입에서 문제 발생");
+	          throw new DataAccessException("답변 삽입에서 문제 발생");
 	      }
 	  }
 	
@@ -41,7 +41,7 @@ public class JdbcTemplate {
 
 	public <T> T queryForObject(String sql, PreparedStatementSetter setter, RowMapper<T> rm) throws DataAccessException {
 		List<T> list = query(sql, setter, rm);
-		return list.size() == 0 ? null : list.get(0);
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 	public void update(String sql, Object... values) throws DataAccessException {
