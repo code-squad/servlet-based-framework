@@ -11,15 +11,7 @@ public class AnnotationHandlerMappingTest {
 	@Before
 	public void setup() {
 		handlerMapping = new AnnotationHandlerMapping("core.nmvc");
-		try {
-			handlerMapping.initialize();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		handlerMapping.initialize();
 	}
 
 	@Test
