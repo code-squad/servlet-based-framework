@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.ModelAndView;
 
 public class HandlerExecution {
-	private Method method;
 	private Object object;
+	private Method method;
 	
 	public HandlerExecution(Object clazz, Method method) {
 		this.object = clazz;

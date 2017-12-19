@@ -23,7 +23,7 @@ public class ControllerScanner {
 		return instantiateControllers(preInitiatedControllers);
 	}
 
-	public Map<Class<?>, Object> instantiateControllers(Set<Class<?>> annotated) {
+	private Map<Class<?>, Object> instantiateControllers(Set<Class<?>> annotated) {
 		Map<Class<?>, Object> classes = new HashMap<>();
 		for (Class<?> clazz : annotated) {
 			try {

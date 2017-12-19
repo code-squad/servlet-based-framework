@@ -3,6 +3,8 @@ package core.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import next.controller.Controller;
 import next.controller.json.AddAnswerController;
 import next.controller.json.DeleteAnswerController;
@@ -17,15 +19,16 @@ import next.controller.jsp.ShowQuestionController;
 import next.controller.jsp.UpdateUserController;
 import next.controller.jsp.UpdateUserFormController;
 
-public class RequestMapping {
+public class LegacyHandlerMapping implements HandlerMapping {
 	private Map<String, Controller> controllers;
+	private static final LegacyHandlerMapping legacyHandlerMapping = new LegacyHandlerMapping();
 
-	private RequestMapping() {
+	private LegacyHandlerMapping() {
 		controllers = initControllers();
 	}
 
-	public static RequestMapping createRequestMapping() {
-		return new RequestMapping();
+	public static LegacyHandlerMapping getInstance() {
+		return legacyHandlerMapping;
 	}
 
 	private static Map<String, Controller> initControllers() {
@@ -46,12 +49,9 @@ public class RequestMapping {
 		return controllerMap;
 	}
 
-	public Controller findController(String path) {
-		Controller controller = controllers.get(path);
-		if (controller == null) {
-			return new ForwardController(path);
-		}
-		return controllers.get(path);
+	@Override
+	public Object getHandler(HttpServletRequest request) {
+		return controllers.get(request.getRequestURI());
 	}
 
 }
