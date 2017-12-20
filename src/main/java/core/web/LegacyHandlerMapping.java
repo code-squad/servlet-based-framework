@@ -36,7 +36,7 @@ public class LegacyHandlerMapping implements HandlerMapping {
 		controllerMap.put("/users/create", new CreateUserController());
 		controllerMap.put("/users/form", new ForwardController("/user/form"));
 		controllerMap.put("/", new HomeController());
-		controllerMap.put("/users", new ListUserController());
+//		controllerMap.put("/users", new ListUserController());
 		controllerMap.put("/users/login", new LoginController());
 		controllerMap.put("/users/loginForm", new ForwardController("/user/login"));
 		controllerMap.put("/users/profile", new ProfileController());

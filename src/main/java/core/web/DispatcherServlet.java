@@ -29,7 +29,7 @@ public class DispatcherServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		lhm = LegacyHandlerMapping.getInstance();
-		ahm = new AnnotationHandlerMapping("core.nmvc");
+		ahm = new AnnotationHandlerMapping("core.nmvc", "next.controller.jsp");
 		ahm.initialize();
 		handlers = new ArrayList<>();
 		handlers.add(lhm);
@@ -43,7 +43,6 @@ public class DispatcherServlet extends HttpServlet {
 			if (handler instanceof Controller) {
 				render(req, resp, ((Controller) handler).execute(req, resp));
 			} else if (handler instanceof HandlerExecution) {
-				HandlerExecution he = ahm.getHandler(req);
 				render(req, resp, ((HandlerExecution) handler).handle(req, resp));
 			}
 		} catch (Exception e) {
