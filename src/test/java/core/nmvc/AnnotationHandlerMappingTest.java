@@ -1,9 +1,13 @@
 package core.nmvc;
 
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+
+import core.web.DispatcherServlet;
 
 public class AnnotationHandlerMappingTest {
 	private AnnotationHandlerMapping handlerMapping;
@@ -18,15 +22,16 @@ public class AnnotationHandlerMappingTest {
 	public void findUserIdTest() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/users/findUserId");
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		HandlerExecution execution = handlerMapping.getHandler(request);
-		execution.handle(request, response);
+		Optional<?> execution = handlerMapping.getHandler(request);
+		((HandlerExecution) execution.get()).handle(request, response);
 	}
 
 	@Test
 	public void gandlerUsersTest() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest("POST", "/users");
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		HandlerExecution execution = handlerMapping.getHandler(request);
-		execution.handle(request, response);
+		Optional<?> execution = handlerMapping.getHandler(request);
+		((HandlerExecution) execution.get()).handle(request, response);
+
 	}
 }

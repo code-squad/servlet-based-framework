@@ -2,6 +2,7 @@ package core.nmvc;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.web.HandlerMapping;
 
+@SuppressWarnings("rawtypes")
 public class AnnotationHandlerMapping implements HandlerMapping{
 	private Object[] basePackage;
 	private Map<HandlerKey, HandlerExecution> handlerExecutions;
@@ -44,9 +46,9 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 	}
 
 	@Override
-	public HandlerExecution getHandler(HttpServletRequest request) {
+	public Optional<?> getHandler(HttpServletRequest request) {
 		String requestUri = request.getRequestURI();
 		RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
-		return handlerExecutions.get(new HandlerKey(requestUri, rm));
+		return Optional.ofNullable(handlerExecutions.get(new HandlerKey(requestUri, rm)));
 	}
 }

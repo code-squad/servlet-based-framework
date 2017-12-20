@@ -24,16 +24,17 @@ public class DispatcherServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 	private LegacyHandlerMapping lhm;
 	private AnnotationHandlerMapping ahm;
-	private List<HandlerMapping> handlers;
+	@SuppressWarnings("rawtypes")
+	private List<HandlerMapping> mappings;
 
 	@Override
 	public void init() throws ServletException {
 		lhm = LegacyHandlerMapping.getInstance();
 		ahm = new AnnotationHandlerMapping("core.nmvc", "next.controller.jsp");
 		ahm.initialize();
-		handlers = new ArrayList<>();
-		handlers.add(lhm);
-		handlers.add(ahm);
+		mappings = new ArrayList<>();
+		mappings.add(lhm);
+		mappings.add(ahm);
 	}
 
 	@Override
@@ -49,16 +50,15 @@ public class DispatcherServlet extends HttpServlet {
 			log.error("mav render 부분에서 에러 발생");
 		}
 	}
-
-	private Object getHandler(HttpServletRequest req) {
-		for (HandlerMapping handlerMapping : handlers) {
-			Object handler = handlerMapping.getHandler(req);
-			if (handler != null) {
-				return handler;
-			}
-		}
-		return null;
-	}
+	
+  private Object getHandler(HttpServletRequest req) {
+      return mappings.stream()
+          .map(hm -> hm.getHandler(req))
+          .filter(h -> h.isPresent())
+          .findFirst()
+          .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 URL입니다."))	
+          .get();
+  }
 
 	private void render(HttpServletRequest req, HttpServletResponse resp, ModelAndView mav) {
 		try {
