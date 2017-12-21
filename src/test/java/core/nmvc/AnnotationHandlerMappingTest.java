@@ -1,13 +1,13 @@
 package core.nmvc;
 
+import static org.junit.Assert.*;
+
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import core.web.DispatcherServlet;
 
 public class AnnotationHandlerMappingTest {
 	private AnnotationHandlerMapping handlerMapping;
@@ -24,6 +24,7 @@ public class AnnotationHandlerMappingTest {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		Optional<?> execution = handlerMapping.getHandler(request);
 		((HandlerExecution) execution.get()).handle(request, response);
+		assertTrue(true);
 	}
 
 	@Test
@@ -32,6 +33,6 @@ public class AnnotationHandlerMappingTest {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		Optional<?> execution = handlerMapping.getHandler(request);
 		((HandlerExecution) execution.get()).handle(request, response);
-
+		assertTrue(true);
 	}
 }

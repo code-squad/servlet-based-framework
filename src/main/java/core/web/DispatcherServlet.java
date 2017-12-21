@@ -26,16 +26,14 @@ import core.nmvc.HandlerExecutionHandlerAdapter;
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
-	private LegacyHandlerMapping lhm;
-	private AnnotationHandlerMapping ahm;
 	@SuppressWarnings("rawtypes")
 	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 	
 	@Override
 	public void init() throws ServletException {
-		lhm = LegacyHandlerMapping.getInstance();
-		ahm = new AnnotationHandlerMapping("core.nmvc", "next.controller.jsp");
+		LegacyHandlerMapping lhm = LegacyHandlerMapping.getInstance();
+		AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("core.nmvc", "next.controller.jsp");
 		ahm.initialize();
 		
 		mappings.add(lhm);
