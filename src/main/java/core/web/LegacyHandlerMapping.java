@@ -54,5 +54,4 @@ public class LegacyHandlerMapping implements HandlerMapping {
 		return Optional.ofNullable(controllers.get(request.getRequestURI()));
 	}
 
-
 }

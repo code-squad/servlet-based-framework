@@ -3,6 +3,7 @@ package core.web;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,18 +20,16 @@ import core.mvc.ModelAndView;
 import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.ControllerHandlerAdapter;
 import core.nmvc.HandlerAdapter;
-import core.nmvc.HandlerExecution;
 import core.nmvc.HandlerExecutionHandlerAdapter;
-import next.controller.Controller;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 	private LegacyHandlerMapping lhm;
 	private AnnotationHandlerMapping ahm;
 	@SuppressWarnings("rawtypes")
-	private List<HandlerMapping> mappings;
+	private List<HandlerMapping> mappings = new ArrayList<>();
 	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 	
 	@Override
@@ -38,7 +37,7 @@ public class DispatcherServlet extends HttpServlet {
 		lhm = LegacyHandlerMapping.getInstance();
 		ahm = new AnnotationHandlerMapping("core.nmvc", "next.controller.jsp");
 		ahm.initialize();
-		mappings = new ArrayList<>();
+		
 		mappings.add(lhm);
 		mappings.add(ahm);
 		
@@ -49,30 +48,21 @@ public class DispatcherServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Object handler = getHandler(req);
-//		try {
-//			if (handler instanceof Controller) {
-//				render(req, resp, ((Controller) handler).execute(req, resp));
-//			} else if (handler instanceof HandlerExecution) {
-//				render(req, resp, ((HandlerExecution) handler).handle(req, resp));
-//			}
-//		} catch (Exception e) {
-//			log.error("mav render 부분에서 에러 발생");
-//		}
 		try {
-			ModelAndView mav = execute(handler, req, resp);
+			ModelAndView mav = execute(handler, req, resp).get();
 			mav.render(req, resp);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("service errrrrrr");
+			logger.error(e.getMessage());
 		}
 	}
-
-	private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception {
-		for (HandlerAdapter handlerAdapter : handlerAdapters) {
-			if (handlerAdapter.supports(handler)) {
-				return handlerAdapter.handle(req, resp, handler);
-			}
-		}
-		return null;
+	
+	private Optional<ModelAndView> execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		return Optional.ofNullable(
+								handlerAdapters.stream().
+								filter(ha -> ha.supports(handler)).
+								findFirst().get()
+								.handle(req, resp, handler));
 	}
 	  
   private Object getHandler(HttpServletRequest req) {
@@ -83,13 +73,5 @@ public class DispatcherServlet extends HttpServlet {
           .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 URL입니다."))	
           .get();
   }
-
-	private void render(HttpServletRequest req, HttpServletResponse resp, ModelAndView mav) {
-		try {
-			mav.render(req, resp);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 }

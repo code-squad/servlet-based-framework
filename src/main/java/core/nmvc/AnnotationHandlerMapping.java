@@ -1,9 +1,7 @@
 package core.nmvc;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,17 +26,13 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 	public void initialize() {
 		ControllerScanner controllerScanner = new ControllerScanner(basePackage);
 		Map<Class<?>, Object> allClass = controllerScanner.getControllers();
-		for (Class<?> clazz : allClass.keySet()) {
-			Set<Method> allMethod = ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class));
-			putHandlerExecutions(allClass, clazz, allMethod);
-		}
-	}
-
-	private void putHandlerExecutions(Map<Class<?>, Object> allClass, Class<?> clazz, Set<Method> allMethod) {
-		for (Method method : allMethod) {
-			RequestMapping rm = method.getAnnotation(RequestMapping.class);
-			handlerExecutions.put(createHandlerKey(rm), new HandlerExecution(allClass.get(clazz), method));
-		}
+		allClass.keySet().stream().forEach( clazz -> {
+			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
+			.forEach( method -> {
+				RequestMapping rm = method.getAnnotation(RequestMapping.class);
+				handlerExecutions.put(createHandlerKey(rm), new HandlerExecution(allClass.get(clazz), method));
+			});
+		});
 	}
 	
 	private HandlerKey createHandlerKey(RequestMapping rm) {
