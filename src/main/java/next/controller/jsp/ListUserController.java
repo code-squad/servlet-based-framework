@@ -15,7 +15,6 @@ public class ListUserController {
 
 	@RequestMapping("/users")
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("userUpp");
 		if (!UserSessionUtils.isLogined(request.getSession())) {
 			return new ModelAndView(new JspView("redirect:/users/loginForm"));
 		}

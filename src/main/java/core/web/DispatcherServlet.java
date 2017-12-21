@@ -13,9 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+
 import core.mvc.ModelAndView;
 import core.nmvc.AnnotationHandlerMapping;
+import core.nmvc.ControllerHandlerAdapter;
+import core.nmvc.HandlerAdapter;
 import core.nmvc.HandlerExecution;
+import core.nmvc.HandlerExecutionHandlerAdapter;
 import next.controller.Controller;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
@@ -26,7 +31,8 @@ public class DispatcherServlet extends HttpServlet {
 	private AnnotationHandlerMapping ahm;
 	@SuppressWarnings("rawtypes")
 	private List<HandlerMapping> mappings;
-
+	private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
+	
 	@Override
 	public void init() throws ServletException {
 		lhm = LegacyHandlerMapping.getInstance();
@@ -35,22 +41,40 @@ public class DispatcherServlet extends HttpServlet {
 		mappings = new ArrayList<>();
 		mappings.add(lhm);
 		mappings.add(ahm);
+		
+		handlerAdapters.add(new ControllerHandlerAdapter());
+		handlerAdapters.add(new HandlerExecutionHandlerAdapter());
 	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Object handler = getHandler(req);
+//		try {
+//			if (handler instanceof Controller) {
+//				render(req, resp, ((Controller) handler).execute(req, resp));
+//			} else if (handler instanceof HandlerExecution) {
+//				render(req, resp, ((HandlerExecution) handler).handle(req, resp));
+//			}
+//		} catch (Exception e) {
+//			log.error("mav render 부분에서 에러 발생");
+//		}
 		try {
-			if (handler instanceof Controller) {
-				render(req, resp, ((Controller) handler).execute(req, resp));
-			} else if (handler instanceof HandlerExecution) {
-				render(req, resp, ((HandlerExecution) handler).handle(req, resp));
-			}
+			ModelAndView mav = execute(handler, req, resp);
+			mav.render(req, resp);
 		} catch (Exception e) {
-			log.error("mav render 부분에서 에러 발생");
+			e.printStackTrace();
 		}
 	}
-	
+
+	private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		for (HandlerAdapter handlerAdapter : handlerAdapters) {
+			if (handlerAdapter.supports(handler)) {
+				return handlerAdapter.handle(req, resp, handler);
+			}
+		}
+		return null;
+	}
+	  
   private Object getHandler(HttpServletRequest req) {
       return mappings.stream()
           .map(hm -> hm.getHandler(req))
