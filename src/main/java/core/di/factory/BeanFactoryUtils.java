@@ -18,14 +18,14 @@ public class BeanFactoryUtils {
      * @param clazz
      * @return
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static Constructor<?> getInjectedConstructor(Class<?> clazz) {
-        Set<Constructor> injectedConstructors = getAllConstructors(clazz, withAnnotation(Inject.class));
-        if (injectedConstructors.isEmpty()) {
-            return null;
-        }
-        return injectedConstructors.iterator().next();
-    }
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Constructor<?> getInjectedConstructor(Class<?> clazz) {
+		Set<Constructor> injectedConstructors = getAllConstructors(clazz, withAnnotation(Inject.class));
+		if (injectedConstructors.isEmpty()) {
+			return null;
+		}
+		return injectedConstructors.iterator().next();
+	}
 
     /**
      * 인자로 전달되는 클래스의 구현 클래스. 만약 인자로 전달되는 Class가 인터페이스가 아니면 전달되는 인자가 구현 클래스,
@@ -35,18 +35,18 @@ public class BeanFactoryUtils {
      * @param preInstanticateBeans
      * @return
      */
-    public static Class<?> findConcreteClass(Class<?> injectedClazz, Set<Class<?>> preInstanticateBeans) {
-        if (!injectedClazz.isInterface()) {
-            return injectedClazz;
-        }
+	public static Class<?> findConcreteClass(Class<?> injectedClazz, Set<Class<?>> preInstanticateBeans) {
+		if (!injectedClazz.isInterface()) {
+			return injectedClazz;
+		}
 
-        for (Class<?> clazz : preInstanticateBeans) {
-            Set<Class<?>> interfaces = Sets.newHashSet(clazz.getInterfaces());
-            if (interfaces.contains(injectedClazz)) {
-                return clazz;
-            }
-        }
+		for (Class<?> clazz : preInstanticateBeans) {
+			Set<Class<?>> interfaces = Sets.newHashSet(clazz.getInterfaces());
+			if (interfaces.contains(injectedClazz)) {
+				return clazz;
+			}
+		}
 
-        throw new IllegalStateException(injectedClazz + "인터페이스를 구현하는 Bean이 존재하지 않는다.");
-    }
+		throw new IllegalStateException(injectedClazz + "인터페이스를 구현하는 Bean이 존재하지 않는다.");
+	}
 }
