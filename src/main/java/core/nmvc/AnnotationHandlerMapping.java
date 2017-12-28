@@ -9,8 +9,12 @@ import org.reflections.ReflectionUtils;
 
 import com.google.common.collect.Maps;
 
+import core.annotation.Controller;
+import core.annotation.Repository;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import core.annotation.Service;
+import core.di.factory.BeanFactory;
 import core.web.HandlerMapping;
 
 @SuppressWarnings("rawtypes")
@@ -25,7 +29,9 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 
 	public void initialize() {
 		BeanScanner beanScanner = new BeanScanner(basePackage);
-		Map<Class<?>, Object> allClass = beanScanner.getControllers();
+		BeanFactory beanFactory = new BeanFactory(beanScanner.getTypesAnnotatedWith(Controller.class, Service.class, Repository.class));
+		System.out.println("111");
+		Map<Class<?>, Object> allClass = beanFactory.getControllers();
 		allClass.keySet().stream().forEach( clazz -> {
 			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
 			.forEach( method -> {

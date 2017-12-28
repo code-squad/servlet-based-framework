@@ -1,14 +1,13 @@
 package core.nmvc;
 
-import java.util.Map;
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import core.annotation.Controller;
-import core.di.factory.BeanFactory;
+import com.google.common.collect.Sets;
 
 public class BeanScanner {
 	private static final Logger logger = LoggerFactory.getLogger(BeanScanner.class);
@@ -18,11 +17,14 @@ public class BeanScanner {
 		reflections = new Reflections(basePackage);
 	}
 
-	public Map<Class<?>, Object> getControllers() {
-		Set<Class<?>> preInitiatedControllers = reflections.getTypesAnnotatedWith(Controller.class);
-		BeanFactory beanFactory = new BeanFactory(preInitiatedControllers);
-		beanFactory.initialize();
-		return beanFactory.getControllers();
+	@SuppressWarnings("unchecked")
+	public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation>... annotations) {
+		Set<Class<?>> beans = Sets.newHashSet();
+		for (Class<? extends Annotation> clazz : annotations) {
+			logger.debug("clazz : {}", clazz);
+			beans.addAll(reflections.getTypesAnnotatedWith(clazz));
+		}
+		return beans;
 	}
 
 }
