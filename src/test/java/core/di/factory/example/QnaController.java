@@ -11,19 +11,19 @@ import core.mvc.ModelAndView;
 
 @Controller
 public class QnaController {
-    private MyQnaService qnaService;
+	private MyQnaService qnaService;
 
-    @Inject
-    public QnaController(MyQnaService qnaService) {
-        this.qnaService = qnaService;
-    }
+	@Inject
+	public QnaController(MyQnaService qnaService) {
+		this.qnaService = qnaService;
+	}
 
-    public MyQnaService getQnaService() {
-        return qnaService;
-    }
+	public MyQnaService getQnaService() {
+		return qnaService;
+	}
 
-    @RequestMapping("/questions")
-    public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ModelAndView(new JspView("/qna/list.jsp"));
-    }
+	@RequestMapping("/questions")
+	public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return new ModelAndView(new JspView("/qna/list.jsp"));
+	}
 }
