@@ -1,8 +1,10 @@
 package core.di.factory;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -41,41 +43,32 @@ public class BeanFactory {
 		if (beans.containsKey(clazz)) {
 			return beans.get(clazz);
 		}
+		clazz = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
 		Constructor<?> constructor = BeanFactoryUtils.getInjectedConstructor(clazz);
-		if (constructor == null) {
-			try {
-				constructor = clazz.getConstructor();
-				Object bean = constructor.newInstance();
-				beans.put(clazz, bean);
-				return bean;
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			}
+		Optional<Constructor<?>> optionalConstructor = Optional.ofNullable(constructor);
+		try {
+			constructor = optionalConstructor.isPresent() ? optionalConstructor.get() : clazz.getConstructor();
+		} catch (NoSuchMethodException | SecurityException e) {
+			logger.error(e.getMessage());
+			logger.error("빈 생성 도중 에러가 발생하였다.");
 		}
 		Object bean = instantiateConstructor(constructor);
-		beans.put(clazz, bean);
 		return bean;
 	}
 
 	private Object instantiateConstructor(Constructor<?> constructor) {
 		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		List<Object> args = Lists.newArrayList();
-		for (Class<?> clazz : parameterTypes) {
-			clazz = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
-			Object bean = beans.get(clazz);
-			args.add(bean == null ? instantiateClass(clazz) : bean);
-		}
+		Arrays.asList(parameterTypes).stream().forEach(p -> {
+			args.add(instantiateClass(p));
+		});
 		return BeanUtils.instantiateClass(constructor, args.toArray());
 	}
 
 	public Map<Class<?>, Object> getControllers() {
 		Map<Class<?>, Object> controllers = Maps.newHashMap();
-		for (Class<?> clazz : preInstanticateBeans) {
-			if (clazz.isAnnotationPresent(Controller.class)) {
-				controllers.put(clazz, beans.get(clazz));
-			}
-		}
+		preInstanticateBeans.stream().filter(c -> c.isAnnotationPresent(Controller.class))
+				.forEach(c -> controllers.put(c, beans.get(c)));
 		return controllers;
 	}
 }

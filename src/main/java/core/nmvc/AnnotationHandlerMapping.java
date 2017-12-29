@@ -30,7 +30,6 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 	public void initialize() {
 		BeanScanner beanScanner = new BeanScanner(basePackage);
 		BeanFactory beanFactory = new BeanFactory(beanScanner.getTypesAnnotatedWith(Controller.class, Service.class, Repository.class));
-		System.out.println("111");
 		Map<Class<?>, Object> allClass = beanFactory.getControllers();
 		allClass.keySet().stream().forEach( clazz -> {
 			ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(RequestMapping.class))
