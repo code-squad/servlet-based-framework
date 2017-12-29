@@ -39,15 +39,15 @@ public class BeanFactory {
 		}
 	}
 
-	private Object instantiateClass(Class<?> classOfBean) {
-		if (beans.containsKey(classOfBean)) {
-			return beans.get(classOfBean);
+	private Object instantiateClass(Class<?> targetClass) {
+		if (beans.containsKey(targetClass)) {
+			return beans.get(targetClass);
 		}
-		classOfBean = BeanFactoryUtils.findConcreteClass(classOfBean, preInstanticateBeans);
-		Constructor<?> constructor = BeanFactoryUtils.getInjectedConstructor(classOfBean);
+		targetClass = BeanFactoryUtils.findConcreteClass(targetClass, preInstanticateBeans);
+		Constructor<?> constructor = BeanFactoryUtils.getInjectedConstructor(targetClass);
 		Optional<Constructor<?>> optionalConstructor = Optional.ofNullable(constructor);
 		try {
-			constructor = optionalConstructor.isPresent() ? optionalConstructor.get() : classOfBean.getConstructor();
+			constructor = optionalConstructor.isPresent() ? optionalConstructor.get() : targetClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
 			logger.error(e.getMessage());
 			logger.error("빈 생성 도중 에러가 발생하였다.");
