@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -53,6 +54,13 @@
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
+            
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
+            	<span class="sr-only">Toggle navigation</span>
+            	<span class="icon-bar"></span>
+            	<span class="icon-bar"></span>
+            	<span class="icon-bar"></span>
+            </button>            
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
@@ -134,9 +142,9 @@
                                           <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
                                       </li>
                                       <li>
-                                          <form class="form-delete" action="/questions/413/answers/1405" method="POST">
+                                          <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
-                                              <button type="submit" class="link-delete-article">삭제</button>
+                                              <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
                                       </li>
                                   </ul>
@@ -163,19 +171,19 @@
                                           <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
                                       </li>
                                       <li>
-                                          <form class="form-delete" action="/questions/413/answers/1405" method="POST">
+                                          <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
-                                              <button type="submit" class="link-delete-article">삭제</button>
+                                              <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
                                       </li>
                                   </ul>
                               </div>
                           </article>
-                          <form class="submit-write">
+                          <form class="answer-form">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" placeholder="Update your status"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="button">Post</button>
+                              <button class="btn btn-success pull-right" type="button">답변하기</button>
                               <div class="clearfix" />
                           </form>
                       </div>
@@ -185,6 +193,36 @@
         </div>
     </div>
 </div>
+
+<script type="text/template" id="answerTemplate">
+	<article class="article">
+		<div class="article-header">
+			<div class="article-header-thumb">
+				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+			</div>
+			<div class="article-header-text">
+				<a href="#" class="article-author-name">{0}</a>
+				<div class="article-header-time">{1}</div>
+			</div>
+		</div>
+		<div class="article-doc comment-doc">
+			{2}
+		</div>
+		<div class="article-util">
+		<ul class="article-util-list">
+			<li>
+				<a class="link-modify-article" href="/api/questions/{3}/answers/{4}/form">수정</a>				
+			</li>
+			<li>
+				<form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
+					<input type="hidden" name="_method" value="DELETE">
+                     <button type="submit" class="delete-answer-button">삭제</button>
+				</form>
+			</li>
+		</ul>
+		</div>
+	</article>
+</script>
 
 <!-- script references -->
 <script src="../js/jquery-2.2.0.min.js"></script>

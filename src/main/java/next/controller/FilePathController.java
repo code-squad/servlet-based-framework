@@ -2,14 +2,17 @@ package next.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class LogoutController implements Controller {
+public class FilePathController implements Controller {
+	private String url;
+	
+	FilePathController(String url){
+		this.url = url;
+	}
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-		return "redirect:/";
+		return url;
 	}
+
 }
