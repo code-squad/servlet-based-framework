@@ -12,7 +12,7 @@ import next.exception.DataAccessException;
 
 public class JdbcTemplate {
 	public void update(String sql, PreparedStatementSetter pstmtSetter) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
+		try (PreparedStatement pstmt = connection(sql)) {
 			pstmtSetter.setValues(pstmt);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -21,7 +21,7 @@ public class JdbcTemplate {
 	}
 
 	public void update(String sql, String... objects) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
+		try (PreparedStatement pstmt = connection(sql)) {
 			for (int i = 0; i < objects.length; i++) {
 				pstmt.setObject(i + 1, objects[i]);
 			}
@@ -32,14 +32,10 @@ public class JdbcTemplate {
 	}
 
 	public <T> List<T> query(String sql, PreparedStatementSetter pstmtSetter, RowMapper<T> rm) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
-			ArrayList<T> values = new ArrayList<T>();
+		try (PreparedStatement pstmt = connection(sql)) {
 			pstmtSetter.setValues(pstmt);
-			try (ResultSet rs = pstmt.executeQuery();) {
-				while (rs.next()) {
-					values.add(rm.mapRow(rs));
-				}
-				return values;
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return getResult(rs, rm);
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
@@ -47,30 +43,55 @@ public class JdbcTemplate {
 	}
 
 	public <T> List<T> query(String sql, RowMapper<T> rm, String... objects) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql);) {
-			ArrayList<T> values = new ArrayList<T>();
+		try (PreparedStatement pstmt = connection(sql)) {
 			for (int i = 0; i < objects.length; i++) {
 				pstmt.setObject(i + 1, objects[i]);
 			}
-			try (ResultSet rs = pstmt.executeQuery();) {
-				while (rs.next()) {
-					values.add(rm.mapRow(rs));
-				}
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return getResult(rs, rm);
 			}
-			return values;
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
 	}
 
 	public <T> T queryForObject(String sql, PreparedStatementSetter pstmtSetter, RowMapper<T> rm) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
-			T value = null;
+		try (PreparedStatement pstmt = connection(sql)) {
 			pstmtSetter.setValues(pstmt);
 			try (ResultSet rs = pstmt.executeQuery();) {
-				if (rs.next()) {
-					value = rm.mapRow(rs);
-				}
+				return getResultForObject(rs, rm);
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	public <T> T queryForObject(String sql, RowMapper<T> rm, String... objects) {
+		try (PreparedStatement pstmt = connection(sql)) {
+			for (int i = 0; i < objects.length; i++) {
+				pstmt.setString(i + 1, objects[i]);
+			}
+			try (ResultSet rs = pstmt.executeQuery();) {
+				return getResultForObject(rs, rm);
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	private PreparedStatement connection(String sql) {
+		try (Connection con = ConnectionManager.getConnection()) {
+			return con.prepareStatement(sql);
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	private <T> T getResultForObject(ResultSet rs, RowMapper<T> rm) {
+		try {
+			T value = null;
+			if (rs.next()) {
+				value = rm.mapRow(rs);
 			}
 			return value;
 		} catch (SQLException e) {
@@ -78,18 +99,13 @@ public class JdbcTemplate {
 		}
 	}
 
-	public <T> T queryForObject(String sql, RowMapper<T> rm, String... objects) {
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
-			T value = null;
-			for (int i = 0; i < objects.length; i++) {
-				pstmt.setString(i + 1, objects[i]);
+	private <T> List<T> getResult(ResultSet rs, RowMapper<T> rm) {
+		try {
+			List<T> values = new ArrayList<T>();
+			while (rs.next()) {
+				values.add(rm.mapRow(rs));
 			}
-			try (ResultSet rs = pstmt.executeQuery();) {
-				if (rs.next()) {
-					value = rm.mapRow(rs);
-				}
-			}
-			return value;
+			return values;
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}

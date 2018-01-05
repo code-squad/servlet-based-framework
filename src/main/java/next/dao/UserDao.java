@@ -2,7 +2,6 @@ package next.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +11,11 @@ public class UserDao {
 	public void insert_(User user) {
 		String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
 		JdbcTemplate template = new JdbcTemplate();
-		template.update(sql, new PreparedStatementSetter() {
-			@Override
-			public PreparedStatement setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, user.getUserId());
-				pstmt.setString(2, user.getPassword());
-				pstmt.setString(3, user.getName());
-				pstmt.setString(4, user.getEmail());
-				return pstmt;
-			}
+		template.update(sql, (PreparedStatement pstmt) -> {
+			pstmt.setString(1, user.getUserId());
+			pstmt.setString(2, user.getPassword());
+			pstmt.setString(3, user.getName());
+			pstmt.setString(4, user.getEmail());
 		});
 	}
 
@@ -33,15 +28,11 @@ public class UserDao {
 	public void update_(User user) {
 		String sql = "UPDATE USERS SET password=?, name=?, email=? WHERE userid=?";
 		JdbcTemplate template = new JdbcTemplate();
-		template.update(sql, new PreparedStatementSetter() {
-			@Override
-			public PreparedStatement setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, user.getPassword());
-				pstmt.setString(2, user.getName());
-				pstmt.setString(3, user.getEmail());
-				pstmt.setString(4, user.getUserId());
-				return pstmt;
-			}
+		template.update(sql, (PreparedStatement pstmt) -> {
+			pstmt.setString(1, user.getPassword());
+			pstmt.setString(2, user.getName());
+			pstmt.setString(3, user.getEmail());
+			pstmt.setString(4, user.getUserId());
 		});
 	}
 
@@ -55,18 +46,14 @@ public class UserDao {
 		String sql = "SELECT userid, password, name, email FROM USERS";
 		List<User> users = new ArrayList<User>();
 		JdbcTemplate template = new JdbcTemplate();
-		users = template.<User>query(sql, new PreparedStatementSetter() {
-			@Override
-			public PreparedStatement setValues(PreparedStatement pstmt) throws SQLException {
-				return null;
-			}
+		users = template.<User>query(sql, (PreparedStatement pstmt) -> {
 		}, (ResultSet rs) -> {
 			return new User(rs.getString("userid"), rs.getString("password"), rs.getString("name"),
 					rs.getString("email"));
 		});
 		return users;
 	}
-	
+
 	public List<User> findAll() {
 		String sql = "SELECT userid, password, name, email FROM USERS";
 		List<User> users = new ArrayList<User>();
@@ -82,12 +69,8 @@ public class UserDao {
 		String sql = "SELECT userid, password, name, email FROM USERS WHERE userid=?";
 		User user = null;
 		JdbcTemplate template = new JdbcTemplate();
-		user = template.<User>queryForObject(sql, new PreparedStatementSetter() {
-			@Override
-			public PreparedStatement setValues(PreparedStatement pstmt) throws SQLException {
-				pstmt.setString(1, userId);
-				return pstmt;
-			}
+		user = template.<User>queryForObject(sql, (PreparedStatement pstmt) -> {
+			pstmt.setString(1, userId);
 		}, (ResultSet rs) -> {
 			return new User(rs.getString("userid"), rs.getString("password"), rs.getString("name"),
 					rs.getString("email"));
