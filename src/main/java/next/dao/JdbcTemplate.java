@@ -35,7 +35,6 @@ public class JdbcTemplate {
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
-	}
 
 	public void update(String sql, String... objects) {
 		update(sql, pstmt -> {
