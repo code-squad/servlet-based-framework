@@ -14,6 +14,10 @@ public class ApiJsonMapper {
 		response.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(mapper.writeValueAsString(object));
+<<<<<<< HEAD
 		return "";
+=======
+		return "Api";
+>>>>>>> feat(ajax): answer 추가 삭제(ajax)
 	}
 }

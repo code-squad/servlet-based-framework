@@ -26,15 +26,16 @@ public class JdbcTemplate {
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pstmt = psc.createPreparedStatement(con)) {
 			pstmt.executeUpdate();
-			
-			try(ResultSet rs = pstmt.getGeneratedKeys()){
-				if(rs.next()) {
+
+			try (ResultSet rs = pstmt.getGeneratedKeys()) {
+				if (rs.next()) {
 					keyHolder.setId(rs.getLong(1));
 				}
 			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
+	}
 
 	public void update(String sql, String... objects) {
 		update(sql, pstmt -> {

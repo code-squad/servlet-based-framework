@@ -40,9 +40,24 @@ public class DispatcherServlet extends HttpServlet {
 		String uri = req.getRequestURI();
 		Controller controller = requestMapping.mappingController(uri);
 		try {
+<<<<<<< HEAD
 			ModelAndView mv = controller.execute(req, res);
 			mv.addObject(createModel(req));
 			mv.getView().render(req, res);
+=======
+			String url = controller.execute((HttpServletRequest) req, (HttpServletResponse) res);
+			if (url.startsWith("redirect")) {
+				String value[] = url.split(":");
+				log.debug("redirect: {}", value[1]);
+				((HttpServletResponse) res).sendRedirect(value[1]);
+			} else if (url.startsWith("Api")) {
+				log.debug("api");
+			} else {
+				RequestDispatcher rd = req.getRequestDispatcher(url);
+				log.debug("forward: {}", url);
+				rd.forward(req, res);
+			}
+>>>>>>> feat(ajax): answer 추가 삭제(ajax)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
