@@ -32,6 +32,8 @@ public class DispatcherServlet extends HttpServlet {
 				String value[] = url.split(":");
 				log.debug("redirect: {}", value[1]);
 				((HttpServletResponse) res).sendRedirect(value[1]);
+			} else if (url.startsWith("Api")) {
+				log.debug("api");
 			} else {
 				RequestDispatcher rd = req.getRequestDispatcher(url);
 				log.debug("forward: {}", url);

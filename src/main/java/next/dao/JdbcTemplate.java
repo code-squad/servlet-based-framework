@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.jdbc.ConnectionManager;
+import core.jdbc.KeyHolder;
+import core.jdbc.PreparedStatementCreator;
 import next.exception.DataAccessException;
 
 public class JdbcTemplate {
@@ -15,6 +17,21 @@ public class JdbcTemplate {
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
 			pstmtSetter.setValues(pstmt);
 			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	public void update(PreparedStatementCreator psc, KeyHolder keyHolder) {
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pstmt = psc.createPreparedStatement(con)) {
+			pstmt.executeUpdate();
+			
+			try(ResultSet rs = pstmt.getGeneratedKeys()){
+				if(rs.next()) {
+					keyHolder.setId(rs.getLong(1));
+				}
+			}
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
 		}
