@@ -63,6 +63,13 @@ public class ApiAnswerAcceptanceTest {
 		log.debug("body : {}", answer);
 		assertNotNull(findAnswer);
 	}
+	
+	@Test
+	public void delete() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.TEXT_HTML));
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	}
 
 	@Configuration
 	static class Config {

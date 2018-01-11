@@ -3,19 +3,18 @@ package next.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import core.annotation.Controller;
+import core.annotation.RequestMapping;
+import core.annotation.RequestMethod;
 import core.mvc.JspView;
 import core.mvc.ModelAndView;
 
-public class FilePathController implements Controller {
-	private String url;
-	
-	FilePathController(String url){
-		this.url = url;
-	}
+@Controller
+public class FilePathController {
 
-	@Override
+	@RequestMapping(value = "/users/form", method = RequestMethod.GET)
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return new ModelAndView(new JspView(url));
+		return new ModelAndView(new JspView("/user/form.jsp"));
 	}
 
 }

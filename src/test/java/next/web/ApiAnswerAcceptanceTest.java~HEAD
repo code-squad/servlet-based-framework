@@ -25,10 +25,10 @@ import next.model.Answer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class ApiAcceptanceTest {
+public class ApiAnswerAcceptanceTest {
 	@Autowired
 	private Config config;
-	private static final Logger log = LoggerFactory.getLogger(ApiAcceptanceTest.class);
+	private static final Logger log = LoggerFactory.getLogger(ApiAnswerAcceptanceTest.class);
 
 	private RestTemplate restTemplate;
 	private AnswerDao answerDao;
