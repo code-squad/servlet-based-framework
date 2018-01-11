@@ -3,13 +3,14 @@ package next.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import core.mvc.View;
 import next.dao.AnswerDao;
 import next.model.Answer;
 
 public class AddAnswerController implements Controller {
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Answer answer = new Answer(request.getParameter("writer"), request.getParameter("contents"),
 				Long.parseLong(request.getParameter("questionId")));
 

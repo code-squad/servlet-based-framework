@@ -4,15 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.db.DataBase;
+import core.mvc.JspView;
+import core.mvc.View;
 
 public class ListUserController implements Controller {
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(!UserSessionUtils.isLogined(request.getSession())) {
-			return "redirect:/users/loginForm";
+			return new JspView("redirect:/users/loginForm");
 		}
 		request.setAttribute("users", DataBase.findAll());
-		return "/user/list.jsp";
+		return new JspView("/user/list.jsp");
 	}
 }

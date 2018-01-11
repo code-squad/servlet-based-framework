@@ -25,10 +25,10 @@ import next.model.Answer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class ApiAcceptanceTest {
+public class ApiAnswerAcceptanceTest {
 	@Autowired
 	private Config config;
-	private static final Logger log = LoggerFactory.getLogger(ApiAcceptanceTest.class);
+	private static final Logger log = LoggerFactory.getLogger(ApiAnswerAcceptanceTest.class);
 
 	private RestTemplate restTemplate;
 	private AnswerDao answerDao;
@@ -62,6 +62,13 @@ public class ApiAcceptanceTest {
 
 		log.debug("body : {}", answer);
 		assertNotNull(findAnswer);
+	}
+	
+	@Test
+	public void delete() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.TEXT_HTML));
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 	}
 
 	@Configuration
