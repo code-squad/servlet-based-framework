@@ -4,18 +4,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.JspView;
-import core.mvc.View;
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 
 public class QuestionShowController implements Controller {
 	@Override
-	public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Long questionId = Long.parseLong(request.getParameter("questionId"));
         QuestionDao questionDao = new QuestionDao();
         AnswerDao answerDao = new AnswerDao();
         request.setAttribute("question", questionDao.findById(questionId));
         request.setAttribute("answers", answerDao.findAllByQuestionId(questionId));
-        return new JspView("/qna/show.jsp");
+        return new ModelAndView(new JspView("/qna/show.jsp"));
 	}
 }
