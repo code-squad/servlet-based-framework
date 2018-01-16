@@ -15,15 +15,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import core.mvc.ModelAndView;
-import core.mvc.View;
+import core.nmvc.AnnotationHandlerMapping;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
 	private static final long serialVersionUID = 1L;
-	private RequestMapping requestMapping = new RequestMapping();
-	
+	private AnnotationHandlerMapping ahm;
+	// private RequestMapping requestMapping = new RequestMapping();
+
+	@Override
+	public void init() {
+		ahm = new AnnotationHandlerMapping("next.controller");
+		ahm.initialize();
+	}
+
 	private Map<String, Object> createModel(HttpServletRequest request) {
 		Enumeration<String> names = request.getAttributeNames();
 		Map<String, Object> model = new HashMap<>();
@@ -36,13 +43,14 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		log.debug("requestUrl : {}", req.getRequestURI().toString());
-		String uri = req.getRequestURI();
-		Controller controller = requestMapping.mappingController(uri);
 		try {
-			ModelAndView mv = controller.execute(req, res);
+			log.debug("requestUrl : {}", req.getRequestURI().toString());
+			ModelAndView mv = ahm.getHandler(req).handle(req, res);
+			log.debug("ModelAndView : {}", mv);
 			mv.addObject(createModel(req));
+			log.debug("addObject Run");
 			mv.getView().render(req, res);
+			log.debug("render Success");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
