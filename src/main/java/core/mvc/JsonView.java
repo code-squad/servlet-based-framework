@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonView implements View {
 	private Object object;
-	
+
 	public JsonView(Object object) {
 		this.object = object;
 	}
