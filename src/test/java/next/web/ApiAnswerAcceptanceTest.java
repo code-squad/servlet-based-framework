@@ -1,5 +1,6 @@
 package next.web;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
@@ -62,6 +63,7 @@ public class ApiAnswerAcceptanceTest {
 
 		log.debug("body : {}", answer);
 		assertNotNull(findAnswer);
+		assertEquals(findAnswer, answer);
 	}
 
 	@Configuration

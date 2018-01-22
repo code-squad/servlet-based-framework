@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.View;
 
 public class MockView implements View {
-
     @Override
     public void render(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
