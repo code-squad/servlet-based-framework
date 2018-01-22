@@ -3,11 +3,14 @@ package core.di.factory;
 import static org.junit.Assert.assertNotNull;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
@@ -18,36 +21,42 @@ import core.di.factory.example.MyQnaService;
 import core.di.factory.example.QnaController;
 
 public class BeanFactoryTest {
-    private Reflections reflections;
-    private BeanFactory beanFactory;
+	private static final Logger log = LoggerFactory.getLogger(BeanFactoryTest.class);
 
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setup() {
-        reflections = new Reflections("core.di.factory.example");
-        Set<Class<?>> preInstanticateClazz = getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
-        beanFactory = new BeanFactory(preInstanticateClazz);
-        beanFactory.initialize();
-    }
+	private Reflections reflections;
+	private BeanFactory beanFactory;
 
-    @Test
-    public void di() throws Exception {
-        QnaController qnaController = beanFactory.getBean(QnaController.class);
+	@Before
+	@SuppressWarnings("unchecked")
+	public void setup() {
+		reflections = new Reflections("core.di.factory.example", "next.controller");
+		Set<Class<?>> preInstanticateClazz = getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
+		beanFactory = new BeanFactory(preInstanticateClazz);
+		beanFactory.initialize();
+	}
 
-        assertNotNull(qnaController);
-        assertNotNull(qnaController.getQnaService());
+	@Test
+	public void di() throws Exception {
+		Map<Class<?>, Object> testBean = beanFactory.getTestBean();
+		for (Object key : testBean.keySet()) {
+			log.debug("beanTest : {}", key.toString());
+		}
+		QnaController qnaController = beanFactory.getBean(QnaController.class);
 
-        MyQnaService qnaService = qnaController.getQnaService();
-        assertNotNull(qnaService.getUserRepository());
-        assertNotNull(qnaService.getQuestionRepository());
-    }
+		assertNotNull(qnaController);
+		assertNotNull(qnaController.getQnaService());
 
-    @SuppressWarnings("unchecked")
-    private Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation>... annotations) {
-        Set<Class<?>> beans = Sets.newHashSet();
-        for (Class<? extends Annotation> annotation : annotations) {
-            beans.addAll(reflections.getTypesAnnotatedWith(annotation));
-        }
-        return beans;
-    }
+		MyQnaService qnaService = qnaController.getQnaService();
+		assertNotNull(qnaService.getUserRepository());
+		assertNotNull(qnaService.getQuestionRepository());
+	}
+
+	@SuppressWarnings("unchecked")
+	private Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation>... annotations) {
+		Set<Class<?>> beans = Sets.newHashSet();
+		for (Class<? extends Annotation> annotation : annotations) {
+			beans.addAll(reflections.getTypesAnnotatedWith(annotation));
+		}
+		return beans;
+	}
 }
