@@ -15,17 +15,17 @@ dependencies {
     compile('com.google.guava:guava:23.0')
     compile('org.apache.commons:commons-lang3:3.6')
     compile('org.apache.commons:commons-dbcp2:2.1.1')
-    compile('org.springframework:spring-jdbc:${spring.version}')
+    compile('org.springframework:spring-jdbc:4.3.12.RELEASE')
     compile('org.reflections:reflections:0.9.10')
     compile('ch.qos.logback:logback-classic:1.2.3')
     compile('com.fasterxml.jackson.core:jackson-databind:2.9.1')
     compileOnly('com.h2database:h2:1.4.196')
-    providedCompile('org.apache.tomcat.embed:tomcat-embed-core:${tomcat.version}')
-    providedCompile('org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcat.version}')
-    providedCompile('org.apache.tomcat.embed:tomcat-embed-jasper:${tomcat.version}')
+    providedCompile('org.apache.tomcat.embed:tomcat-embed-core:8.0.46')
+    providedCompile('org.apache.tomcat.embed:tomcat-embed-logging-juli:8.0.46')
+    providedCompile('org.apache.tomcat.embed:tomcat-embed-jasper:8.0.46')
     testCompile('junit:junit:4.12')
     testCompile('org.assertj:assertj-core:3.9.0')
-    testCompile('org.springframework:spring-test:${spring.version}')
+    testCompile('org.springframework:spring-test:4.3.12.RELEASE')
 }
 
 war {
