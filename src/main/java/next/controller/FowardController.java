@@ -15,8 +15,8 @@ public class FowardController implements Controller {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        if(path.equals("/users/form")) return "user/form.jsp";
-        if(path.equals("/users/loginForm")) return "user/login.jsp";
+        if(this.path.equals("/users/form")) return "user/form.jsp";
+        if(this.path.equals("/users/loginForm")) return "user/login.jsp";
         return null;
     }
 }

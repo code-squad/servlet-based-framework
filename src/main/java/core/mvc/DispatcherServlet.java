@@ -1,5 +1,9 @@
 package core.mvc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,17 +16,25 @@ import java.io.IOException;
 // 서블릿 컨테이너 역할
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
+    private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+
     private RequestMapping requestMapping;
 
     @Override
     public void init() throws ServletException {
+        log.debug("hooe");
         requestMapping = new RequestMapping();
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI();
+        log.debug("url : {}", url);
+        log.debug("here");
         Controller controller = requestMapping.find(url);
-        controller.execute(req, resp);
+        String location = controller.execute(req, resp);
+        if(location.startsWith("redirect:")) resp.sendRedirect(location);
+        RequestDispatcher rd = req.getRequestDispatcher(location);
+        rd.forward(req, resp);
     }
 }

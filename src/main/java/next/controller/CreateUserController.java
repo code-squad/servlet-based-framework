@@ -17,9 +17,6 @@ public class CreateUserController implements Controller {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) {
-        if(req.getMethod() == "GET"){
-            return "/user/form.jsp";
-        }
         User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
         log.debug("User : {}", user);

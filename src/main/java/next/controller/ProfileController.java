@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@WebServlet("/users/profile")
 public class ProfileController implements Controller {
     private static final long serialVersionUID = 1L;
 
