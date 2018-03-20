@@ -11,7 +11,7 @@ public class RequestMapping {
 
     public RequestMapping(){
         controllers = new HashMap<>();
-        controllers.put("", new HomeController());
+        controllers.put("/", new HomeController());
         controllers.put("/users/create", new CreateUserController());
         controllers.put("/users", new ListUserController());
         controllers.put("/users/login", new LoginController());

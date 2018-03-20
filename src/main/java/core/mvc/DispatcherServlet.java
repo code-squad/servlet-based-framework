@@ -21,8 +21,7 @@ public class DispatcherServlet extends HttpServlet {
     private RequestMapping requestMapping;
 
     @Override
-    public void init() throws ServletException {
-        log.debug("hooe");
+    public void init() {
         requestMapping = new RequestMapping();
     }
 
@@ -30,9 +29,9 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI();
         log.debug("url : {}", url);
-        log.debug("here");
         Controller controller = requestMapping.find(url);
         String location = controller.execute(req, resp);
+        log.debug("location :  {}", location);
         if(location.startsWith("redirect:")) resp.sendRedirect(location);
         RequestDispatcher rd = req.getRequestDispatcher(location);
         rd.forward(req, resp);
