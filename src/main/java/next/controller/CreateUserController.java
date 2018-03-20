@@ -12,7 +12,6 @@ import next.model.User;
 
 public class CreateUserController implements Controller {
     // 서블릿으로 구현된 것을 컨트롤러로 변경한다.
-    private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 
     @Override
