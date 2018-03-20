@@ -12,6 +12,6 @@ public class HomeController implements Controller {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("users", DataBase.findAll());
-        return "home.jsp";
+        return "/home.jsp";
     }
 }
