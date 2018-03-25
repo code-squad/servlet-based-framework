@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import core.db.DataBase;
 import next.model.User;
 
-//@WebServlet(value = { "/users/update", "/users/updateForm" })
 public class UpdateUserController implements Controller {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);

@@ -5,28 +5,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.exception.DataAccessException;
 import next.model.User;
 
 public class UserDao {
 
-    public void insert(User user) throws SQLException {
+    public void insert(User user) throws DataAccessException {
         String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
         JdbcTemplate.execute(sql, user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
     }
 
-    public void update(User user) throws SQLException {
+    public void update(User user) throws DataAccessException {
         String sql = "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
         JdbcTemplate.execute(sql, user.getPassword(), user.getName(), user.getEmail(), user.getUserId());
     }
 
-    public List<User> findAll() throws SQLException {
+    public List<User> findAll() throws DataAccessException {
         String sql = "SELECT userId, password, name, email FROM USERS";
 
 //        FindOperator op = (s)  -> getUsers(s);
         return JdbcSelectTemplate.execute(sql, (s)  -> getUsers(s));
     }
 
-    public User findByUserId(String userId) throws SQLException {
+    public User findByUserId(String userId) throws DataAccessException {
         String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
 
 //        FindOperator op = (s)  -> getUsers(s);
