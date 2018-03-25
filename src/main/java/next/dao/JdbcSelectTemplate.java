@@ -1,7 +1,6 @@
 package next.dao;
 
 import core.jdbc.ConnectionManager;
-import next.exception.DataAccessException;
 import next.model.User;
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class JdbcSelectTemplate {
 
-    public static List<User> execute(String sql, FindOperator op, String... params) throws DataAccessException {
+    public static List<User> execute(String sql, FindOperator op, String... params) throws SQLException {
         ResultSet rs;
         try(Connection dbConn = ConnectionManager.getConnection();
             PreparedStatement pstmt = dbConn.prepareStatement(sql)
@@ -20,8 +19,6 @@ public class JdbcSelectTemplate {
             setParams(pstmt, params);
             rs = pstmt.executeQuery();
             return op.find(rs);
-        } catch (SQLException e){
-            throw new DataAccessException(e);
         }
     }
 
