@@ -10,10 +10,20 @@ import java.util.List;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 
-public class UserDao {
+public class UserDao extends InsertJdbcTemplate {
 
     public void insert(User user) throws SQLException {
-       InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate();
+        InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate() {
+            @Override
+            void setValuesForInsert(User user, PreparedStatement pstmt) throws SQLException {
+                UserDao.this.setValuesForUpdate(user, pstmt);
+            }
+
+            @Override
+            String createQueryForInsert() {
+                return UserDao.this.createQueryForUpdate();
+            }
+        };
         insertJdbcTemplate.insert(user, this);
     }
 
@@ -29,7 +39,17 @@ public class UserDao {
     }
 
     public void update(User user) throws SQLException {
-        UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate();
+        UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate() {
+            @Override
+            void setValuesForUpdate(User user, PreparedStatement pstmt) throws SQLException {
+                UserDao.this.setValuesForUpdate(user, pstmt);
+            }
+
+            @Override
+            String createQueryForUpdate() {
+               return UserDao.this.createQueryForUpdate();
+            }
+        };
         updateJdbcTemplate.update(user, this);
     }
 
