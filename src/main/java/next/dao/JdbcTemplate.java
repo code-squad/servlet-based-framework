@@ -7,19 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public abstract class InsertJdbcTemplate {
+public abstract class JdbcTemplate {
 
-    public void insert(User user, UserDao userDao) throws SQLException {// 변하지 않는 부분
+    public void update(String query) throws SQLException {// 변하지 않는 부분
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
             // 커넥션 객체 생성
             con = ConnectionManager.getConnection();
-            String sql = createQueryForInsert();
             // Creates a PreparedStatement object for sending
             // parameterized SQL statements to the database.
-            pstmt = con.prepareStatement(sql);
-            setValuesForInsert(user, pstmt);
+            pstmt = con.prepareStatement(query);
+            setValues(query, pstmt);
             // implement spl statement
             pstmt.executeUpdate();
         } finally {
@@ -32,6 +31,5 @@ public abstract class InsertJdbcTemplate {
             }
         }
     }
-    abstract void setValuesForInsert(User user, PreparedStatement pstmt) throws SQLException;
-    abstract String createQueryForInsert();
+    abstract void setValues(String query, PreparedStatement pstmt) throws SQLException;
 }
