@@ -1,13 +1,10 @@
 package next.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public class UserDao {
@@ -23,11 +20,7 @@ public class UserDao {
             }
         };
 
-        jdbcTemplate.update(createInsertQuery());
-    }
-
-    String createInsertQuery() {
-        return "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)");
     }
 
     public void update(User user) throws SQLException {
@@ -37,71 +30,42 @@ public class UserDao {
                 pstmt.setString(1, user.getPassword());
                 pstmt.setString(2, user.getName());
                 pstmt.setString(3, user.getEmail());
-                pstmt.setString(4, user.getUserId());            }
+                pstmt.setString(4, user.getUserId());
+            }
         };
 
-        jdbcTemplate.update(createUpdateQuery());
-    }
-
-    String createUpdateQuery() {
-        return "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
+        jdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?");
     }
 
     public List<User> findAll() throws SQLException {
-        // TODO 구현 필요함.
-        Connection dbConn= null;
-        PreparedStatement pstmt = null;
-        List<User> users = new ArrayList<>();
-        try {
-            dbConn = ConnectionManager.getConnection();
-            String sql = "SELECT userId, password, name, email FROM USERS";
-            pstmt = dbConn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                User user = new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
-                users.add(user);
+        JdbcSelectTemplate jdbcSelectTemplate = new JdbcSelectTemplate() {
+            @Override
+            void setValues(String userId, PreparedStatement pstmt) throws SQLException {
             }
-        }finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
-            if (dbConn != null) {
-                dbConn.close();
-            }
-        }
-        return users;
+        };
+        return jdbcSelectTemplate.find(createQueryForFindAll(), (users, rs) -> getValues(users, rs));
     }
 
-    public User findByUserId(String userId) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, userId);
+    public User findUserById(String userId) throws SQLException {
+        JdbcSelectTemplate jdbcSelectTemplate = new JdbcSelectTemplate() {
+            @Override
+            void setValues(String userId, PreparedStatement pstmt) throws SQLException {
+                pstmt.setString(1, userId);
+            }
+        };
+        return jdbcSelectTemplate.find(createQueryForFindUser(), (users, rs) -> getValues(users, rs), userId).get(0);
+    }
 
-            rs = pstmt.executeQuery();
+    void getValues(List<User> users, ResultSet rs) throws SQLException {
+        User user = new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
+        users.add(user);
+    }
 
-            User user = null;
-            if (rs.next()) {
-                user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-                        rs.getString("email"));
-            }
-            return user;
+    private String createQueryForFindAll() {
+        return "SELECT userId, password, name, email FROM USERS";
+    }
 
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+    private String createQueryForFindUser() {
+        return "SELECT userId, password, name, email FROM USERS WHERE userid=?";
     }
 }
