@@ -12,85 +12,49 @@ import java.util.List;
 
 public abstract class JdbcTemplate {
 
-    public static void update(String query, PreparedStatementSetter pss) throws SQLException {// 변하지 않는 부분
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        try {
+    public static void update(String query, PreparedStatementSetter pss) throws DataAccessException {// 변하지 않는 부분
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(query)
+        ) {
             // 커넥션 객체 생성
-            con = ConnectionManager.getConnection();
             // Creates a PreparedStatement object for sending
             // parameterized SQL statements to the database.
-            pstmt = con.prepareStatement(query);
             pss.setValues(pstmt);
             // implement spl statement
             pstmt.executeUpdate();
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
-            if (con != null) {
-                con.close();
-            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
     }
 
-    public static List<User> query(String sql, RowMapper rm) throws SQLException {
-        Connection dbConn= null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        List<User> users = new ArrayList<>();
-        try {
-            dbConn = ConnectionManager.getConnection();
-            pstmt = dbConn.prepareStatement(sql);
-
-            rs = pstmt.executeQuery();
-            while(rs.next()){
-                User user = (User)rm.mapRow(rs);
+    public static List query(String sql, RowMapper rm) throws DataAccessException {
+        List users = new ArrayList<>();
+        try (Connection dbConn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = dbConn.prepareStatement(sql);
+        ) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Object user = rm.mapRow(rs);
                 users.add(user);
             }
-        }finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
-            if (dbConn != null) {
-                dbConn.close();
-            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
         return users;
     }
 
-    public static User queryForObject(String sql, RowMapper rm, PreparedStatementSetter pss) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            pstmt = con.prepareStatement(sql);
+    public static Object queryForObject(String sql, RowMapper rm, PreparedStatementSetter pss) throws DataAccessException {
+        try (Connection dbConn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = dbConn.prepareStatement(sql)
+        ) {
             pss.setValues(pstmt);
-
-            rs = pstmt.executeQuery();
-
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return (User)rm.mapRow(rs);
+                return rm.mapRow(rs);
             }
             return null;
-
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
     }
-
 }

@@ -1,13 +1,12 @@
 package next.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import next.model.User;
 
 public class UserDao {
 
-    public void insert(User user) throws SQLException {
+    public void insert(User user) throws DataAccessException {
         JdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", pstmt -> {
             pstmt.setString(1, user.getUserId());
             pstmt.setString(2, user.getPassword());
@@ -16,7 +15,7 @@ public class UserDao {
         });
     }
 
-    public void update(User user) throws SQLException {
+    public void update(User user) throws DataAccessException {
         JdbcTemplate.update("UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?", pstmt -> {
             pstmt.setString(1, user.getPassword());
             pstmt.setString(2, user.getName());
@@ -25,15 +24,16 @@ public class UserDao {
         });
     }
 
-    public List<User> findAll() throws SQLException {
-        return JdbcTemplate.query("SELECT userId, password, name, email FROM USERS", rs ->
-                new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4)));
+    public List<User> findAll() throws DataAccessException {
+        RowMapper<User> rm = rs ->
+                new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
+        return JdbcTemplate.query("SELECT userId, password, name, email FROM USERS", rm);
     }
 
-    public User findByUserId(String userId) throws SQLException {
-        return JdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", rs ->
-                new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4)),
-                pstmt ->  pstmt.setString(1, userId)
+    public User findByUserId(String userId) throws DataAccessException {
+        RowMapper<User> rm = rs ->
+                new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
+        return (User)JdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", rm, pstmt ->  pstmt.setString(1, userId)
         );
     }
 }
