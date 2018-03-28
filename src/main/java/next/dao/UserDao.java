@@ -15,6 +15,10 @@ public class UserDao {
                 user.getName(), user.getEmail(), user.getUserId());
     }
 
+    public void delete(String userId) throws DataAccessException {
+        JdbcTemplate.update("DELETE FROM USERS WHERE userid=?", userId);
+    }
+
     public List<User> findAll() throws DataAccessException {
         RowMapper<User> rm = rs ->
                 new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
@@ -26,4 +30,5 @@ public class UserDao {
                 new User(rs.getString("userId"), rs.getString(2), rs.getString(3), rs.getString(4));
         return JdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?", rm, userId);
     }
+
 }
