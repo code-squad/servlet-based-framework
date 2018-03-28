@@ -1,7 +1,6 @@
 package next.dao;
 
 import core.jdbc.ConnectionManager;
-import next.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,27 +26,57 @@ public abstract class JdbcTemplate {
         }
     }
 
-    public static List query(String sql, RowMapper rm) throws DataAccessException {
-        List users = new ArrayList<>();
+    public static void update(String query, Object... objects) throws DataAccessException {
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(query)
+        ) {
+            for (int i = 0; i < objects.length; i++) {
+                pstmt.setObject(i + 1, objects[i]);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    public static <T> List<T> query(String sql, RowMapper<T> rm) throws DataAccessException {
+        List<T> objects = new ArrayList<T>();
         try (Connection dbConn = ConnectionManager.getConnection();
              PreparedStatement pstmt = dbConn.prepareStatement(sql);
         ) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Object user = rm.mapRow(rs);
-                users.add(user);
+                T object = rm.mapRow(rs);
+                objects.add(object);
             }
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
-        return users;
+        return objects;
     }
 
-    public static Object queryForObject(String sql, RowMapper rm, PreparedStatementSetter pss) throws DataAccessException {
+    public static <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
         try (Connection dbConn = ConnectionManager.getConnection();
              PreparedStatement pstmt = dbConn.prepareStatement(sql)
         ) {
             pss.setValues(pstmt);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rm.mapRow(rs);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    public static <T> T queryForObject(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
+        try (Connection dbConn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = dbConn.prepareStatement(sql)
+        ) {
+            for (int i = 0; i < objects.length; i++) {
+                pstmt.setObject(i + 1, objects[i]);
+            }
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rm.mapRow(rs);
