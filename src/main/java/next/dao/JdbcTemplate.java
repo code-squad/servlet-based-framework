@@ -15,9 +15,6 @@ public abstract class JdbcTemplate {
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)
         ) {
-            // 커넥션 객체 생성
-            // Creates a PreparedStatement object for sending
-            // parameterized SQL statements to the database.
             pss.setValues(pstmt);
             // implement spl statement
             pstmt.executeUpdate();
@@ -27,23 +24,23 @@ public abstract class JdbcTemplate {
     }
 
     public static void update(String query, Object... objects) throws DataAccessException {
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(query)
-        ) {
-            for (int i = 0; i < objects.length; i++) {
-                pstmt.setObject(i + 1, objects[i]);
-            }
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
+        PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
+
+        update(query, pss);
+    }
+
+    private static void setValues(PreparedStatement pstmt, Object[] objects) throws SQLException {
+        for (int i = 0; i < objects.length; i++) {
+            pstmt.setObject(i + 1, objects[i]);
         }
     }
 
-    public static <T> List<T> query(String sql, RowMapper<T> rm) throws DataAccessException {
-        List<T> objects = new ArrayList<T>();
+    public static <T> List<T> query(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
+        List<T> objects = new ArrayList<>();
         try (Connection dbConn = ConnectionManager.getConnection();
-             PreparedStatement pstmt = dbConn.prepareStatement(sql);
+             PreparedStatement pstmt = dbConn.prepareStatement(sql)
         ) {
+            pss.setValues(pstmt);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 T object = rm.mapRow(rs);
@@ -55,35 +52,19 @@ public abstract class JdbcTemplate {
         return objects;
     }
 
+    public static <T> List<T> query(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
+       PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
+       return query(sql, rm, pss);
+    }
+
     public static <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
-        try (Connection dbConn = ConnectionManager.getConnection();
-             PreparedStatement pstmt = dbConn.prepareStatement(sql)
-        ) {
-            pss.setValues(pstmt);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rm.mapRow(rs);
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
+        return query(sql, rm, pss).get(0);
     }
 
     public static <T> T queryForObject(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
-        try (Connection dbConn = ConnectionManager.getConnection();
-             PreparedStatement pstmt = dbConn.prepareStatement(sql)
-        ) {
-            for (int i = 0; i < objects.length; i++) {
-                pstmt.setObject(i + 1, objects[i]);
-            }
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rm.mapRow(rs);
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
+        // object -> pss
+        PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
+        return queryForObject(sql, rm, pss);
     }
+
 }
