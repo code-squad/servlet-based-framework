@@ -20,6 +20,8 @@ public class RequestMapping {
         controllers.put("/users/update", new UpdateUserController());
         controllers.put("/users/form", new FowardController("/users/form"));
         controllers.put("/users/loginForm", new FowardController("/users/loginForm"));
+        controllers.put("/api/qna/addAnswer", new AddAnswerController());
+        controllers.put("/api/questions", new ShowQuestionsController());
     }
 
     public Controller find(String url) {

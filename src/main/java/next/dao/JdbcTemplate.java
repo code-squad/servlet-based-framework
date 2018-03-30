@@ -91,7 +91,6 @@ public abstract class JdbcTemplate {
     }
 
     public static <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
-        // optional 처리하기.
         List<T> list = query(sql, rm, pss);
         Optional<T> object = Optional.ofNullable(list.get(0));
         return object.orElse(null);

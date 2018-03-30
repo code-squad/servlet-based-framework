@@ -32,15 +32,18 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI();
         log.debug("url : {}", url);
+
         Controller controller = requestMapping.find(url);
         String location = controller.execute(req, resp);
         log.debug("location :  {}", location);
+        // redirect
 		if (location.startsWith("redirect:")) {
 			String real = location.substring(9);
 			log.debug("real : {}", real);
 			resp.sendRedirect(real);
 			return;
 		}
+
         RequestDispatcher rd = req.getRequestDispatcher(location);
         rd.forward(req, resp);
     }

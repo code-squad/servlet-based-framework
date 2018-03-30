@@ -6,11 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 import core.db.DataBase;
 import core.mvc.Controller;
 
+import java.io.IOException;
+
 public class HomeController implements Controller {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute("users", DataBase.findAll());
         return "home.jsp";
     }

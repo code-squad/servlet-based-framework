@@ -4,10 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.Controller;
+import next.dao.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import core.db.DataBase;
 import next.model.User;
 
 public class CreateUserController implements Controller {
@@ -20,7 +20,8 @@ public class CreateUserController implements Controller {
                 req.getParameter("email"));
         log.debug("User : {}", user);
 
-        DataBase.addUser(user);
+        UserDao userDao = new UserDao();
+        userDao.insert(user);
 
         return "redirect:/";
     }
