@@ -18,7 +18,6 @@ public class ShowQuestionsController implements Controller {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        log.debug("hi");
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
         for(Question q : questions) {

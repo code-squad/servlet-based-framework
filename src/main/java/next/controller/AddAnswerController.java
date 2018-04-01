@@ -17,7 +17,6 @@ public class AddAnswerController implements Controller {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        log.debug("here");
         // create Answer object using data from Http request
         Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents"), req.getIntHeader("questionId"));
 

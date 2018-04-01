@@ -41,10 +41,9 @@ function onError(){
     console.log("error");
 }
 
-function showQuestions(e) {
-    // e.preventDefault();
+window.addEventListener('DOMContentLoaded', function(){
+    e.preventDefault();
     // 서버로 보낼 데이터 없음.
-
     $.ajax({
         type: 'get',
         url : '/api/questions',
@@ -52,7 +51,19 @@ function showQuestions(e) {
         error : onError,
         success : onQuestionSuccess
     })
-}
+})
+
+// function showQuestions(e) {
+//     e.preventDefault();
+//     // 서버로 보낼 데이터 없음.
+//     $.ajax({
+//         type: 'get',
+//         url : '/api/questions',
+//         dataType: 'json',
+//         error : onError,
+//         success : onQuestionSuccess
+//     })
+// }
 
 function onQuestionSuccess(json, status) {
     var questionTemplate = $("#questionTemplate").html();
@@ -60,3 +71,6 @@ function onQuestionSuccess(json, status) {
     $(".list").prepend(template);
     console.log(json);
 }
+
+// delete answers
+$(".form-delete")
