@@ -26,6 +26,7 @@ public class AnswerDaoTest {
         AnswerDao answerDao = new AnswerDao();
         Answer created = answerDao.insert(answer);
         assertEquals("jiwon", created.getWriter());
+        assertEquals(6, created.getAnswerId());
     }
 
     @Test
@@ -34,5 +35,6 @@ public class AnswerDaoTest {
         Answer answer = answerDao.findById(1L);
         String firstWriter = "eungju";
         assertEquals(firstWriter, answer.getWriter());
+        assertEquals(1L, answer.getAnswerId());
     }
 }

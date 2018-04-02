@@ -29,6 +29,8 @@ public class RequestMapping {
         controllers.put("/users/loginForm", new FowardController("/users/loginForm"));
         controllers.put("/qna/form", new FowardController("/qna/form"));
         controllers.put("/qna/create", new CreateQuestionController());
+        controllers.put("/qna", new ShowQuestionController());
+
 
 
         controllers.values().stream().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));

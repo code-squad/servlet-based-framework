@@ -30,6 +30,7 @@ public class QuestionDaoTest {
         Question question = new Question("writer", "title", "contents");
         Question created = questionDao.insert(question);
         assertEquals("writer", created.getWriter());
+        assertEquals(9, created.getQuestionId());
     }
 
     @Test

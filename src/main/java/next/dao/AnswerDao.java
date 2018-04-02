@@ -6,13 +6,13 @@ import next.model.Answer;
 public class AnswerDao {
 
     public Answer insert(Answer answer) {
-        String sql = "INSERT INTO ANSWERS VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
         KeyHolder holder = new KeyHolder();
         // 자동생성한 id 값을 넣어주어야 함 (*)
-        JdbcTemplate.update(sql, holder, holder.getId(), answer.getWriter(), answer.getContents(),
+        JdbcTemplate.update(sql, holder, answer.getWriter(), answer.getContents(),
                 answer.getCreatedDate(), answer.getQuestionId());
 
-        return findById(answer.getAnswerId());
+        return findById(holder.getId());
     }
 
     public Answer findById(Long id) {

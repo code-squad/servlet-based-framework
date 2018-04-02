@@ -1,20 +1,27 @@
 package next.dao;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import core.jdbc.KeyHolder;
 import next.model.Question;
 
-import java.util.List;
-
 public class QuestionDao {
+    private static final Logger log = LoggerFactory.getLogger(QuestionDao.class);
 
     public Question insert(Question question) {
-        String sql = "INSERT INTO QUESTIONS VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer)  VALUES (?, ?, ?, ?, ?)";
         KeyHolder holder = new KeyHolder();
-        // 자동생성한 id 값을 넣어주어야 함 (*)
-        JdbcTemplate.update(sql, holder, holder.getId(), question.getWriter(), question.getTitle(),
+
+        JdbcTemplate.update(sql, holder, question.getWriter(), question.getTitle(),
                 question.getContents(), question.getCreatedDate(), question.getCountOfComment());
 
-        return findById(question.getQuestionId());
+        Long key = holder.getId();
+        log.debug("key : {}", key);
+
+        return findById(key);
     }
 
     public Question findById(Long id) {

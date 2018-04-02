@@ -20,9 +20,11 @@ public class ShowQuestionsController implements Controller {
     public String execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
+
         for(Question q : questions) {
             log.debug("question: {}", q.toString());
         }
+
         // object -> json (Jackson library)
         ObjectMapper mapper = new ObjectMapper();
         res.setContentType("application/json;charset=UTF-8");
