@@ -2,6 +2,7 @@ package next.dao;
 
 import core.jdbc.ConnectionManager;
 import next.model.Answer;
+import next.model.Result;
 import next.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,5 +54,15 @@ public class AnswerDaoTest {
         AnswerDao answerDao = new AnswerDao();
         List<Answer> answers = answerDao.findByQuestionId(7L);
         assertEquals(2, answers.size());
+    }
+
+    @Test
+    public void deleteAnswer() throws Exception {
+        AnswerDao answerDao = new AnswerDao();
+        Result rs = answerDao.delete(5L);
+        answerDao.delete(4L);
+
+        assertEquals(3, answerDao.findAll().size());
+        assertEquals(true, rs.isStatus());
     }
 }

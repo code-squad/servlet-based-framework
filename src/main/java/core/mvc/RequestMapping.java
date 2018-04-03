@@ -30,8 +30,7 @@ public class RequestMapping {
         controllers.put("/qna/form", new FowardController("/qna/form"));
         controllers.put("/qna/create", new CreateQuestionController());
         controllers.put("/qna", new ShowQuestionController());
-
-
+        controllers.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         controllers.values().stream().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));
     }

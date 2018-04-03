@@ -98,8 +98,8 @@ public abstract class JdbcTemplate {
 
     public static <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
         List<T> list = query(sql, rm, pss);
-        Optional<T> object = Optional.ofNullable(list.get(0));
-        return object.orElse(null);
+        if(list.size() == 0) return null;
+        return list.get(0);
     }
 
     public static <T> T queryForObject(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {

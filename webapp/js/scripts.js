@@ -54,17 +54,26 @@ String.prototype.format = function() {
     });
 };
 // delete answers
-$(".form-delete button").click(deleteAnswer);
+$(".form-delete").click(deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
-    // 서버로 보낼 데이터 없음.
+
+    var deleteBtn = $(this);
+    var queryString = deleteBtn.closest("form").serialize();
+    console.log('qs', queryString);
+
     $.ajax({
-        type : 'delete',
-        url : '/api/qna/addAnswer',
+        type : 'post',
+        url : '/api/qna/deleteAnswer',
         data : queryString,
         dataType : 'json',
         error : onError,
-        success : onSuccess
+        success : function (json, status) {
+            if(json.status) {
+                deleteBtn.closest('article').remove();
+            }
+        }
     });
 }
+
