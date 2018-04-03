@@ -18,9 +18,9 @@ public class HomeController implements Controller {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("여기");
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
+
         log.debug("questions : {}", questions.toString());
         request.setAttribute("questions", questions);
         return "home.jsp";

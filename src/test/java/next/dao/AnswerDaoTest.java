@@ -2,11 +2,14 @@ package next.dao;
 
 import core.jdbc.ConnectionManager;
 import next.model.Answer;
+import next.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -36,5 +39,19 @@ public class AnswerDaoTest {
         String firstWriter = "eungju";
         assertEquals(firstWriter, answer.getWriter());
         assertEquals(1L, answer.getAnswerId());
+    }
+
+    @Test
+    public void findAll() throws Exception {
+        AnswerDao answerDao = new AnswerDao();
+        List<Answer> answers = answerDao.findAll();
+        assertEquals(5, answers.size());
+    }
+
+    @Test
+    public void findByQuestionId() throws Exception {
+        AnswerDao answerDao = new AnswerDao();
+        List<Answer> answers = answerDao.findByQuestionId(7L);
+        assertEquals(2, answers.size());
     }
 }

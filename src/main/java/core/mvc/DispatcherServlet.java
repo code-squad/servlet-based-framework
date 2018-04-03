@@ -36,6 +36,9 @@ public class DispatcherServlet extends HttpServlet {
         Controller controller = requestMapping.find(url);
         String location = controller.execute(req, resp);
         log.debug("location :  {}", location);
+
+        if(location == null) return;
+
         // redirect
 		if (location.startsWith("redirect:")) {
 			String real = location.substring(9);

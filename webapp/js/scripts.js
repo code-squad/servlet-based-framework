@@ -12,7 +12,7 @@ $('#btnToggle').click(function(){
 });
 });
 // 답변추가
-$(".btn btn-success pull-right input[type=submit]").click(addAnswer);
+$(".submit-write button").click(addAnswer);
 
 function addAnswer(e) {
     e.preventDefault();
@@ -30,47 +30,41 @@ function addAnswer(e) {
 
 function onSuccess(json, status){
     // 서버로부터 전달받은 데이터를 json 형태로 잘 왔는지 확인
+    console.log(json);
+    // answerTemplate을 읽어온다.
     var answerTemplate = $("#answerTemplate").html();
     var template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId);
-    // 동적 html 생성 필요한 부분에 template 을 붙인다.
+    // 해당 클래스 뒤에 template 파일을 붙인다.
     $(".qna-comment-slipp-articles").prepend(template);
-    console.log(json);
+    $(".submit-write textarea").val("");
+
 }
 
 function onError(){
     console.log("error");
 }
 
-window.addEventListener('DOMContentLoaded', function(){
+String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
+};
+// delete answers
+$(".form-delete button").click(deleteAnswer);
+
+function deleteAnswer(e) {
     e.preventDefault();
     // 서버로 보낼 데이터 없음.
     $.ajax({
-        type: 'get',
-        url : '/api/questions',
-        dataType: 'json',
+        type : 'delete',
+        url : '/api/qna/addAnswer',
+        data : queryString,
+        dataType : 'json',
         error : onError,
-        success : onQuestionSuccess
-    })
-})
-
-// function showQuestions(e) {
-//     e.preventDefault();
-//     // 서버로 보낼 데이터 없음.
-//     $.ajax({
-//         type: 'get',
-//         url : '/api/questions',
-//         dataType: 'json',
-//         error : onError,
-//         success : onQuestionSuccess
-//     })
-// }
-
-function onQuestionSuccess(json, status) {
-    var questionTemplate = $("#questionTemplate").html();
-    var template = questionTemplate.format(json.title, new Date(json.createdDate), json.writer, json.countOfComment);
-    $(".list").prepend(template);
-    console.log(json);
+        success : onSuccess
+    });
 }
-
-// delete answers
-$(".form-delete")

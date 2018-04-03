@@ -27,6 +27,7 @@ public class LoginController implements Controller {
         }
         if (user.matchPassword(password)) {
             HttpSession session = request.getSession();
+            // session 에 세션아이디 이름으로 user 등록
             session.setAttribute(UserSessionUtils.USER_SESSION_KEY, user);
             return "redirect:/";
         }
