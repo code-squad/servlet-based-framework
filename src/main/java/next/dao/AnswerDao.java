@@ -3,7 +3,6 @@ package next.dao;
 import core.jdbc.KeyHolder;
 import next.model.Answer;
 import next.model.Result;
-import next.model.User;
 
 import java.util.List;
 

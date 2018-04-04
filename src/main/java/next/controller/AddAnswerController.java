@@ -13,11 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-public class AddAnswerController implements RestController {
+public class AddAnswerController implements RestController<Answer> {
     private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 
     @Override
@@ -40,17 +37,6 @@ public class AddAnswerController implements RestController {
         Answer savedAnswer = answerDao.insert(answer);
 
         // object -> json (Jackson library)
-        writeJson(res, savedAnswer);
-    }
-
-    private void writeJson(HttpServletResponse res, Answer savedAnswer) throws IOException {
-        res.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = res.getWriter();
-        out.print(getJson(savedAnswer));
-    }
-
-    private String getJson(Answer savedAnswer) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(savedAnswer);
+        writeJson(res, getJson(savedAnswer));
     }
 }
