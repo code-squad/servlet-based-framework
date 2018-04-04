@@ -35,7 +35,10 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = requestMapping.find(url);
 
-        if (executeAjaxReq(req, resp, url, controller)) return;
+        if (isAjaxReq(url)){
+            controller.executeAjax(req, resp);
+            return;
+        }
 
         String location = controller.execute(req, resp);
         log.debug("location :  {}", location);
@@ -43,6 +46,11 @@ public class DispatcherServlet extends HttpServlet {
         // redirect
         if (executeRedirect(resp, location)) return;
         // forward
+        forward(req, resp, location);
+        return;
+    }
+
+    private void forward(HttpServletRequest req, HttpServletResponse resp, String location) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher(location);
         rd.forward(req, resp);
     }
@@ -55,9 +63,8 @@ public class DispatcherServlet extends HttpServlet {
         return false;
     }
 
-    private boolean executeAjaxReq(HttpServletRequest req, HttpServletResponse resp, String url, Controller controller) throws IOException {
+    private boolean isAjaxReq(String url) throws IOException {
         if(url.contains("api")) {
-            controller.executeAjax(req, resp);
             return true;
         }
         return false;
