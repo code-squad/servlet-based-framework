@@ -121,8 +121,8 @@
                     <a class="link-modify-article" href="/api/questions/{3}/answers/{4}/form">수정</a>
                 </li>
                 <li>
-                    <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
+                    <form class="delete-answer-form" name="answer-delete-form" action="/api/qna/deleteAnswer" method="POST">
+                        <input type="hidden" name="answerId" value="${answer.answerId}">
                         <button type="submit" class="delete-answer-button">삭제</button>
                     </form>
                 </li>

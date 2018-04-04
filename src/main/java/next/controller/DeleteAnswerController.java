@@ -1,6 +1,6 @@
 package next.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import core.mvc.Controller;
 import next.dao.AnswerDao;
 import next.model.Result;
@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class DeleteAnswerController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
@@ -20,17 +22,21 @@ public class DeleteAnswerController implements Controller {
         Long answerId = Long.parseLong(request.getParameter("answerId"));
         log.debug("answerId : {}", answerId);
 
-        answerDao.delete(answerId);
+        Result result = answerDao.delete(answerId);
 
-        ObjectMapper mapper = new ObjectMapper();
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        if(answerDao.findById(answerId) == null){
-            out.print(mapper.writeValueAsString(Result.ok()));
-        }
-        else out.print(mapper.writeValueAsString(Result.fail("error message")));
+        writeJson(response, result);
 
         return null;
+    }
+
+    private void writeJson(HttpServletResponse response, Result result) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(getJson(result));
+    }
+
+    private String getJson(Result result) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(result);
     }
 }

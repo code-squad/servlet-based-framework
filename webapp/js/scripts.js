@@ -12,7 +12,7 @@ $('#btnToggle').click(function(){
 });
 });
 // 답변추가
-$(".submit-write button").click(addAnswer);
+$(".submit-write button").on("click", addAnswer);
 
 function addAnswer(e) {
     e.preventDefault();
@@ -53,8 +53,8 @@ String.prototype.format = function() {
             ;
     });
 };
-// delete answers
-$(".form-delete").click(deleteAnswer);
+// event delegation
+$(".qna-comment-slipp-articles").on("click", ".delete-answer-form button[type='submit']", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();

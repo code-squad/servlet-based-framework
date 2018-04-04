@@ -1,6 +1,6 @@
 package next.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import core.mvc.Controller;
 import next.dao.AnswerDao;
 import next.model.Answer;
@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class AddAnswerController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
@@ -37,10 +39,18 @@ public class AddAnswerController implements Controller {
         Answer savedAnswer = answerDao.insert(answer);
 
         // object -> json (Jackson library)
-        ObjectMapper mapper = new ObjectMapper();
+        writeJson(res, savedAnswer);
+        return null;
+    }
+
+    private void writeJson(HttpServletResponse res, Answer savedAnswer) throws IOException {
         res.setContentType("application/json;charset=UTF-8");
         PrintWriter out = res.getWriter();
-        out.print(mapper.writeValueAsString(savedAnswer));
-        return null;
+        out.print(getJson(savedAnswer));
+    }
+
+    private String getJson(Answer savedAnswer) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(savedAnswer);
     }
 }
