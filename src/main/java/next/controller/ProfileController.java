@@ -1,6 +1,7 @@
 package next.controller;
 
 import core.db.DataBase;
+import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
 import next.model.User;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ProfileController implements Controller {
+public class ProfileController implements CommonController {
     private static final long serialVersionUID = 1L;
 
     @Override

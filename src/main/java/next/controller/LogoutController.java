@@ -1,5 +1,6 @@
 package next.controller;
 
+import core.mvc.CommonController;
 import core.mvc.Controller;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //@WebServlet("/users/logout")
-public class LogoutController implements Controller {
+public class LogoutController implements CommonController {
     private static final long serialVersionUID = 1L;
 
     @Override

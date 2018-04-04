@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public interface Controller {
 
-    String execute(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    default String execute(HttpServletRequest req, HttpServletResponse res) throws IOException{ return null; }
+    default void executeAjax(HttpServletRequest req, HttpServletResponse res) throws IOException{ }
+
 
 }

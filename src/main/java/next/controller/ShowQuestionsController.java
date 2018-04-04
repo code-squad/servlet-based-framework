@@ -1,6 +1,7 @@
 package next.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.QuestionDao;
 import next.model.Question;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class ShowQuestionsController implements Controller {
+public class ShowQuestionsController implements CommonController {
     private static final Logger log = LoggerFactory.getLogger(ShowQuestionsController.class);
 
     @Override

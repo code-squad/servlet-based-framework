@@ -54,15 +54,14 @@ String.prototype.format = function() {
     });
 };
 // event delegation
-$(".qna-comment-slipp-articles").on("click", ".delete-answer-form button[type='submit']", deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", ".delete-answer-button", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
 
-    var deleteBtn = $(this);
-    var queryString = deleteBtn.closest("form").serialize();
+    var queryString = e.currentTarget.previousElementSibling.value;
     console.log('qs', queryString);
-
+    console.log(e);
     $.ajax({
         type : 'post',
         url : '/api/qna/deleteAnswer',
@@ -71,7 +70,7 @@ function deleteAnswer(e) {
         error : onError,
         success : function (json, status) {
             if(json.status) {
-                deleteBtn.closest('article').remove();
+                e.currentTarget.closest('article').remove();
             }
         }
     });

@@ -33,7 +33,6 @@ public class RequestMapping {
         controllers.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         controllers.values().stream().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));
-        log.debug("hi");
     }
 
     public Controller find(String url) {

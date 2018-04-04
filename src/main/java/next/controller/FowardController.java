@@ -1,12 +1,13 @@
 package next.controller;
 
+import core.mvc.CommonController;
 import core.mvc.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 // The controller that only handle simple view changing function with no such special logic.
-public class FowardController implements Controller {
+public class FowardController implements CommonController {
     private String path;
 
     public FowardController(String path) {

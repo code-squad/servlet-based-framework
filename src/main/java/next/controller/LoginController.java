@@ -5,11 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import core.db.DataBase;
+import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
 import next.model.User;
 
-public class LoginController implements Controller {
+public class LoginController implements CommonController {
     private static final long serialVersionUID = 1L;
 
     @Override

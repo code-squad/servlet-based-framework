@@ -1,5 +1,6 @@
 package next.controller;
 
+import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ShowQuestionController  implements Controller {
+public class ShowQuestionController  implements CommonController {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // questions
