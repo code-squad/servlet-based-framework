@@ -35,23 +35,33 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = requestMapping.find(url);
 
-        if(url.contains("api")) {
-            controller.executeAjax(req, resp);
-            return;
-        }
+        if (executeAjaxReq(req, resp, url, controller)) return;
 
         String location = controller.execute(req, resp);
         log.debug("location :  {}", location);
 
         // redirect
+        if (executeRedirect(resp, location)) return;
+        // forward
+        RequestDispatcher rd = req.getRequestDispatcher(location);
+        rd.forward(req, resp);
+    }
+
+    private boolean executeRedirect(HttpServletResponse resp, String location) throws IOException {
         if (location.startsWith("redirect:")) {
             String real = location.substring(9);
             log.debug("real : {}", real);
             resp.sendRedirect(real);
-            return;
+            return true;
         }
+        return false;
+    }
 
-        RequestDispatcher rd = req.getRequestDispatcher(location);
-        rd.forward(req, resp);
+    private boolean executeAjaxReq(HttpServletRequest req, HttpServletResponse resp, String url, Controller controller) throws IOException {
+        if(url.contains("api")) {
+            controller.executeAjax(req, resp);
+            return true;
+        }
+        return false;
     }
 }
