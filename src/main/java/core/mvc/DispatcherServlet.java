@@ -49,9 +49,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private boolean executeRedirect(HttpServletResponse resp, String location) throws IOException {
         if (location.startsWith("redirect:")) {
-            String real = location.substring(9);
-            log.debug("real : {}", real);
-            resp.sendRedirect(real);
+            resp.sendRedirect(location.substring(9));
             return true;
         }
         return false;
@@ -64,4 +62,5 @@ public class DispatcherServlet extends HttpServlet {
         }
         return false;
     }
+
 }
