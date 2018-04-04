@@ -1,8 +1,5 @@
 package next.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import core.mvc.CommonController;
-import core.mvc.Controller;
 import core.mvc.RestController;
 import next.dao.AnswerDao;
 import next.model.Result;

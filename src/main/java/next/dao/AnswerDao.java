@@ -22,7 +22,7 @@ public class AnswerDao {
         String sql = "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE answerId = ?";
         RowMapper<Answer> rm = rs -> new Answer(rs.getLong("answerId"), rs.getString(2),
                 rs.getString(3), rs.getDate(4), rs.getLong(5));
-        return JdbcTemplate.queryForObject(sql, rm,  id);
+        return JdbcTemplate.queryForObject(sql, rm, id);
     }
 
     public List<Answer> findAll() throws DataAccessException {
@@ -40,7 +40,7 @@ public class AnswerDao {
     public Result delete(Long id) {
         String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
         JdbcTemplate.update(sql, id);
-        if(findById(id) == null) return Result.ok();
+        if (findById(id) == null) return Result.ok();
         return Result.fail("Error message");
     }
 }

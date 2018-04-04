@@ -22,7 +22,7 @@ public class ShowQuestionsController implements CommonController {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
 
-        for(Question q : questions) {
+        for (Question q : questions) {
             log.debug("question: {}", q.toString());
         }
 

@@ -12,7 +12,7 @@ $('#btnToggle').click(function(){
 });
 });
 // 답변추가
-$(".submit-write button").on("click", addAnswer);
+$(".submit-write button").click(addAnswer);
 
 function addAnswer(e) {
     e.preventDefault();

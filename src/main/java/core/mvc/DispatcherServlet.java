@@ -16,10 +16,10 @@ import java.io.IOException;
 // 서블릿 컨테이너 역할
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
-    
-	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private RequestMapping requestMapping;
 
@@ -34,18 +34,22 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("url : {}", url);
 
         Controller controller = requestMapping.find(url);
+
+        if(url.contains("api")) {
+            controller.executeAjax(req, resp);
+            return;
+        }
+
         String location = controller.execute(req, resp);
         log.debug("location :  {}", location);
 
-        if(location == null) return;
-
         // redirect
-		if (location.startsWith("redirect:")) {
-			String real = location.substring(9);
-			log.debug("real : {}", real);
-			resp.sendRedirect(real);
-			return;
-		}
+        if (location.startsWith("redirect:")) {
+            String real = location.substring(9);
+            log.debug("real : {}", real);
+            resp.sendRedirect(real);
+            return;
+        }
 
         RequestDispatcher rd = req.getRequestDispatcher(location);
         rd.forward(req, resp);

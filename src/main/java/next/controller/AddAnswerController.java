@@ -1,7 +1,5 @@
 package next.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import core.mvc.RestController;
 import next.dao.AnswerDao;
 import next.model.Answer;
@@ -26,7 +24,7 @@ public class AddAnswerController implements RestController<Answer> {
 //            return "/users/login.jsp";
 //        }
 
-        User user = (User)session.getAttribute(UserSessionUtils.USER_SESSION_KEY);
+        User user = (User) session.getAttribute(UserSessionUtils.USER_SESSION_KEY);
         String questionId = req.getParameter("questionId");
         log.debug("questionId:{}", questionId);
 

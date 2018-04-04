@@ -18,7 +18,7 @@ public class FowardController implements CommonController {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         if (this.path.equals("/users/form")) return "/user/form.jsp";
         if (this.path.equals("/users/loginForm")) return "/user/login.jsp";
-        if(this.path.equals("/qna/form")) return "/qna/form.jsp";
+        if (this.path.equals("/qna/form")) return "/qna/form.jsp";
         return null;
     }
 }

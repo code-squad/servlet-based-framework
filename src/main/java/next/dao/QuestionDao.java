@@ -30,10 +30,10 @@ public class QuestionDao {
         RowMapper<Question> rm = rs -> new Question(rs.getLong("questionId"), rs.getString(2),
                 rs.getString(3), rs.getString(4), rs.getDate(5), rs.getInt(6));
 
-        return JdbcTemplate.queryForObject(sql, rm,  id);
+        return JdbcTemplate.queryForObject(sql, rm, id);
     }
 
-    public List<Question> findAll(){
+    public List<Question> findAll() {
         String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS";
 
         RowMapper<Question> rm = rs -> new Question(rs.getLong("questionId"), rs.getString(2),

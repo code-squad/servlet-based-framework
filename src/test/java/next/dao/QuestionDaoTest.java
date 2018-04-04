@@ -42,7 +42,7 @@ public class QuestionDaoTest {
 
     @Test
     public void findAll() throws Exception {
-        List<Question> list  = questionDao.findAll();
+        List<Question> list = questionDao.findAll();
         assertEquals(8, list.size());
     }
 

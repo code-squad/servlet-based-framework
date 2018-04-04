@@ -36,7 +36,7 @@ public abstract class JdbcTemplate {
 
     private static void setId(KeyHolder holder, PreparedStatement pstmt) throws SQLException {
         ResultSet rs = pstmt.getGeneratedKeys();
-        if(rs.next()) {
+        if (rs.next()) {
             holder.setId(rs.getLong(1));
         }
         rs.close();
@@ -58,7 +58,7 @@ public abstract class JdbcTemplate {
     public static void update(String query, KeyHolder holder, Object... objects) throws DataAccessException {
         PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
 
-        update(query,holder, pss);
+        update(query, holder, pss);
     }
 
     public static void update(String query, Object... objects) throws DataAccessException {
@@ -69,7 +69,7 @@ public abstract class JdbcTemplate {
 
     private static void setValues(PreparedStatement pstmt, Object[] objects) throws SQLException {
         for (int i = 0; i < objects.length; i++) {
-            pstmt.setObject(i+1, objects[i]);
+            pstmt.setObject(i + 1, objects[i]);
         }
     }
 
@@ -92,13 +92,13 @@ public abstract class JdbcTemplate {
     }
 
     public static <T> List<T> query(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
-       PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
-       return query(sql, rm, pss);
+        PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
+        return query(sql, rm, pss);
     }
 
     public static <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
         List<T> list = query(sql, rm, pss);
-        if(list.size() == 0) return null;
+        if (list.size() == 0) return null;
         return list.get(0);
     }
 
