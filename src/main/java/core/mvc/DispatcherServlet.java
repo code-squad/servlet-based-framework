@@ -36,30 +36,23 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = requestMapping.find(url);
 
-
         Response response = controller.execute(req, resp);
         String location = response.getResult();
         log.debug("location :  {}", location);
 
-        if (location == null) return;
-        // redirect
-        if (executeRedirect(resp, location)) return;
-        // forward
-        forward(req, resp, location);
+        move(req, resp, location);
         return;
     }
 
-    private void forward(HttpServletRequest req, HttpServletResponse resp, String location) throws ServletException, IOException {
+    private void move(HttpServletRequest req, HttpServletResponse resp, String location) throws IOException, ServletException {
+        if (location == null) return;
+        // redirect
+        if (location.startsWith("redirect:")) {
+            resp.sendRedirect(location.substring(9));
+            return;
+        }
+        // forward
         RequestDispatcher rd = req.getRequestDispatcher(location);
         rd.forward(req, resp);
     }
-
-    private boolean executeRedirect(HttpServletResponse resp, String location) throws IOException {
-        if (location.startsWith("redirect:")) {
-            resp.sendRedirect(location.substring(9));
-            return true;
-        }
-        return false;
-    }
-
 }
