@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 public class JsonView implements View {
 
     @Override
-    public void render(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    public void render(HttpServletRequest request, HttpServletResponse response) {
+        return;
     }
 }

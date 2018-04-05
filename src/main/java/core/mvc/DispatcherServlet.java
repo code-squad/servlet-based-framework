@@ -35,24 +35,9 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("url : {}", url);
 
         Controller controller = requestMapping.find(url);
-
-        Response response = controller.execute(req, resp);
-        String location = response.getResult();
-        log.debug("location :  {}", location);
-
-        move(req, resp, location);
-        return;
+        // 클라이언트 요청 처리
+        View view  = controller.execute(req, resp);
+        view.render(req, resp);
     }
 
-    private void move(HttpServletRequest req, HttpServletResponse resp, String location) throws IOException, ServletException {
-        if (location == null) return;
-        // redirect
-        if (location.startsWith("redirect:")) {
-            resp.sendRedirect(location.substring(9));
-            return;
-        }
-        // forward
-        RequestDispatcher rd = req.getRequestDispatcher(location);
-        rd.forward(req, resp);
-    }
 }

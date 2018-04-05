@@ -1,7 +1,10 @@
 package core.mvc;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class JspView implements View {
 
@@ -12,7 +15,14 @@ public class JspView implements View {
     }
 
     @Override
-    public void render(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    public void render(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        //redirect
+        if (this.url.startsWith("redirect:")) {
+            res.sendRedirect(this.url.substring(9));
+            return;
+        }
+        // forward
+        RequestDispatcher rd = req.getRequestDispatcher(this.url);
+        rd.forward(req, res);
     }
 }
