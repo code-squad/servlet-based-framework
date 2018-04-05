@@ -8,33 +8,36 @@ import core.db.DataBase;
 import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
+import next.model.Response;
 import next.model.User;
 
-public class LoginController implements CommonController {
+import java.io.IOException;
+
+public class LoginController implements Controller {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String userId = request.getParameter("userId");
-        String password = request.getParameter("password");
+    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        String userId = req.getParameter("userId");
+        String password = req.getParameter("password");
 
         UserDao userDao = new UserDao();
         User user = userDao.findByUserId(userId);
 
         if (user == null) {
-            request.setAttribute("loginFailed", true);
+            req.setAttribute("loginFailed", true);
             // loginFailed 가 view 로 전달되는지 확인필요.
-            return "/user/login.jsp";
+            return Response.isNotAjax("/user/login.jsp");
         }
         if (user.matchPassword(password)) {
-            HttpSession session = request.getSession();
+            HttpSession session = req.getSession();
             // session 에 세션아이디 이름으로 user 등록
             session.setAttribute(UserSessionUtils.USER_SESSION_KEY, user);
-            return "redirect:/";
+            return Response.isNotAjax("redirect:/");
         }
         // 비밀번호 틀렸을 때
-        request.setAttribute("loginFailed", true);
-        return "user/login.jsp";
+        req.setAttribute("loginFailed", true);
+        return Response.isNotAjax("user/login.jsp");
     }
 }
 

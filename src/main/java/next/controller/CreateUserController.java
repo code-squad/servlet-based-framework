@@ -6,17 +6,33 @@ import javax.servlet.http.HttpServletResponse;
 import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
+import next.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import next.model.User;
 
-public class CreateUserController implements CommonController {
+import java.io.IOException;
+
+public class CreateUserController implements Controller {
     // 서블릿으로 구현된 것을 컨트롤러로 변경한다.
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 
+//    @Override
+//    public String execute(HttpServletRequest req, HttpServletResponse res) {
+//        User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
+//                req.getParameter("email"));
+//        log.debug("User : {}", user);
+//
+//        UserDao userDao = new UserDao();
+//        userDao.insert(user);
+//
+//        return "redirect:/";
+//    }
+
+
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse res) {
+    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
         log.debug("User : {}", user);
@@ -24,6 +40,6 @@ public class CreateUserController implements CommonController {
         UserDao userDao = new UserDao();
         userDao.insert(user);
 
-        return "redirect:/";
+        return Response.isNotAjax("redirect:/");
     }
 }

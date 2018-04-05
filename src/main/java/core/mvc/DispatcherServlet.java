@@ -1,5 +1,6 @@
 package core.mvc;
 
+import next.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,14 +36,12 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = requestMapping.find(url);
 
-        if (isAjaxReq(url)){
-            controller.executeAjax(req, resp);
-            return;
-        }
 
-        String location = controller.execute(req, resp);
+        Response response = controller.execute(req, resp);
+        String location = response.getResult();
         log.debug("location :  {}", location);
 
+        if(location == null) return;
         // redirect
         if (executeRedirect(resp, location)) return;
         // forward
@@ -58,13 +57,6 @@ public class DispatcherServlet extends HttpServlet {
     private boolean executeRedirect(HttpServletResponse resp, String location) throws IOException {
         if (location.startsWith("redirect:")) {
             resp.sendRedirect(location.substring(9));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAjaxReq(String url) throws IOException {
-        if(url.contains("api")) {
             return true;
         }
         return false;
