@@ -12,14 +12,6 @@ import javax.servlet.http.HttpSession;
 public class LogoutController implements Controller {
     private static final long serialVersionUID = 1L;
 
-//    @Override
-//    public String execute(HttpServletRequest request, HttpServletResponse response) {
-//        HttpSession session = request.getSession();
-//        session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-//        return "redirect:/";
-//    }
-
-
     @Override
     public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         HttpSession session = req.getSession();

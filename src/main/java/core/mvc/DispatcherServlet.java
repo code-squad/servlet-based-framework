@@ -41,7 +41,7 @@ public class DispatcherServlet extends HttpServlet {
         String location = response.getResult();
         log.debug("location :  {}", location);
 
-        if(location == null) return;
+        if (location == null) return;
         // redirect
         if (executeRedirect(resp, location)) return;
         // forward

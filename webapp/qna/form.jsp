@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="kr">
@@ -26,7 +26,7 @@
                     <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
                 </div>
                 <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
-                <div class="clearfix" />
+                <div class="clearfix"/>
             </form>
         </div>
     </div>
