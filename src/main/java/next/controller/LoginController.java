@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import core.db.DataBase;
-import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
 import next.model.Response;

@@ -1,13 +1,8 @@
 package next.controller;
 
-import core.db.DataBase;
-import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.dao.UserDao;
 import next.model.Response;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

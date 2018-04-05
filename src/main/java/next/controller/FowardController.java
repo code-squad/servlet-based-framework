@@ -1,6 +1,5 @@
 package next.controller;
 
-import core.mvc.CommonController;
 import core.mvc.Controller;
 import next.model.Response;
 

@@ -17,7 +17,6 @@ public class RequestMapping {
     public RequestMapping() {
         controllers = new HashMap<>();
         controllers.put("/api/qna/addAnswer", new AddAnswerController());
-        controllers.put("/api/questions", new ShowQuestionsController());
         controllers.put("/", new HomeController());
         controllers.put("/users/create", new CreateUserController());
         controllers.put("/users", new ListUserController());
