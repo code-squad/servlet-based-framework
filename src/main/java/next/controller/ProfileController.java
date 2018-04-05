@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.dao.UserDao;
 import next.model.Response;
 import next.model.User;
@@ -13,7 +15,7 @@ public class ProfileController implements Controller {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         String userId = req.getParameter("userId");
 
         UserDao userDao = new UserDao();
@@ -23,6 +25,6 @@ public class ProfileController implements Controller {
             throw new NullPointerException("사용자를 찾을 수 없습니다.");
         }
         req.setAttribute("user", user);
-        return Response.isNotAjax("/user/profile.jsp");
+        return new JspView("/user/profile.jsp");
     }
 }

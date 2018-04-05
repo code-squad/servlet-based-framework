@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.dao.UserDao;
 import next.model.Response;
 
@@ -11,13 +13,13 @@ import java.io.IOException;
 public class ListUserController implements Controller {
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         if (!UserSessionUtils.isLogined(req.getSession())) {
-            return Response.isNotAjax("redirect:/users/loginForm");
+            return new JspView("redirect:/users/loginForm");
         }
         UserDao userDao = new UserDao();
 
         req.setAttribute("users", userDao.findAll());
-        return Response.isNotAjax("/user/list.jsp");
+        return new JspView("/user/list.jsp");
     }
 }

@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
 import next.model.Response;
@@ -15,13 +17,13 @@ public class CreateQuestionController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(CreateQuestionController.class);
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Question question = new Question(req.getParameter("writer"), req.getParameter("title"), req.getParameter("contents"));
         log.debug("Question : {}", question);
 
         QuestionDao questionDao = new QuestionDao();
         questionDao.insert(question);
 
-        return Response.isNotAjax("redirect:/");
+        return new JspView("redirect:/");
     }
 }

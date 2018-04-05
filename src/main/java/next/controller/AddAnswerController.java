@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JsonView;
+import core.mvc.View;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.Response;
@@ -17,8 +19,8 @@ public class AddAnswerController implements Controller<Answer> {
     private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
-// create Answer object using data from Http request
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        // create Answer object using data from Http request
 
         HttpSession session = req.getSession();
 //        if(session == null){// 로그인 안한 상태
@@ -37,7 +39,7 @@ public class AddAnswerController implements Controller<Answer> {
 
         // object -> json (Jackson library)
         writeJson(res, getJson(savedAnswer));
-        return Response.isAjax();
+        return new JsonView();
     }
 
 }

@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.model.Response;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +18,10 @@ public class FowardController implements Controller {
     }
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        if (this.path.equals("/users/form")) return Response.isNotAjax("/user/form.jsp");
-        if (this.path.equals("/users/loginForm")) return Response.isNotAjax("/user/login.jsp");
-        if (this.path.equals("/qna/form")) return Response.isNotAjax("/qna/form.jsp");
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        if (this.path.equals("/users/form")) return new JspView("/user/form.jsp");
+        if (this.path.equals("/users/loginForm")) return new JspView("/user/login.jsp");
+        if (this.path.equals("/qna/form")) return new JspView("/qna/form.jsp");
         return null;
     }
 }

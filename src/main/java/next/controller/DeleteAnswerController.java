@@ -1,6 +1,8 @@
 package next.controller;
 
 import core.mvc.Controller;
+import core.mvc.JsonView;
+import core.mvc.View;
 import next.dao.AnswerDao;
 import next.model.Response;
 import next.model.Result;
@@ -16,7 +18,7 @@ public class DeleteAnswerController implements Controller<Result> {
     private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
 
     @Override
-    public Response execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         AnswerDao answerDao = new AnswerDao();
         String para = req.getParameter("answerId");
         log.debug("answerId : {}", para);
@@ -26,6 +28,7 @@ public class DeleteAnswerController implements Controller<Result> {
         Result result = answerDao.delete(answerId);
 
         writeJson(res, getJson(result));
-        return Response.isAjax();
+
+        return new JsonView();
     }
 }

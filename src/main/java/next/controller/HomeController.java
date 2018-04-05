@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.Controller;
+import core.mvc.JspView;
+import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
 import next.model.Response;
@@ -18,12 +20,13 @@ public class HomeController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    public Response execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public View execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
 
         log.debug("questions : {}", questions.toString());
         request.setAttribute("questions", questions);
-        return Response.isNotAjax("home.jsp");
+
+        return new JspView("home.jsp");
     }
 }
