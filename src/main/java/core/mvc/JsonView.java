@@ -21,7 +21,7 @@ public class JsonView implements View {
     @Override
     public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         // 모델에 담긴 데이터를 꺼내 req 에 전달한다.
-        model.forEach((k,v) -> req.setAttribute(k, v));
+        model.forEach((k, v) -> req.setAttribute(k, v));
         writeJson(res, getJson(model));
     }
 
@@ -30,7 +30,7 @@ public class JsonView implements View {
         response.getWriter().print(json);
     }
 
-   private String getJson(Map<String, ?> model) throws JsonProcessingException {
+    private String getJson(Map<String, ?> model) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(model);
     }
 }
