@@ -14,11 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class DeleteAnswerController implements Controller<Result> {
+public class DeleteAnswerController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
 
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public View execute(HttpServletRequest req, HttpServletResponse res) {
+        log.debug("hi");
         AnswerDao answerDao = new AnswerDao();
         String para = req.getParameter("answerId");
         log.debug("answerId : {}", para);
@@ -26,9 +27,8 @@ public class DeleteAnswerController implements Controller<Result> {
         Long answerId = Long.parseLong(para);
 
         Result result = answerDao.delete(answerId);
+        req.setAttribute("result", result);
 
-        writeJson(res, getJson(result));
-
-        return new JsonView();
+        return new JsonView(req);
     }
 }

@@ -15,8 +15,8 @@ $(".submit-write button").click(addAnswer);
 
 function addAnswer(e) {
     e.preventDefault();
-    var queryString = $("form[name=answer]").serialize(); // form data 들을 자동으로 묶어준다.
-
+    var queryString = $("form.submit-write").serialize(); // form data 들을 자동으로 묶어준다.
+    console.log("queryString : {}", queryString);
     $.ajax({
         type: 'post',
         url: '/api/qna/addAnswer',
@@ -32,7 +32,7 @@ function onSuccess(json, status) {
     console.log(json);
     // answerTemplate을 읽어온다.
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId);
+    var template = answerTemplate.format(json.answer.writer, new Date(json.answer.createdDate), json.answer.contents, json.answer.answerId);
     // 해당 클래스 뒤에 template 파일을 붙인다.
     $(".qna-comment-slipp-articles").prepend(template);
     $(".submit-write textarea").val("");
@@ -53,12 +53,13 @@ String.prototype.format = function () {
     });
 };
 // event delegation
-$(".qna-comment-slipp-articles").on("click", ".delete-answer-button", deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", ".delete-answer button", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
 
-    var queryString = e.currentTarget.previousElementSibling.value;
+    var queryString = $("form.delete-answer").serialize();
+
     console.log('qs', queryString);
     console.log(e);
     $.ajax({
@@ -68,7 +69,7 @@ function deleteAnswer(e) {
         dataType: 'json',
         error: onError,
         success: function (json, status) {
-            if (json.status) {
+            if (json.result.status) {
                 e.currentTarget.closest('article').remove();
             }
         }

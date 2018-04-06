@@ -37,9 +37,9 @@ public class AddAnswerController implements Controller<Answer> {
         AnswerDao answerDao = new AnswerDao();
         Answer savedAnswer = answerDao.insert(answer);
 
+        req.setAttribute("answer", savedAnswer);
         // object -> json (Jackson library)
-        writeJson(res, getJson(savedAnswer));
-        return new JsonView();
+        return new JsonView(req);
     }
 
 }
