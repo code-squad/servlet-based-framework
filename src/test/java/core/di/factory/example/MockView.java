@@ -11,15 +11,8 @@ import core.mvc.View;
 
 public class MockView implements View {
 
-//    @Override
-//    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
-//            throws Exception {
-//
-//    }
-
-
     @Override
-    public void render(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
     }
 }

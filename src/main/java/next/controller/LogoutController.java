@@ -2,6 +2,7 @@ package next.controller;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.model.Response;
 
@@ -15,9 +16,10 @@ public class LogoutController implements Controller {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         HttpSession session = req.getSession();
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-        return new JspView("redirect:/");
+
+        return new ModelAndView(new JspView("redirect:/"));
     }
 }

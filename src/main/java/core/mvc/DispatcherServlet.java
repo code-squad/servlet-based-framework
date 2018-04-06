@@ -34,8 +34,7 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = requestMapping.find(url);
         // 클라이언트 요청 처리
-        View view  = controller.execute(req, resp);
-        view.render(req, resp);
+        ModelAndView modelAndView = controller.execute(req, resp);
+        modelAndView.getView().render(modelAndView.getModel(),req, resp);
     }
-
 }

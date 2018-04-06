@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.UserDao;
 import next.model.Response;
@@ -20,7 +21,7 @@ public class UpdateUserController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         UserDao userDao = new UserDao();
         User user = userDao.findByUserId(req.getParameter("userId"));
 
@@ -33,6 +34,7 @@ public class UpdateUserController implements Controller {
 
         log.debug("Update User : {}", updateUser);
         user.update(updateUser);
-        return new JspView("redirect:/");
+
+        return new ModelAndView(new JspView("redirect:/"));
     }
 }

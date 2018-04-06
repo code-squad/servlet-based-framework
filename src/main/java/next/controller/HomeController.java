@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.QuestionDao;
 import next.model.Question;
@@ -20,13 +21,11 @@ public class HomeController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
-
         log.debug("questions : {}", questions.toString());
-        request.setAttribute("questions", questions);
 
-        return new JspView("home.jsp");
+        return new ModelAndView(new JspView("home.jsp")).addObject("questions", questions);
     }
 }

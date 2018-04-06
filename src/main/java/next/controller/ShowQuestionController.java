@@ -2,6 +2,7 @@ package next.controller;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class ShowQuestionController implements Controller {
 
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) throws IOException {
         // questions
         Long questionId = Long.parseLong(req.getParameter("questionId"));
         QuestionDao questionDao = new QuestionDao();
@@ -22,7 +23,6 @@ public class ShowQuestionController implements Controller {
         req.setAttribute("question", question);
         // answers
         AnswerDao answerDao = new AnswerDao();
-        req.setAttribute("answers", answerDao.findByQuestionId(questionId));
-        return new JspView("/qna/show.jsp");
+        return new ModelAndView(new JspView("/qna/show.jsp")).addObject("answers", answerDao.findByQuestionId(questionId));
     }
 }

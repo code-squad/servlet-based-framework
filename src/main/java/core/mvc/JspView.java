@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class JspView implements View {
 
@@ -15,7 +16,8 @@ public class JspView implements View {
     }
 
     @Override
-    public void render(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        model.forEach((k,v) -> req.setAttribute(k, v));
         //redirect
         if (this.url.startsWith("redirect:")) {
             res.sendRedirect(this.url.substring(9));
