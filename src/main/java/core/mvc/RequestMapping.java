@@ -31,7 +31,7 @@ public class RequestMapping {
         controllers.put("/qna", new ShowQuestionController());
         controllers.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
-        controllers.values().stream().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));
+        controllers.values().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));
     }
 
     public Controller find(String url) {
