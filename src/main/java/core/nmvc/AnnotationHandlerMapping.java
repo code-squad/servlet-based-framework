@@ -30,10 +30,8 @@ public class AnnotationHandlerMapping {
         // @Controller 가 달린 클래스들만 추출해 Set에 담기
         Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(Controller.class);
         annotated.forEach(annotatedClass -> {
-            // 클래스의 모든 메소드.
-            Method[] allMethods  = annotatedClass.getDeclaredMethods();
             // 1. @RequestMapping 붙은 method 만 필터.
-            List<Method> annotatedMethods = Arrays.stream(allMethods).filter(m -> m.isAnnotationPresent(RequestMapping.class)
+            List<Method> annotatedMethods = Arrays.stream(annotatedClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(RequestMapping.class)
             ).collect(Collectors.toList());
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {
