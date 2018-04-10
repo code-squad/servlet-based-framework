@@ -15,7 +15,6 @@ import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import org.reflections.Reflections;
-import static org.reflections.ReflectionUtils.*;
 public class AnnotationHandlerMapping {
     private Object[] basePackage;
 
@@ -36,16 +35,15 @@ public class AnnotationHandlerMapping {
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {
                 RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
-                handlerExecutions.put(new HandlerKey(requestMapping.value(), requestMapping.method()), new HandlerExecution());
+                handlerExecutions.put(new HandlerKey(requestMapping.value(), requestMapping.method()), new HandlerExecution(annotatedClass, m));
             });
         });
-
     }
 
     public HandlerExecution getHandler(HttpServletRequest request) {// 해당 url 과 http method 에 해당하는 handlerExecution 을 가져옴.
         String requestUri = request.getRequestURI();
         RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
         return handlerExecutions.get(new HandlerKey(requestUri, rm));
-        // handlerexecution.handle(); -> requestMapping 달린 해당 메소드 실행.
+        // handlerExecution.handle(); -> requestMapping 달린 해당 메소드 실행.
     }
 }

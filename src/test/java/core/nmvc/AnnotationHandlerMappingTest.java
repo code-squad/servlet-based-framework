@@ -20,6 +20,7 @@ public class AnnotationHandlerMappingTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
         HandlerExecution execution = handlerMapping.getHandler(request);
         // 해당 컨트롤러의 메소드 실행.
+
         execution.handle(request, response);
     }
 }
