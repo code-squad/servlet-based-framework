@@ -3,7 +3,6 @@ package core.mvc;
 import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
-import next.controller.CreateQuestionController;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
@@ -16,7 +15,7 @@ import java.io.IOException;
 
 @Controller
 public class QuestionController {
-    private static final Logger log = LoggerFactory.getLogger(CreateQuestionController.class);
+    private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 
     @RequestMapping(value = "/qna/create", method = RequestMethod.POST)
     public ModelAndView createQuestion(HttpServletRequest req, HttpServletResponse res) throws IOException {
