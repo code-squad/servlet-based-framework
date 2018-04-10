@@ -18,17 +18,8 @@ public class RequestMapping {
         controllers = new HashMap<>();
         controllers.put("/api/qna/addAnswer", new AddAnswerController());
         controllers.put("/", new HomeController());
-        controllers.put("/users/create", new CreateUserController());
-        controllers.put("/users", new ListUserController());
-        controllers.put("/users/login", new LoginController());
-        controllers.put("/users/logout", new LogoutController());
-        controllers.put("/users/update", new UpdateUserController());
-        controllers.put("/users/profile", new ProfileController());
-        controllers.put("/users/form", new FowardController("/users/form"));
-        controllers.put("/users/loginForm", new FowardController("/users/loginForm"));
         controllers.put("/qna/form", new FowardController("/qna/form"));
         controllers.put("/qna/create", new CreateQuestionController());
-        controllers.put("/qna", new ShowQuestionController());
         controllers.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         controllers.values().forEach(c -> log.debug("mapped request : {}", c.getClass().getName()));

@@ -108,13 +108,4 @@ public class UserController {
     public ModelAndView createLoginForm(HttpServletRequest req, HttpServletResponse res) {
         return new ModelAndView(new JspView("/user/login.jsp"));
     }
-
-
-
-
-
-
-
-
-
 }
