@@ -104,6 +104,11 @@ public class UserController {
         return new ModelAndView(new JspView("/user/form.jsp"));
     }
 
+    @RequestMapping(value = "/users/updateForm")
+    public ModelAndView updateForm(HttpServletRequest req, HttpServletResponse res) {
+        return new ModelAndView(new JspView("/user/updateForm.jsp"));
+    }
+
     @RequestMapping(value = "/users/loginForm")
     public ModelAndView createLoginForm(HttpServletRequest req, HttpServletResponse res) {
         return new ModelAndView(new JspView("/user/login.jsp"));
