@@ -25,9 +25,7 @@ public class AnnotationHandlerMapping {
     }
 
     public void initialize() {// url + HttpMethod 와 해당 컨트롤러의 @RequestMapping 이 달린 메소드를 매칭 시키는 것 같음.
-        Reflections reflections = new Reflections(basePackage);
-        // @Controller 가 달린 클래스들만 추출해 Set에 담기
-        Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(Controller.class);
+        Set<Class<?>> annotated = getControllers();
         annotated.forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.
             List<Method> annotatedMethods = Arrays.stream(annotatedClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(RequestMapping.class)
@@ -38,6 +36,11 @@ public class AnnotationHandlerMapping {
                 handlerExecutions.put(new HandlerKey(requestMapping.value(), requestMapping.method()), new HandlerExecution(annotatedClass, m));
             });
         });
+    }
+
+    private Set<Class<?>> getControllers() {
+        Reflections reflections = new Reflections(basePackage);
+        return reflections.getTypesAnnotatedWith(Controller.class);
     }
 
     public HandlerExecution getHandler(HttpServletRequest request) {// 해당 url 과 http method 에 해당하는 handlerExecution 을 가져옴.
