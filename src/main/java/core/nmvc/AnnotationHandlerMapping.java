@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
 
-import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
-import org.reflections.Reflections;
 public class AnnotationHandlerMapping {
     private Object[] basePackage;
 
@@ -25,11 +23,10 @@ public class AnnotationHandlerMapping {
     }
 
     public void initialize() {// url + HttpMethod 와 해당 컨트롤러의 @RequestMapping 이 달린 메소드를 매칭 시키는 것 같음.
-        Set<Class<?>> annotated = getControllers();
+        Set<Class<?>> annotated = ControllerScanner.getControllers(basePackage);
         annotated.forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.
-            List<Method> annotatedMethods = Arrays.stream(annotatedClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(RequestMapping.class)
-            ).collect(Collectors.toList());
+            List<Method> annotatedMethods = getMethods(annotatedClass);
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {
                 RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
@@ -38,9 +35,9 @@ public class AnnotationHandlerMapping {
         });
     }
 
-    private Set<Class<?>> getControllers() {
-        Reflections reflections = new Reflections(basePackage);
-        return reflections.getTypesAnnotatedWith(Controller.class);
+    private List<Method> getMethods(Class<?> annotatedClass) {
+        return Arrays.stream(annotatedClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(RequestMapping.class)
+                ).collect(Collectors.toList());
     }
 
     public HandlerExecution getHandler(HttpServletRequest request) {// 해당 url 과 http method 에 해당하는 handlerExecution 을 가져옴.

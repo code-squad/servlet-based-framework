@@ -19,7 +19,7 @@ public class HandlerExecution {
     private Class<?> clazz;
     private Method method;
 
-    public HandlerExecution(Class<?> clazz, Method method) {
+    public HandlerExecution(Class<?> clazz, Method method) {// handlerExecution 이 class , method 정보 모두 갖고 있을 수 있도록 했다.
         this.clazz = clazz;
         this.method = method;
     }
