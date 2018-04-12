@@ -12,6 +12,8 @@ import core.mvc.ModelAndView;
 public class QnaController {
     private MyQnaService qnaService;
 
+    public QnaController(){}
+
     @Inject
     public QnaController(MyQnaService qnaService) {
         this.qnaService = qnaService;

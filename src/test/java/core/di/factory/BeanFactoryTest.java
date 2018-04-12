@@ -25,7 +25,9 @@ public class BeanFactoryTest {
     @SuppressWarnings("unchecked")
     public void setup() {
         reflections = new Reflections("core.di.factory.example");
+        // 리플렉션을 통해 annotation 이 붙은 클래스들을 모은다.
         Set<Class<?>> preInstanticateClazz = getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
+        // 클래스들을 빈으로 등록
         beanFactory = new BeanFactory(preInstanticateClazz);
         beanFactory.initialize();
     }
