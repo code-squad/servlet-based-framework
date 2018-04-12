@@ -27,6 +27,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     // 프레임워크가 시작되면서 클래스의 인스턴스들(= bean)을 생성하는 부분
     public void initialize() {
-        this.preInstanticateBeans.forEach(BeanUtils::instantiateClass);
+        // default 생성자 기반으로 인스턴스화 함.
+        this.preInstanticateBeans.forEach(bean -> this.beans.put(bean, BeanUtils.instantiateClass(bean)));
     }
 }
