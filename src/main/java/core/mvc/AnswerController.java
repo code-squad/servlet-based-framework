@@ -8,6 +8,7 @@ import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.Result;
 import next.model.User;
+import next.service.AnswerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,21 +34,24 @@ public class AnswerController {
         Answer answer = new Answer(user.getUserId(), req.getParameter("contents"), Long.parseLong(req.getParameter("questionId")));
 
         log.debug("answer : {}", answer.toString());
+
         AnswerDao answerDao = new AnswerDao();
-        Answer savedAnswer = answerDao.insert(answer);
+        AnswerService answerService = new AnswerService(answerDao);
+        Answer savedAnswer = answerService.insert(answer);
 
         return new ModelAndView(new JsonView()).addObject("answer", savedAnswer);
     }
 
     @RequestMapping(value = "/api/qna/deleteAnswer", method = RequestMethod.POST)
     public ModelAndView delete(HttpServletRequest req, HttpServletResponse res) {
-        AnswerDao answerDao = new AnswerDao();
         String para = req.getParameter("answerId");
         log.debug("answerId : {}", para);
 
         Long answerId = Long.parseLong(para);
 
-        Result result = answerDao.delete(answerId);
+        AnswerDao answerDao = new AnswerDao();
+        AnswerService answerService = new AnswerService(answerDao);
+        Result result = answerService.delete(answerId);
 
         return new ModelAndView(new JsonView()).addObject("result", result);
     }

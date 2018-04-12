@@ -6,6 +6,7 @@ import core.annotation.RequestMethod;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
+import next.service.AnswerService;
 import next.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,8 @@ public class QuestionController {
         req.setAttribute("question", question);
         // answers
         AnswerDao answerDao = new AnswerDao();
-        return new ModelAndView(new JspView("/qna/show.jsp")).addObject("answers", answerDao.findByQuestionId(questionId));
+        AnswerService answerService = new AnswerService(answerDao);
+
+        return new ModelAndView(new JspView("/qna/show.jsp")).addObject("answers", answerService.findByQuestionId(questionId));
     }
 }
