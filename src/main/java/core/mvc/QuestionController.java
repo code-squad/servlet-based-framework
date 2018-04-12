@@ -17,7 +17,12 @@ import java.io.IOException;
 public class QuestionController {
     private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 
-    @RequestMapping(value = "/qna/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/qna/form")
+    public ModelAndView questionForm(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        return new ModelAndView(new JspView("/qna/form.jsp"));
+    }
+
+    @RequestMapping(value = "/qna", method = RequestMethod.POST)
     public ModelAndView createQuestion(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Question question = new Question(req.getParameter("writer"), req.getParameter("title"), req.getParameter("contents"));
         log.debug("Question : {}", question);
@@ -38,10 +43,5 @@ public class QuestionController {
         // answers
         AnswerDao answerDao = new AnswerDao();
         return new ModelAndView(new JspView("/qna/show.jsp")).addObject("answers", answerDao.findByQuestionId(questionId));
-    }
-
-    @RequestMapping(value = "/qna/form")
-    public ModelAndView questionForm(HttpServletRequest req, HttpServletResponse res) throws IOException {
-         return new ModelAndView(new JspView("/qna/form.jsp"));
     }
 }

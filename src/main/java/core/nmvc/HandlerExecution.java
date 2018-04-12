@@ -3,16 +3,12 @@ package core.nmvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import core.annotation.RequestMapping;
-import core.annotation.RequestMethod;
 import core.mvc.ModelAndView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class HandlerExecution {
     private static final Logger log = LoggerFactory.getLogger(HandlerExecution.class);

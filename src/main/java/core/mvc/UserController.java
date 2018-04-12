@@ -6,6 +6,7 @@ import core.annotation.RequestMethod;
 import next.controller.UserSessionUtils;
 import next.dao.UserDao;
 import next.model.User;
+import next.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +24,8 @@ public class UserController {
             return new ModelAndView(new JspView("redirect:/users/loginForm"));
         }
         UserDao userDao = new UserDao();
-
-        return new ModelAndView(new JspView("redirect:/users/loginForm")).addObject("users", userDao.findAll());
+        UserService userService = new UserService(userDao);
+        return new ModelAndView(new JspView("redirect:/users/loginForm")).addObject("users", userService.findAll());
     }
 
     @RequestMapping(value = "/users/create" , method = RequestMethod.POST)
@@ -34,7 +35,8 @@ public class UserController {
         log.debug("User : {}", user);
 
         UserDao userDao = new UserDao();
-        userDao.insert(user);
+        UserService userService = new UserService(userDao);
+        userService.insert(user);
 
         return new ModelAndView(new JspView("redirect:/"));
     }
@@ -44,7 +46,9 @@ public class UserController {
         String userId = req.getParameter("userId");
         String password = req.getParameter("password");
 
-        User user = new UserDao().findByUserId(userId);
+        UserDao userDao = new UserDao();
+        UserService userService = new UserService(userDao);
+        User user = userService.findByUserId(userId);
 
         if (user == null) {
             return new ModelAndView(new JspView("/user/login.jsp")).addObject("loginFailed", true);
@@ -67,10 +71,11 @@ public class UserController {
         return new ModelAndView(new JspView("redirect:/"));
     }
 
-    @RequestMapping(value = "/users/update", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/update", method = RequestMethod.POST)
     public ModelAndView update(HttpServletRequest req, HttpServletResponse res){
         UserDao userDao = new UserDao();
-        User user = userDao.findByUserId(req.getParameter("userId"));
+        UserService userService = new UserService(userDao);
+        User user = userService.findByUserId(req.getParameter("userId"));
 
         if (!UserSessionUtils.isSameUser(req.getSession(), user)) {
             throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
@@ -80,7 +85,7 @@ public class UserController {
                 req.getParameter("email"));
 
         log.debug("Update User : {}", updateUser);
-        user.update(updateUser);
+        userDao.update(updateUser);
 
         return new ModelAndView(new JspView("redirect:/"));
     }
@@ -90,7 +95,8 @@ public class UserController {
         String userId = req.getParameter("userId");
 
         UserDao userDao = new UserDao();
-        User user = userDao.findByUserId(userId);
+        UserService userService = new UserService(userDao);
+        User user = userService.findByUserId(userId);
 
         if (user == null) {
             throw new NullPointerException("사용자를 찾을 수 없습니다.");

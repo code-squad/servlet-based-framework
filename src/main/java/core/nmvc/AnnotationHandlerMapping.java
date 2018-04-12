@@ -22,7 +22,7 @@ public class AnnotationHandlerMapping {
         this.basePackage = basePackage;
     }
 
-    public void initialize() {// url + HttpMethod 와 해당 컨트롤러의 @RequestMapping 이 달린 메소드를 매칭 시키는 것 같음.
+    public void initialize() {
         Set<Class<?>> annotated = ControllerScanner.getControllers(basePackage);
         annotated.forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.

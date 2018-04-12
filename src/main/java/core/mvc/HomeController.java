@@ -16,7 +16,7 @@ import java.util.List;
 public class HomeController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
-    @RequestMapping(value = "/")
+    @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request, HttpServletResponse response) throws IOException {
         QuestionDao questionDao = new QuestionDao();
         List<Question> questions = questionDao.findAll();
