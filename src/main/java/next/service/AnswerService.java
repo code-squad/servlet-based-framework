@@ -1,11 +1,13 @@
 package next.service;
 
+import core.annotation.Service;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.Result;
 
 import java.util.List;
 
+@Service
 public class AnswerService {
     private AnswerDao answerDao;
 

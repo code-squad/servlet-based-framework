@@ -1,8 +1,10 @@
 package next.service;
 
+import core.annotation.Service;
 import next.dao.QuestionDao;
 import next.model.Question;
 
+@Service
 public class QuestionService {
     private QuestionDao questionDao;
 
