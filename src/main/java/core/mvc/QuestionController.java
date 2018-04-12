@@ -6,6 +6,7 @@ import core.annotation.RequestMethod;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
+import next.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,8 @@ public class QuestionController {
         log.debug("Question : {}", question);
 
         QuestionDao questionDao = new QuestionDao();
-        questionDao.insert(question);
+        QuestionService questionService = new QuestionService(questionDao);
+        questionService.insert(question);
 
         return new ModelAndView(new JspView("redirect:/"));
     }
@@ -37,8 +39,11 @@ public class QuestionController {
     public ModelAndView showQuestion(HttpServletRequest req, HttpServletResponse res) throws IOException {
         // questions
         Long questionId = Long.parseLong(req.getParameter("questionId"));
+
         QuestionDao questionDao = new QuestionDao();
-        Question question = questionDao.findById(questionId);
+        QuestionService questionService = new QuestionService(questionDao);
+        Question question = questionService.findById(questionId);
+
         req.setAttribute("question", question);
         // answers
         AnswerDao answerDao = new AnswerDao();
