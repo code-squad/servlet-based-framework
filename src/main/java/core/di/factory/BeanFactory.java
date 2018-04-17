@@ -1,7 +1,10 @@
 package core.di.factory;
 
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Parameter;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +30,43 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     // 프레임워크가 시작되면서 클래스의 인스턴스들(= bean)을 생성하는 부분
     public void initialize() {
-        // default 생성자 기반으로 인스턴스화 함.
-        this.preInstanticateBeans.forEach(bean -> this.beans.put(bean, BeanUtils.instantiateClass(bean)));
+        // 기본 생성자로 먼저 빈으로 등록
+        this.preInstanticateBeans.forEach(bean ->
+            this.beans.put(bean, BeanUtils.instantiateClass(bean)));
+        // DI 실행
+        this.beans.forEach((clazz, object) -> logger.debug("class, object : {}",  clazz, object));
+        this.beans.forEach((clazz, object) -> {
+            try {
+                // overwrite
+                this.beans.put(clazz, setField(clazz));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    private Object setField(Class<?> clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
+        // 1. inject 생성자 가져오기
+        Constructor injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
+        // 원래 있던 빈 반환
+        if(injectedConstructor == null) {
+            Class concreteClass = BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans);
+            return this.beans.get(concreteClass);
+        }
+
+        //2. 생성자의 파라미터 목록
+        Parameter[] parameters = injectedConstructor.getParameters();
+        List<Object> objects = new ArrayList<>();
+        for(Parameter p : parameters) {
+            Object object  = setField(p.getType());
+            objects.add(object);
+        }
+        // 3. 생성자 실행
+        return injectedConstructor.newInstance(objects.toArray());
     }
 }
