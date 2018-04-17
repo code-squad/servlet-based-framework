@@ -1,7 +1,6 @@
 package core.di.factory;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -34,16 +33,12 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         this.preInstanticateBeans.forEach(bean ->
             this.beans.put(bean, BeanUtils.instantiateClass(bean)));
         // DI 실행
-        this.beans.forEach((clazz, object) -> logger.debug("class, object : {}",  clazz, object));
         this.beans.forEach((clazz, object) -> {
             try {
                 // overwrite
+                logger.debug("class, object : {}",  clazz, object);
                 this.beans.put(clazz, setField(clazz));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         });
@@ -63,8 +58,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         Parameter[] parameters = injectedConstructor.getParameters();
         List<Object> objects = new ArrayList<>();
         for(Parameter p : parameters) {
-            Object object  = setField(p.getType());
-            objects.add(object);
+            objects.add(setField(p.getType()));
         }
         // 3. 생성자 실행
         return injectedConstructor.newInstance(objects.toArray());

@@ -18,6 +18,11 @@ import java.io.IOException;
 @Controller
 public class QuestionController {
     private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
+    private QuestionDao questionDao = new QuestionDao();
+    private QuestionService questionService = new QuestionService(questionDao);
+
+    private AnswerDao answerDao = new AnswerDao();
+    private AnswerService answerService = new AnswerService(answerDao);
 
     @RequestMapping(value = "/qna/form")
     public ModelAndView questionForm(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -29,8 +34,6 @@ public class QuestionController {
         Question question = new Question(req.getParameter("writer"), req.getParameter("title"), req.getParameter("contents"));
         log.debug("Question : {}", question);
 
-        QuestionDao questionDao = new QuestionDao();
-        QuestionService questionService = new QuestionService(questionDao);
         questionService.insert(question);
 
         return new ModelAndView(new JspView("redirect:/"));
@@ -41,14 +44,10 @@ public class QuestionController {
         // questions
         Long questionId = Long.parseLong(req.getParameter("questionId"));
 
-        QuestionDao questionDao = new QuestionDao();
-        QuestionService questionService = new QuestionService(questionDao);
         Question question = questionService.findById(questionId);
 
         req.setAttribute("question", question);
         // answers
-        AnswerDao answerDao = new AnswerDao();
-        AnswerService answerService = new AnswerService(answerDao);
 
         return new ModelAndView(new JspView("/qna/show.jsp")).addObject("answers", answerService.findByQuestionId(questionId));
     }

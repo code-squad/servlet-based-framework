@@ -21,6 +21,9 @@ import java.io.IOException;
 public class AnswerController {
     private static final Logger log = LoggerFactory.getLogger(AnswerController.class);
 
+    private AnswerDao answerDao = new AnswerDao();
+    private AnswerService answerService = new AnswerService(answerDao);
+
     @RequestMapping(value = "/api/qna/addAnswer", method = RequestMethod.POST)
     public ModelAndView create(HttpServletRequest req, HttpServletResponse res) throws IOException {
         // create Answer object using data from Http request
@@ -35,8 +38,6 @@ public class AnswerController {
 
         log.debug("answer : {}", answer.toString());
 
-        AnswerDao answerDao = new AnswerDao();
-        AnswerService answerService = new AnswerService(answerDao);
         Answer savedAnswer = answerService.insert(answer);
 
         return new ModelAndView(new JsonView()).addObject("answer", savedAnswer);
@@ -49,8 +50,6 @@ public class AnswerController {
 
         Long answerId = Long.parseLong(para);
 
-        AnswerDao answerDao = new AnswerDao();
-        AnswerService answerService = new AnswerService(answerDao);
         Result result = answerService.delete(answerId);
 
         return new ModelAndView(new JsonView()).addObject("result", result);

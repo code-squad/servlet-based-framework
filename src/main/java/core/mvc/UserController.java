@@ -17,14 +17,13 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
+    private UserDao userDao = new UserDao();
+    private UserService userService = new UserService(userDao);
     @RequestMapping("/users")
     public ModelAndView list(HttpServletRequest req, HttpServletResponse res){
         if (!UserSessionUtils.isLogined(req.getSession())) {
             return new ModelAndView(new JspView("redirect:/users/loginForm"));
         }
-        UserDao userDao = new UserDao();
-        UserService userService = new UserService(userDao);
         return new ModelAndView(new JspView("redirect:/users/loginForm")).addObject("users", userService.findAll());
     }
 
@@ -34,8 +33,6 @@ public class UserController {
                 req.getParameter("email"));
         log.debug("User : {}", user);
 
-        UserDao userDao = new UserDao();
-        UserService userService = new UserService(userDao);
         userService.insert(user);
 
         return new ModelAndView(new JspView("redirect:/"));
@@ -46,8 +43,6 @@ public class UserController {
         String userId = req.getParameter("userId");
         String password = req.getParameter("password");
 
-        UserDao userDao = new UserDao();
-        UserService userService = new UserService(userDao);
         User user = userService.findByUserId(userId);
 
         if (user == null) {
@@ -73,8 +68,6 @@ public class UserController {
 
     @RequestMapping(value = "/users/update", method = RequestMethod.POST)
     public ModelAndView update(HttpServletRequest req, HttpServletResponse res){
-        UserDao userDao = new UserDao();
-        UserService userService = new UserService(userDao);
         User user = userService.findByUserId(req.getParameter("userId"));
 
         if (!UserSessionUtils.isSameUser(req.getSession(), user)) {
@@ -94,8 +87,6 @@ public class UserController {
     public ModelAndView profile(HttpServletRequest req, HttpServletResponse res){
         String userId = req.getParameter("userId");
 
-        UserDao userDao = new UserDao();
-        UserService userService = new UserService(userDao);
         User user = userService.findByUserId(userId);
 
         if (user == null) {

@@ -4,6 +4,8 @@ import core.annotation.Service;
 import next.dao.QuestionDao;
 import next.model.Question;
 
+import java.util.List;
+
 @Service
 public class QuestionService {
     private QuestionDao questionDao;
@@ -19,4 +21,5 @@ public class QuestionService {
     public Question findById(Long questionId){
         return questionDao.findById(questionId);
     }
+    public List<Question> findAll() { return questionDao.findAll(); }
 }
