@@ -44,17 +44,21 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         Constructor injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
 
         if(injectedConstructor == null) {
-            Class concreteClass = BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans);
-            return concreteClass.newInstance();
+            return BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans).newInstance();
         }
 
         //2. 생성자의 파라미터 목록
-        Parameter[] parameters = injectedConstructor.getParameters();
+        List<Object> objects = getObjects(injectedConstructor.getParameters());
+
+        // 3. 생성자 실행
+        return injectedConstructor.newInstance(objects.toArray());
+    }
+
+    private List<Object> getObjects(Parameter[] parameters) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         List<Object> objects = new ArrayList<>();
         for(Parameter p : parameters) {
             objects.add(setField(p.getType()));
         }
-        // 3. 생성자 실행
-        return injectedConstructor.newInstance(objects.toArray());
+        return objects;
     }
 }

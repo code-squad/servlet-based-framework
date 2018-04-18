@@ -7,7 +7,7 @@ import org.reflections.Reflections;
 
 import java.util.Set;
 
-public class BeanScanner {
+class BeanScanner {
 
     static Set<Class<?>> getControllers(Object... basePackage) {
         Reflections reflections = new Reflections(basePackage);
