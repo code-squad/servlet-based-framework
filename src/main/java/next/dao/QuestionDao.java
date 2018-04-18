@@ -2,12 +2,14 @@ package next.dao;
 
 import java.util.List;
 
+import core.annotation.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import core.jdbc.KeyHolder;
 import next.model.Question;
 
+@Repository
 public class QuestionDao {
     private static final Logger log = LoggerFactory.getLogger(QuestionDao.class);
 

@@ -1,13 +1,12 @@
 package core.mvc;
 
-import core.annotation.Controller;
-import core.annotation.RequestMapping;
-import core.annotation.RequestMethod;
+import core.annotation.*;
 import next.controller.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import next.model.Result;
 import next.model.User;
+import next.service.AnswerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,12 @@ import java.io.IOException;
 @Controller
 public class AnswerController {
     private static final Logger log = LoggerFactory.getLogger(AnswerController.class);
+    private AnswerService answerService;
+
+    @Inject
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
 
     @RequestMapping(value = "/api/qna/addAnswer", method = RequestMethod.POST)
     public ModelAndView create(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -33,21 +38,20 @@ public class AnswerController {
         Answer answer = new Answer(user.getUserId(), req.getParameter("contents"), Long.parseLong(req.getParameter("questionId")));
 
         log.debug("answer : {}", answer.toString());
-        AnswerDao answerDao = new AnswerDao();
-        Answer savedAnswer = answerDao.insert(answer);
+
+        Answer savedAnswer = answerService.insert(answer);
 
         return new ModelAndView(new JsonView()).addObject("answer", savedAnswer);
     }
 
     @RequestMapping(value = "/api/qna/deleteAnswer", method = RequestMethod.POST)
     public ModelAndView delete(HttpServletRequest req, HttpServletResponse res) {
-        AnswerDao answerDao = new AnswerDao();
         String para = req.getParameter("answerId");
         log.debug("answerId : {}", para);
 
         Long answerId = Long.parseLong(para);
 
-        Result result = answerDao.delete(answerId);
+        Result result = answerService.delete(answerId);
 
         return new ModelAndView(new JsonView()).addObject("result", result);
     }

@@ -1,11 +1,13 @@
 package next.dao;
 
+import core.annotation.Repository;
 import core.jdbc.KeyHolder;
 import next.model.Answer;
 import next.model.Result;
 
 import java.util.List;
 
+@Repository
 public class AnswerDao {
 
     public Answer insert(Answer answer) {
