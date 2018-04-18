@@ -32,6 +32,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         this.preInstanticateBeans.forEach(clazz -> {
             try {
                 this.beans.put(clazz, setField(clazz));
+
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }

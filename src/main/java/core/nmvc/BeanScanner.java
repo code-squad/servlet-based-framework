@@ -8,19 +8,21 @@ import org.reflections.Reflections;
 import java.util.Set;
 
 class BeanScanner {
+    private static Reflections reflections;
 
-    static Set<Class<?>> getControllers(Object... basePackage) {
-        Reflections reflections = new Reflections(basePackage);
+    public BeanScanner(Object... basePackage){
+        reflections = new Reflections(basePackage);
+    }
+
+    static Set<Class<?>> getControllers() {
         return reflections.getTypesAnnotatedWith(Controller.class);
     }
 
-    static Set<Class<?>> getServices(Object... basePackage) {
-        Reflections reflections = new Reflections(basePackage);
+    static Set<Class<?>> getServices() {
         return reflections.getTypesAnnotatedWith(Service.class);
     }
 
-    static Set<Class<?>> getRepositories(Object... basePackage) {
-        Reflections reflections = new Reflections(basePackage);
+    static Set<Class<?>> getRepositories() {
         return reflections.getTypesAnnotatedWith(Repository.class);
     }
 }
