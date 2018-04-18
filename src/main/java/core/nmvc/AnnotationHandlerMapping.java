@@ -45,7 +45,7 @@ public class AnnotationHandlerMapping {
 
     private List<Method> getMethods(Class<?> annotatedClass) {
         return Arrays.stream(annotatedClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(RequestMapping.class)
-                ).collect(Collectors.toList());
+        ).collect(Collectors.toList());
     }
 
     public HandlerExecution getHandler(HttpServletRequest request) {// 해당 url 과 http method 에 해당하는 handlerExecution 을 가져옴.

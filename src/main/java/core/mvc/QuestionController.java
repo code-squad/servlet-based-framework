@@ -24,7 +24,7 @@ public class QuestionController {
 
     private AnswerService answerService;
 
-   @Inject
+    @Inject
     public QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;

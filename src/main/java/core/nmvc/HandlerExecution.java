@@ -26,7 +26,7 @@ public class HandlerExecution {
         ModelAndView modelAndView = new ModelAndView();
         try {
             // 해당 메소드의 파라미터들 다 넣어주어야 함.
-            modelAndView = (ModelAndView)this.method.invoke(controllerBean, req, res);
+            modelAndView = (ModelAndView) this.method.invoke(controllerBean, req, res);
         } catch (IllegalAccessException e) {
             log.debug("IllegalAccessException occured " + e.getMessage());
         } catch (InvocationTargetException e) {

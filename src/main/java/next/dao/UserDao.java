@@ -4,6 +4,7 @@ import java.util.List;
 
 import core.annotation.Repository;
 import next.model.User;
+
 @Repository
 public class UserDao {
 

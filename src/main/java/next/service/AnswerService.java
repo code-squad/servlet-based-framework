@@ -17,19 +17,19 @@ public class AnswerService {
         this.answerDao = answerDao;
     }
 
-    public Answer insert(Answer answer){
+    public Answer insert(Answer answer) {
         return answerDao.insert(answer);
     }
 
-    public Result delete(Long answerId){
+    public Result delete(Long answerId) {
         return answerDao.delete(answerId);
     }
 
-    public List<Answer> findAll(){
+    public List<Answer> findAll() {
         return answerDao.findAll();
     }
 
-    public List<Answer> findByQuestionId(Long questionId){
+    public List<Answer> findByQuestionId(Long questionId) {
         return answerDao.findByQuestionId(questionId);
     }
 }

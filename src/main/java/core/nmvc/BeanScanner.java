@@ -10,7 +10,7 @@ import java.util.Set;
 class BeanScanner {
     private static Reflections reflections;
 
-    public BeanScanner(Object... basePackage){
+    public BeanScanner(Object... basePackage) {
         reflections = new Reflections(basePackage);
     }
 

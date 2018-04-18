@@ -6,6 +6,7 @@ import next.model.Answer;
 import next.model.Result;
 
 import java.util.List;
+
 @Repository
 public class AnswerDao {
 

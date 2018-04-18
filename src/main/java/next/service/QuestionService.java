@@ -16,12 +16,15 @@ public class QuestionService {
         this.questionDao = questionDao;
     }
 
-    public void insert(Question question){
+    public void insert(Question question) {
         questionDao.insert(question);
     }
 
-    public Question findById(Long questionId){
+    public Question findById(Long questionId) {
         return questionDao.findById(questionId);
     }
-    public List<Question> findAll() { return questionDao.findAll(); }
+
+    public List<Question> findAll() {
+        return questionDao.findAll();
+    }
 }

@@ -16,18 +16,20 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public void insert(User user){
+    public void insert(User user) {
         userDao.insert(user);
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return userDao.findAll();
     }
 
-    public User findByUserId(String userId){
+    public User findByUserId(String userId) {
         return userDao.findByUserId(userId);
     }
 
-    public void update(User user){userDao.update(user);}
+    public void update(User user) {
+        userDao.update(user);
+    }
 
 }

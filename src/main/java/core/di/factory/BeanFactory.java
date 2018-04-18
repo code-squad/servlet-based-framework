@@ -16,6 +16,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
     private Set<Class<?>> preInstanticateBeans;
 
     private Map<Class<?>, Object> beans = Maps.newHashMap();
+
     // 생성자를 통해 bean 이 될 클래스들을 설정해주고 있다.
     public BeanFactory(Set<Class<?>> preInstanticateBeans) {
         this.preInstanticateBeans = preInstanticateBeans;
@@ -44,7 +45,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         // 1. inject 생성자 가져오기
         Constructor injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
 
-        if(injectedConstructor == null) {
+        if (injectedConstructor == null) {
             return BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans).newInstance();
         }
 
@@ -57,7 +58,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     private List<Object> getObjects(Parameter[] parameters) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         List<Object> objects = new ArrayList<>();
-        for(Parameter p : parameters) {
+        for (Parameter p : parameters) {
             objects.add(setField(p.getType()));
         }
         return objects;

@@ -26,15 +26,15 @@ public class UserController {
     }
 
     @RequestMapping("/users")
-    public ModelAndView list(HttpServletRequest req, HttpServletResponse res){
+    public ModelAndView list(HttpServletRequest req, HttpServletResponse res) {
         if (!UserSessionUtils.isLogined(req.getSession())) {
             return new ModelAndView(new JspView("redirect:/users/loginForm"));
         }
         return new ModelAndView(new JspView("redirect:/users/loginForm")).addObject("users", userService.findAll());
     }
 
-    @RequestMapping(value = "/users/create" , method = RequestMethod.POST)
-    public ModelAndView create(HttpServletRequest req, HttpServletResponse res){
+    @RequestMapping(value = "/users/create", method = RequestMethod.POST)
+    public ModelAndView create(HttpServletRequest req, HttpServletResponse res) {
         User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
         log.debug("User : {}", user);
@@ -44,8 +44,8 @@ public class UserController {
         return new ModelAndView(new JspView("redirect:/"));
     }
 
-    @RequestMapping(value = "/users/login" , method = RequestMethod.POST)
-    public ModelAndView login(HttpServletRequest req, HttpServletResponse res){
+    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
+    public ModelAndView login(HttpServletRequest req, HttpServletResponse res) {
         String userId = req.getParameter("userId");
         String password = req.getParameter("password");
 
@@ -64,8 +64,8 @@ public class UserController {
         return new ModelAndView(new JspView("/user/login.jsp")).addObject("loginFailed", true);
     }
 
-    @RequestMapping(value = "/users/logout" , method = RequestMethod.POST)
-    public ModelAndView logout(HttpServletRequest req, HttpServletResponse res){
+    @RequestMapping(value = "/users/logout", method = RequestMethod.POST)
+    public ModelAndView logout(HttpServletRequest req, HttpServletResponse res) {
         HttpSession session = req.getSession();
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
 
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/update", method = RequestMethod.POST)
-    public ModelAndView update(HttpServletRequest req, HttpServletResponse res){
+    public ModelAndView update(HttpServletRequest req, HttpServletResponse res) {
         User user = userService.findByUserId(req.getParameter("userId"));
 
         if (!UserSessionUtils.isSameUser(req.getSession(), user)) {
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/profile")
-    public ModelAndView profile(HttpServletRequest req, HttpServletResponse res){
+    public ModelAndView profile(HttpServletRequest req, HttpServletResponse res) {
         String userId = req.getParameter("userId");
 
         User user = userService.findByUserId(userId);
