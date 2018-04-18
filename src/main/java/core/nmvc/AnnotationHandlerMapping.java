@@ -23,15 +23,12 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
-        Set<Class<?>> controllers = BeanScanner.getControllers(basePackage);
-        Set<Class<?>> beans = BeanScanner.getRepositories(basePackage);
-        beans.addAll(BeanScanner.getServices(basePackage));
-        beans.addAll(controllers);
+        BeanScanner beanScanner = new BeanScanner(basePackage);
+        BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans());
 
-        BeanFactory beanFactory = new BeanFactory(beans);
         beanFactory.initialize();
 
-        controllers.forEach(annotatedClass -> {
+        beanScanner.getControllers().forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.
             Object bean = beanFactory.getBean(annotatedClass);
             List<Method> annotatedMethods = getMethods(bean.getClass());
