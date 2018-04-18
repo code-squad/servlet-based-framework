@@ -1,6 +1,7 @@
 package core.mvc;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import next.controller.UserSessionUtils;
@@ -17,8 +18,13 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private UserDao userDao = new UserDao();
-    private UserService userService = new UserService(userDao);
+    private UserService userService;
+
+    @Inject
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @RequestMapping("/users")
     public ModelAndView list(HttpServletRequest req, HttpServletResponse res){
         if (!UserSessionUtils.isLogined(req.getSession())) {
@@ -78,7 +84,7 @@ public class UserController {
                 req.getParameter("email"));
 
         log.debug("Update User : {}", updateUser);
-        userDao.update(updateUser);
+        userService.update(updateUser);
 
         return new ModelAndView(new JspView("redirect:/"));
     }

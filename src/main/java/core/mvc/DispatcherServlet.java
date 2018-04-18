@@ -26,7 +26,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        annotationHandlerMapping = new AnnotationHandlerMapping("core.mvc");
+        annotationHandlerMapping = new AnnotationHandlerMapping("core.mvc", "next.dao", "next.service");
         annotationHandlerMapping.initialize();
     }
 
@@ -40,6 +40,4 @@ public class DispatcherServlet extends HttpServlet {
         modelAndView = handlerExecution.handle(req, resp);
         modelAndView.getView().render(modelAndView.getModel(), req, resp);
     }
-
-
 }

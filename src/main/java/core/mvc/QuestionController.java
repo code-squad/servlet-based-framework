@@ -1,6 +1,7 @@
 package core.mvc;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import next.dao.AnswerDao;
@@ -18,11 +19,16 @@ import java.io.IOException;
 @Controller
 public class QuestionController {
     private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
-    private QuestionDao questionDao = new QuestionDao();
-    private QuestionService questionService = new QuestionService(questionDao);
 
-    private AnswerDao answerDao = new AnswerDao();
-    private AnswerService answerService = new AnswerService(answerDao);
+    private QuestionService questionService;
+
+    private AnswerService answerService;
+
+   @Inject
+    public QuestionController(QuestionService questionService, AnswerService answerService) {
+        this.questionService = questionService;
+        this.answerService = answerService;
+    }
 
     @RequestMapping(value = "/qna/form")
     public ModelAndView questionForm(HttpServletRequest req, HttpServletResponse res) throws IOException {

@@ -1,6 +1,7 @@
 package core.mvc;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import next.dao.QuestionDao;
 import next.model.Question;
@@ -16,8 +17,13 @@ import java.util.List;
 @Controller
 public class HomeController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
-    private QuestionDao questionDao = new QuestionDao();
-    private QuestionService questionService = new QuestionService(questionDao);
+
+    private QuestionService questionService;
+
+    @Inject
+    public HomeController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request, HttpServletResponse response) throws IOException {

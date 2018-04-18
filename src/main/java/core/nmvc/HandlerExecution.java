@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
 
 public class HandlerExecution {
     private static final Logger log = LoggerFactory.getLogger(HandlerExecution.class);
-    private Class<?> clazz;
+    private Object controllerBean;
     private Method method;
 
-    public HandlerExecution(Class<?> clazz, Method method) {// handlerExecution 이 class , method 정보 모두 갖고 있을 수 있도록 했다.
-        this.clazz = clazz;
+    public HandlerExecution(Object controllerBean, Method method) {// handlerExecution 이 class , method 정보 모두 갖고 있을 수 있도록 했다.
+        this.controllerBean = controllerBean;
         this.method = method;
     }
 
@@ -26,13 +26,12 @@ public class HandlerExecution {
         ModelAndView modelAndView = new ModelAndView();
         try {
             // 해당 메소드의 파라미터들 다 넣어주어야 함.
-            modelAndView = (ModelAndView)this.method.invoke(this.clazz.newInstance(), req, res);
+            // 생성자의 파라미터
+            modelAndView = (ModelAndView)this.method.invoke(controllerBean, req, res);
         } catch (IllegalAccessException e) {
-            log.debug("IllegalAccessException occured");
+            log.debug("IllegalAccessException occured " + e.getMessage());
         } catch (InvocationTargetException e) {
-            log.debug("InvocationTargetException occured");
-        } catch (InstantiationException e) {
-            log.debug("InstantiationException occured");
+            log.debug("InvocationTargetException occured " + e.getMessage());
         }
         return modelAndView;
     }

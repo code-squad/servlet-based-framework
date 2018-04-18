@@ -1,8 +1,6 @@
 package core.mvc;
 
-import core.annotation.Controller;
-import core.annotation.RequestMapping;
-import core.annotation.RequestMethod;
+import core.annotation.*;
 import next.controller.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.model.Answer;
@@ -20,9 +18,12 @@ import java.io.IOException;
 @Controller
 public class AnswerController {
     private static final Logger log = LoggerFactory.getLogger(AnswerController.class);
+    private AnswerService answerService;
 
-    private AnswerDao answerDao = new AnswerDao();
-    private AnswerService answerService = new AnswerService(answerDao);
+    @Inject
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
 
     @RequestMapping(value = "/api/qna/addAnswer", method = RequestMethod.POST)
     public ModelAndView create(HttpServletRequest req, HttpServletResponse res) throws IOException {

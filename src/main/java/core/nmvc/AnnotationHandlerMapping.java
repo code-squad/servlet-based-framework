@@ -1,10 +1,7 @@
 package core.nmvc;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +10,8 @@ import com.google.common.collect.Maps;
 
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import core.di.factory.BeanFactory;
+
 public class AnnotationHandlerMapping {
     private Object[] basePackage;
 
@@ -23,14 +22,23 @@ public class AnnotationHandlerMapping {
     }
 
     public void initialize() {
-        Set<Class<?>> annotated = ControllerScanner.getControllers(basePackage);
-        annotated.forEach(annotatedClass -> {
+        // annotation 붙은 클래스들 빈으로 모두 등록
+        Set<Class<?>> controllers = BeanScanner.getControllers(basePackage);
+        Set<Class<?>> beans = BeanScanner.getRepositories(basePackage);
+        beans.addAll(BeanScanner.getServices(basePackage));
+        beans.addAll(controllers);
+
+        BeanFactory beanFactory = new BeanFactory(beans);
+        beanFactory.initialize();
+
+        controllers.forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.
-            List<Method> annotatedMethods = getMethods(annotatedClass);
+            Object bean = beanFactory.getBean(annotatedClass);
+            List<Method> annotatedMethods = getMethods(bean.getClass());
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {
                 RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
-                handlerExecutions.put(new HandlerKey(requestMapping.value(), requestMapping.method()), new HandlerExecution(annotatedClass, m));
+                handlerExecutions.put(new HandlerKey(requestMapping.value(), requestMapping.method()), new HandlerExecution(bean, m));
             });
         });
     }
