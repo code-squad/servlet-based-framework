@@ -5,6 +5,7 @@ import core.jdbc.KeyHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,8 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class JdbcTemplate {
+public class JdbcTemplate {
     private static final Logger log = LoggerFactory.getLogger(JdbcTemplate.class);
+    private DataSource dataSource;
+
+    public JdbcTemplate(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public static void update(String query, KeyHolder holder, PreparedStatementSetter pss) throws DataAccessException {// 변하지 않는 부분
         try (Connection con = ConnectionManager.getConnection();
