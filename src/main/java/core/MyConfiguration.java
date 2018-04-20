@@ -1,4 +1,4 @@
-package core.di.factory;
+package core;
 
 import core.annotation.Bean;
 import core.annotation.ComponentScan;
@@ -9,6 +9,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan(basePackages = {"core.mvc", "next.dao", "next.service"})
 public class MyConfiguration {
     @Bean
     public DataSource dataSource(){

@@ -1,6 +1,7 @@
 package core.nmvc;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,22 +9,34 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
 
-import core.annotation.RequestMapping;
-import core.annotation.RequestMethod;
+import core.annotation.*;
 import core.di.factory.BeanFactory;
+import next.exception.NoConfigurationFileException;
+import org.reflections.Reflections;
 
 public class AnnotationHandlerMapping {
     private Object[] basePackage;
+    private Class<?> configuration;
 
     private Map<HandlerKey, HandlerExecution> handlerExecutions = Maps.newHashMap();
 
-    public AnnotationHandlerMapping(Object... basePackage) {
-        this.basePackage = basePackage;
+    public AnnotationHandlerMapping(Object configurationFilePackage) {
+        this.configuration =  detectConfigurationFile(configurationFilePackage);
+        this.basePackage = configuration.getAnnotation(ComponentScan.class).basePackages();
+    }
+
+    private Class<?> detectConfigurationFile(Object configurationFilePackage) {
+        return new Reflections(configurationFilePackage).getTypesAnnotatedWith(Configuration.class).
+                stream().findFirst().orElseThrow(() -> new NoConfigurationFileException("There is no configuration file"));
     }
 
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
         BeanScanner beanScanner = new BeanScanner(basePackage);
+       // 1. @Bean 메소드 추출
+        Set<Method> beanMethod = Arrays.stream(this.configuration.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toSet());
+
+//        BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans(), beanMethod);
         BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans());
 
         beanFactory.initialize();
@@ -49,6 +62,5 @@ public class AnnotationHandlerMapping {
         String requestUri = request.getRequestURI();
         RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
         return handlerExecutions.get(new HandlerKey(requestUri, rm));
-        // handlerExecution.handle(); -> requestMapping 달린 해당 메소드 실행.
     }
 }
