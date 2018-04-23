@@ -33,10 +33,7 @@ public class AnnotationHandlerMapping {
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
         BeanScanner beanScanner = new BeanScanner(basePackage);
-       // 1. @Bean 메소드 추출
-        Set<Method> beanMethod = Arrays.stream(this.configuration.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toSet());
 
-//        BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans(), beanMethod);
         BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans());
 
         beanFactory.initialize();

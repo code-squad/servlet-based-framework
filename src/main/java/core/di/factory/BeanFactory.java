@@ -4,6 +4,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import core.nmvc.ConfigurationBeanScanner;
+import next.exception.NoReturnObjectMethodException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,20 +15,16 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
     private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
     private Set<Class<?>> preInstanticateBeans;
-    private Set<Method> beanAnnotatedMethods;
-    private Set<AnnotatedElement> candidateBeans;
     private Map<Class<?>, Object> beans = Maps.newHashMap();
+    private ConfigurationBeanScanner cbs;
+    public BeanFactory(){}
 
-    // 생성자를 통해 bean 이 될 클래스들을 설정해주고 있다.
-    public BeanFactory(Set<Class<?>> preInstanticateBeans, Set<Method> beanAnnotatedMethods) {
-        this.beanAnnotatedMethods = beanAnnotatedMethods;
-        this.preInstanticateBeans = preInstanticateBeans;
-        this.candidateBeans = this.preInstanticateBeans.stream().map(clazz -> (AnnotatedElement)clazz).collect(Collectors.toSet());
-        this.candidateBeans.addAll(beanAnnotatedMethods.stream().map(method -> (AnnotatedElement)method).collect(Collectors.toSet()));
-    }
+//    public BeanFactory(Set<Class<?>> preInstanticateBeans){
+//        this.preInstanticateBeans = preInstanticateBeans;
+//    }
 
-    public BeanFactory(Set<Class<?>> preInstanticateBeans){
-        this.preInstanticateBeans = preInstanticateBeans;
+    public BeanFactory(ConfigurationBeanScanner cbs){
+        this.cbs = cbs;
     }
 
 
@@ -50,21 +48,6 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         });
         this.beans.forEach((clazz, object) -> logger.debug("beans : {}", clazz, object));
     }
-    // 외부 클래스로 뺀다.
-    // 각 클래스의 setMethod로 실행시키도록 한다.
-    private Object setField(Method method) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
-        // 1. inject 생성자 가져오기
-
-        if (method == null) {
-            return BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans).newInstance();
-        }
-
-        //2. 생성자의 파라미터 목록
-        List<Object> objects = getObjects(injectedConstructor.getParameters());
-
-        // 3. 생성자 실행
-        return injectedConstructor.newInstance(objects.toArray());
-    }
 
     private Object setField(Class<?> clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
         // 1. inject 생성자 가져오기
@@ -80,8 +63,6 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         // 3. 생성자 실행
         return injectedConstructor.newInstance(objects.toArray());
     }
-
-
 
     private List<Object> getObjects(Parameter[] parameters) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         List<Object> objects = new ArrayList<>();
