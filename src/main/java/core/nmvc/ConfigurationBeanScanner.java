@@ -14,7 +14,7 @@ public class ConfigurationBeanScanner {
         this.configurationFile = configurationFile;
     }
 
-    public Set<Class<?>> doScan(){
+    Set<Class<?>> doScan(){
         return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class))
                 .map(Method::getReturnType).collect(Collectors.toSet());
     }

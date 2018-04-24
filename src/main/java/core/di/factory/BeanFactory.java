@@ -2,10 +2,7 @@ package core.di.factory;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import core.nmvc.ConfigurationBeanScanner;
-import next.exception.NoReturnObjectMethodException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +11,13 @@ import com.google.common.collect.Maps;
 public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클래스
     private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
-    private Set<Class<?>> preInstanticateBeans;
+    private Set<Class<?>> beanCandidates;
+
     private Map<Class<?>, Object> beans = Maps.newHashMap();
-    private ConfigurationBeanScanner cbs;
     public BeanFactory(){}
 
-    public BeanFactory(Set<Class<?>> preInstanticateBeans){
-        this.preInstanticateBeans = preInstanticateBeans;
+    public BeanFactory(Set<Class<?>> beanCandidates){
+        this.beanCandidates = beanCandidates;
     }
 
     @SuppressWarnings("unchecked")
@@ -32,7 +29,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     public void initialize() {
         // DI 실행
-        this.preInstanticateBeans.forEach(clazz -> {
+        this.beanCandidates.forEach(clazz -> {
             try {
 
                 this.beans.put(clazz, setField(clazz));
@@ -49,7 +46,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         Constructor injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
 
         if (injectedConstructor == null) {
-            return BeanFactoryUtils.findConcreteClass(clazz, this.preInstanticateBeans).newInstance();
+            return BeanFactoryUtils.findConcreteClass(clazz, this.beanCandidates).newInstance();
         }
 
         //2. 생성자의 파라미터 목록
