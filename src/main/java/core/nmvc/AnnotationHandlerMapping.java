@@ -34,7 +34,7 @@ public class AnnotationHandlerMapping {
         // annotation 붙은 클래스들 빈으로 모두 등록
         BeanScanner beanScanner = new BeanScanner(basePackage);
 
-        BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans());
+        BeanFactory beanFactory = new BeanFactory(beanScanner.doScan());
 
         beanFactory.initialize();
 

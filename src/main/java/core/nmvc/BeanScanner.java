@@ -28,7 +28,7 @@ class BeanScanner {
         return reflections.getTypesAnnotatedWith(Repository.class);
     }
 
-    Set<Class<?>> getBeans() {
+    Set<Class<?>> doScan() {
         return Stream.concat(
                 Stream.concat(getControllers().stream(), getServices().stream()),
                 getRepositories().stream()).collect(Collectors.toSet());

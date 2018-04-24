@@ -19,14 +19,9 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
     private ConfigurationBeanScanner cbs;
     public BeanFactory(){}
 
-//    public BeanFactory(Set<Class<?>> preInstanticateBeans){
-//        this.preInstanticateBeans = preInstanticateBeans;
-//    }
-
-    public BeanFactory(ConfigurationBeanScanner cbs){
-        this.cbs = cbs;
+    public BeanFactory(Set<Class<?>> preInstanticateBeans){
+        this.preInstanticateBeans = preInstanticateBeans;
     }
-
 
     @SuppressWarnings("unchecked")
     public <T> T getBean(Class<T> requiredType) {

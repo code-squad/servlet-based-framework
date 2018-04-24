@@ -1,7 +1,6 @@
 package core.nmvc;
 
 import core.annotation.Bean;
-import core.di.factory.BeanFactory;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -15,11 +14,8 @@ public class ConfigurationBeanScanner {
         this.configurationFile = configurationFile;
     }
 
-    public Set<Method> findMethods(){
-        return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toSet());
-    }
-
-    public Class<?> getConfigurationFile() {
-        return configurationFile;
+    public Set<Class<?>> doScan(){
+        return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class))
+                .map(Method::getReturnType).collect(Collectors.toSet());
     }
 }
