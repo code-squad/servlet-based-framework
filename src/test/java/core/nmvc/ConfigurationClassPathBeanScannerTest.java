@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import static org.junit.Assert.*;
 
-public class ConfigurationBeanScannerTest {
+public class ConfigurationClassPathBeanScannerTest {
 
     @Test
     public void register_simple() {

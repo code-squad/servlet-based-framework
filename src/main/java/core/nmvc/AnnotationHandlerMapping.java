@@ -1,7 +1,6 @@
 package core.nmvc;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,13 +31,13 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
-        BeanScanner beanScanner = new BeanScanner(basePackage);
+        ClassPathBeanScanner classPathBeanScanner = new ClassPathBeanScanner(basePackage);
 
-        BeanFactory beanFactory = new BeanFactory(beanScanner.doScan());
+        BeanFactory beanFactory = new BeanFactory(classPathBeanScanner.doScan());
 
         beanFactory.initialize();
 
-        beanScanner.getControllers().forEach(annotatedClass -> {
+        classPathBeanScanner.getControllers().forEach(annotatedClass -> {
             // 1. @RequestMapping 붙은 method 만 필터.
             Object bean = beanFactory.getBean(annotatedClass);
             List<Method> annotatedMethods = getMethods(bean.getClass());

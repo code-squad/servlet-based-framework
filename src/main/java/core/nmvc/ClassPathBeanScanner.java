@@ -7,10 +7,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class BeanScanner {
+class ClassPathBeanScanner {
     private Object[] basePackage;
 
-    BeanScanner(Object... basePackage){
+    ClassPathBeanScanner(Object... basePackage){
         this.basePackage = basePackage;
     }
     Set<Class<?>> getControllers() {
