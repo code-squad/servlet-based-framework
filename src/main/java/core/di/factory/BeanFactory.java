@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import core.nmvc.Bean;
+import core.nmvc.BeanDefinition;
 import core.nmvc.ClassPathBean;
 import core.nmvc.ConfigurationBean;
 import org.slf4j.Logger;
@@ -16,16 +17,14 @@ import org.springframework.beans.BeanUtils;
 public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클래스
     private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
-    //    private Set<Class<?>> beanCandidates;
     private Set<Bean> beanCandidates;
+    private BeanDefinition beanDefinition;
 
     private Map<Class<?>, Object> beans = Maps.newHashMap();
 
-    public BeanFactory() {
-    }
-
-    public BeanFactory(Set<Bean> beanCandidates) {
-        this.beanCandidates = beanCandidates;
+    public BeanFactory(BeanDefinition beanDefinition) {
+        this.beanDefinition = beanDefinition;
+        this.beanCandidates = this.beanDefinition.getBeanCandidates();
     }
 
     @SuppressWarnings("unchecked")
@@ -37,7 +36,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     public void initialize() {
         // DI 실행
-        this.beanCandidates.forEach(candidate -> {
+        this.beanDefinition.getBeanCandidates().forEach(candidate -> {
             try {
 
                 this.beans.put(candidate.getClazz(), setField(candidate));
@@ -60,23 +59,28 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
     private Object setField(Bean bean) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
         if (bean instanceof ClassPathBean) {
             // 1. constructor 찾기
-            ClassPathBean classPathBean = (ClassPathBean) bean;
-
-            Constructor injectConstructor = classPathBean.getInjectedConstructor();
-            if (injectConstructor == null) return classPathBean.getClazz().newInstance();
-
-            Parameter[] params = injectConstructor.getParameters();
-            List<Object> args = getObjects(params);
-            return BeanUtils.instantiateClass(injectConstructor, args.toArray());
+            return instantiateClassPathBean((ClassPathBean) bean);
         }
         // 1. Method 찾기
-        ConfigurationBean configBean = (ConfigurationBean) bean;
-        Method method = configBean.getBeanMethod();
+        return instantiateConfigBean((ConfigurationBean) bean);
+    }
+
+    private Object instantiateConfigBean(ConfigurationBean bean) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        Method method = bean.getBeanMethod();
         Parameter[] params = method.getParameters();
 
-        if (params.length == 0) return method.invoke(configBean.getConfigurationFile().newInstance());
+        if (params.length == 0) return method.invoke(bean.getConfigurationFile().newInstance());
         List<Object> args = getObjects(params);
-        return method.invoke(configBean.getConfigurationFile().newInstance(), args.toArray());
+        return method.invoke(beanDefinition.instantiateConfiguration(), args.toArray());
+    }
+
+    private Object instantiateClassPathBean(ClassPathBean bean) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        Constructor injectConstructor = bean.getInjectedConstructor();
+        if (injectConstructor == null) return bean.getClazz().newInstance();
+
+        Parameter[] params = injectConstructor.getParameters();
+        List<Object> args = getObjects(params);
+        return BeanUtils.instantiateClass(injectConstructor, args.toArray());
     }
 
     private List<Object> getObjects(Parameter[] params) throws IllegalAccessException, InstantiationException, InvocationTargetException {
@@ -92,7 +96,7 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
             // 인터페이스인데도 빈 후보로 등록된 경우
             if (param.getType().isInterface()) {
                 ConfigurationBean configBean = (ConfigurationBean) find(param.getType());
-                return configBean.getBeanMethod().invoke(configBean.getConfigurationFile().newInstance());
+                return configBean.getBeanMethod().invoke(beanDefinition.instantiateConfiguration());
             }
             return setField(find(param.getType()));
 

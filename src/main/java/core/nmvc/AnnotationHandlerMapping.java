@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
 
+import core.MyConfiguration;
 import core.annotation.*;
 import core.di.factory.BeanFactory;
 import next.exception.NoConfigurationFileException;
@@ -31,13 +32,14 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
-        ClassPathBeanScanner classPathBeanScanner = new ClassPathBeanScanner(basePackage);
-
-        BeanFactory beanFactory = new BeanFactory(classPathBeanScanner.doScan());
+        ClassPathBeanScanner cpbs = new ClassPathBeanScanner(basePackage);
+        ConfigurationBeanScanner cbs = new ConfigurationBeanScanner(MyConfiguration.class);
+        BeanDefinition beanDefinition = new BeanDefinition(cbs, cpbs);
+        BeanFactory beanFactory = new BeanFactory(beanDefinition);
 
         beanFactory.initialize();
 
-        classPathBeanScanner.getControllers().forEach(annotatedBean -> {
+        cpbs.getControllers().forEach(annotatedBean -> {
             // 1. @RequestMapping 붙은 method 만 필터.
             Object bean = beanFactory.getBean(annotatedBean.getClazz());
             List<Method> annotatedMethods = getMethods(bean.getClass());

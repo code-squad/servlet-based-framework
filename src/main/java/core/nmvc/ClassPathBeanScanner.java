@@ -1,10 +1,8 @@
 package core.nmvc;
 
 import core.annotation.*;
-import core.di.factory.BeanFactoryUtils;
 import org.reflections.Reflections;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +31,7 @@ public class ClassPathBeanScanner {
                 .map(ClassPathBean::new).collect(Collectors.toSet());
     }
 
-    public Set<Bean> doScan() {
+   Set<Bean> doScan() {
         return Stream.concat(
                 Stream.concat(getControllers().stream(), getServices().stream()),
                 getRepositories().stream()).collect(Collectors.toSet());
