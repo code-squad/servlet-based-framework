@@ -33,7 +33,7 @@ public class AnnotationHandlerMapping {
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
         ClassPathBeanScanner cpbs = new ClassPathBeanScanner(basePackage);
-        ConfigurationBeanScanner cbs = new ConfigurationBeanScanner(MyConfiguration.class);
+        ConfigurationBeanScanner cbs = new ConfigurationBeanScanner(configuration);
         BeanDefinition beanDefinition = new BeanDefinition(cbs, cpbs);
         BeanFactory beanFactory = new BeanFactory(beanDefinition);
 

@@ -1,12 +1,11 @@
 package core.nmvc;
 
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+
 
 public class ConfigurationBean extends Bean {
     private Method beanMethod;
@@ -18,13 +17,17 @@ public class ConfigurationBean extends Bean {
         this.configurationFile = configurationFile;
     }
 
-    @Override
-    public Object instantiate(Bean bean, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        return null;
-    }
-
     public Method getBeanMethod() {
         return beanMethod;
+    }
+
+    public List<Parameter> getParameters(){
+        return Arrays.asList(beanMethod.getParameters());
+    }
+
+    public Object instantiate(List<Object> args) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        if (getParameters().size() == 0) return beanMethod.invoke(this.configurationFile.newInstance());
+        return beanMethod.invoke(this.configurationFile.newInstance(), args.toArray());
     }
 
     public Class<?> getConfigurationFile() {

@@ -62,16 +62,8 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
             return instantiateClassPathBean((ClassPathBean) bean);
         }
         // 1. Method 찾기
-        return instantiateConfigBean((ConfigurationBean) bean);
-    }
-
-    private Object instantiateConfigBean(ConfigurationBean bean) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Method method = bean.getBeanMethod();
-        Parameter[] params = method.getParameters();
-
-        if (params.length == 0) return method.invoke(bean.getConfigurationFile().newInstance());
-        List<Object> args = getObjects(params);
-        return method.invoke(beanDefinition.instantiateConfiguration(), args.toArray());
+        ConfigurationBean configBean = (ConfigurationBean)bean;
+        return configBean.instantiate(getObjects(configBean.getParameters()));
     }
 
     private Object instantiateClassPathBean(ClassPathBean bean) throws InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -79,11 +71,11 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         if (injectConstructor == null) return bean.getClazz().newInstance();
 
         Parameter[] params = injectConstructor.getParameters();
-        List<Object> args = getObjects(params);
+        List<Object> args = getObjects(Arrays.asList(params));
         return BeanUtils.instantiateClass(injectConstructor, args.toArray());
     }
 
-    private List<Object> getObjects(Parameter[] params) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private List<Object> getObjects(List<Parameter> params) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         List<Object> args = new ArrayList<>();
         for (Parameter p : params) {
             args.add(inject(p));
@@ -99,7 +91,6 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
                 return configBean.getBeanMethod().invoke(beanDefinition.instantiateConfiguration());
             }
             return setField(find(param.getType()));
-
         }
         // 인터페이스라서 후보로 등록되어있지 않은경우
         Class<?> concreteClass = BeanFactoryUtils.findConcreteClass(param.getType(), this.beanCandidates);

@@ -37,7 +37,7 @@ public class BeanFactoryTest {
         cpbs = new ClassPathBeanScanner("core.di.factory.example");
         cbs = new ConfigurationBeanScanner(IntegrationConfig.class);
         bf = new BeanDefinition(cbs, cpbs);
-        beanFactory = new BeanFactory(bf.register());
+        beanFactory = new BeanFactory(bf);
         beanFactory.initialize();
     }
 
