@@ -1,5 +1,7 @@
 package core.di.factory.example;
 
+import core.annotation.Inject;
+
 import javax.sql.DataSource;
 
 public class MyJdbcTemplate {

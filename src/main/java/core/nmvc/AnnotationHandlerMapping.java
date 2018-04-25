@@ -37,9 +37,9 @@ public class AnnotationHandlerMapping {
 
         beanFactory.initialize();
 
-        classPathBeanScanner.getControllers().forEach(annotatedClass -> {
+        classPathBeanScanner.getControllers().forEach(annotatedBean -> {
             // 1. @RequestMapping 붙은 method 만 필터.
-            Object bean = beanFactory.getBean(annotatedClass);
+            Object bean = beanFactory.getBean(annotatedBean.getClazz());
             List<Method> annotatedMethods = getMethods(bean.getClass());
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {

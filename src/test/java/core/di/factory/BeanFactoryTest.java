@@ -5,6 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+import core.di.factory.example.*;
+import core.nmvc.BeanDefinition;
+import core.nmvc.ClassPathBeanScanner;
+import core.nmvc.ConfigurationBeanScanner;
 import org.junit.Before;
 import org.junit.Test;
 import org.reflections.Reflections;
@@ -14,21 +18,26 @@ import com.google.common.collect.Sets;
 import core.annotation.Controller;
 import core.annotation.Repository;
 import core.annotation.Service;
-import core.di.factory.example.MyQnaService;
-import core.di.factory.example.QnaController;
+
+import javax.sql.DataSource;
 
 public class BeanFactoryTest {
     private Reflections reflections;
     private BeanFactory beanFactory;
+    private ClassPathBeanScanner cpbs;
+    private ConfigurationBeanScanner cbs;
+    private BeanDefinition bf;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setup() {
         reflections = new Reflections("core.di.factory.example");
         // 리플렉션을 통해 annotation 이 붙은 클래스들을 모은다.
-        Set<Class<?>> preInstanticateClazz = getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
         // 클래스들을 빈으로 등록
-        beanFactory = new BeanFactory(preInstanticateClazz);
+        cpbs = new ClassPathBeanScanner("core.di.factory.example");
+        cbs = new ConfigurationBeanScanner(IntegrationConfig.class);
+        bf = new BeanDefinition(cbs, cpbs);
+        beanFactory = new BeanFactory(bf.register());
         beanFactory.initialize();
     }
 
@@ -42,6 +51,26 @@ public class BeanFactoryTest {
         MyQnaService qnaService = qnaController.getQnaService();
         assertNotNull(qnaService.getUserRepository());
         assertNotNull(qnaService.getQuestionRepository());
+    }
+
+    @Test
+    public void di_configuration() {
+        assertNotNull(beanFactory.getBean(DataSource.class));
+    }
+
+    @Test
+    public void register_classpathBeanScanner_통합() {
+
+        assertNotNull(beanFactory.getBean(DataSource.class));
+
+        JdbcUserRepository userRepository = beanFactory.getBean(JdbcUserRepository.class);
+        assertNotNull(userRepository);
+        assertNotNull(userRepository.getJdbcTemplate());
+        assertNotNull(userRepository.getJdbcTemplate().getDataSource());
+
+        MyJdbcTemplate jdbcTemplate = beanFactory.getBean(MyJdbcTemplate.class);
+        assertNotNull(jdbcTemplate);
+        assertNotNull(jdbcTemplate.getDataSource());
     }
 
     @SuppressWarnings("unchecked")

@@ -1,5 +1,18 @@
 package core.nmvc;
 
-public interface Bean {
-    public Object instantiate(Bean bean);
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+
+public abstract class Bean {
+    Class<?> clazz;
+
+    public Bean(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
+    public abstract Object instantiate(Class<?> clazz, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException;
+
+    public Class<?> getClazz() {
+        return clazz;
+    }
 }

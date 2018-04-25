@@ -13,7 +13,7 @@ public class BeanDefinition {
         this.cpbs = cpbs;
     }
 
-    public Set<Class<?>> register(){
+    public Set<Bean> register(){
        return  Stream.concat(this.cbs.doScan().stream(), this.cpbs.doScan().stream()).collect(Collectors.toSet());
     }
 }

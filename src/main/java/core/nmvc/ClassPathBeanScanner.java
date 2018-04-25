@@ -1,36 +1,44 @@
 package core.nmvc;
 
 import core.annotation.*;
+import core.di.factory.BeanFactoryUtils;
 import org.reflections.Reflections;
 
+import java.lang.reflect.Constructor;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class ClassPathBeanScanner {
+public class ClassPathBeanScanner {
     private Object[] basePackage;
 
-    ClassPathBeanScanner(Object... basePackage){
+    public ClassPathBeanScanner(Object... basePackage){
         this.basePackage = basePackage;
     }
-    Set<Class<?>> getControllers() {
+    Set<Bean> getControllers() {
         Reflections reflections = new Reflections(basePackage);
-        return reflections.getTypesAnnotatedWith(Controller.class);
+        return reflections.getTypesAnnotatedWith(Controller.class).stream()
+                .map(ClassPathBean::new).collect(Collectors.toSet());
     }
 
-    private Set<Class<?>> getServices() {
+    private Set<Bean> getServices() {
         Reflections reflections = new Reflections(basePackage);
-        return reflections.getTypesAnnotatedWith(Service.class);
+        return reflections.getTypesAnnotatedWith(Service.class).stream()
+                .map(ClassPathBean::new).collect(Collectors.toSet());
     }
 
-    private Set<Class<?>> getRepositories() {
+    private Set<Bean> getRepositories() {
         Reflections reflections = new Reflections(basePackage);
-        return reflections.getTypesAnnotatedWith(Repository.class);
+        return reflections.getTypesAnnotatedWith(Repository.class).stream()
+                .map(ClassPathBean::new).collect(Collectors.toSet());
     }
 
-    Set<Class<?>> doScan() {
+    public Set<Bean> doScan() {
         return Stream.concat(
                 Stream.concat(getControllers().stream(), getServices().stream()),
                 getRepositories().stream()).collect(Collectors.toSet());
     }
+
+
+
 }

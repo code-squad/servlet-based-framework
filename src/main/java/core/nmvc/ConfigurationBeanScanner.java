@@ -9,13 +9,18 @@ import java.util.stream.Collectors;
 
 public class ConfigurationBeanScanner {
     private Class<?> configurationFile;
+    private Set<Method> beanMethods;
 
-    public void register(Class<?> configurationFile){// 어떤 설정파일 사용할 건지 설정
+    public ConfigurationBeanScanner(Class<?> configurationFile) {
         this.configurationFile = configurationFile;
+        this.beanMethods = getBeanMethods();
     }
 
-    Set<Class<?>> doScan(){
-        return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class))
-                .map(Method::getReturnType).collect(Collectors.toSet());
+    Set<Method> getBeanMethods(){
+        return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toSet());
+    }
+
+    public Set<core.nmvc.Bean> doScan(){
+        return this.beanMethods.stream().map(method -> new ConfigurationBean(method.getReturnType(), method, this.configurationFile)).collect(Collectors.toSet());
     }
 }
