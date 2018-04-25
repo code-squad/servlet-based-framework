@@ -19,7 +19,7 @@ public class ConfigurationBean extends Bean {
     }
 
     @Override
-    public Object instantiate(Class<?> clazz, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public Object instantiate(Bean bean, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         return null;
     }
 

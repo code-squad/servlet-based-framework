@@ -10,7 +10,8 @@ public abstract class Bean {
         this.clazz = clazz;
     }
 
-    public abstract Object instantiate(Class<?> clazz, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException;
+    public abstract Object instantiate(Bean bean, Set<Bean> beanCandidates) throws IllegalAccessException, InstantiationException, InvocationTargetException;
+
 
     public Class<?> getClazz() {
         return clazz;

@@ -16,13 +16,15 @@ import org.springframework.beans.BeanUtils;
 public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클래스
     private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
 
-//    private Set<Class<?>> beanCandidates;
+    //    private Set<Class<?>> beanCandidates;
     private Set<Bean> beanCandidates;
 
     private Map<Class<?>, Object> beans = Maps.newHashMap();
-    public BeanFactory(){}
 
-    public BeanFactory(Set<Bean> beanCandidates){
+    public BeanFactory() {
+    }
+
+    public BeanFactory(Set<Bean> beanCandidates) {
         this.beanCandidates = beanCandidates;
     }
 
@@ -47,19 +49,22 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
         this.beans.forEach((clazz, object) -> logger.debug("beans : {}", clazz, object));
     }
 
-    private Set<Class<?>> getClasses(){
+    private Set<Class<?>> getClasses() {
         return this.beanCandidates.stream().map(Bean::getClazz).collect(Collectors.toSet());
     }
 
-    private Bean find(Class<?> clazz){
+    private Bean find(Class<?> clazz) {
         return this.beanCandidates.stream().filter(b -> b.getClazz().equals(clazz)).findFirst().orElse(null);
     }
 
     private Object setField(Bean bean) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
         if (bean instanceof ClassPathBean) {
             // 1. constructor 찾기
-            Constructor injectConstructor = BeanFactoryUtils.getInjectedConstructor(bean.getClazz());
-            if (injectConstructor == null) return bean.getClazz().newInstance();
+            ClassPathBean classPathBean = (ClassPathBean) bean;
+
+            Constructor injectConstructor = classPathBean.getInjectedConstructor();
+            if (injectConstructor == null) return classPathBean.getClazz().newInstance();
+
             Parameter[] params = injectConstructor.getParameters();
             List<Object> args = getObjects(params);
             return BeanUtils.instantiateClass(injectConstructor, args.toArray());
@@ -76,27 +81,24 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     private List<Object> getObjects(Parameter[] params) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         List<Object> args = new ArrayList<>();
-        for(Parameter p : params){
-            if(getClasses().contains(p.getType())) {
-                // 인터페이스인데도 빈 후보로 등록된 경우
-                if(p.getType().isInterface()) {
-                    ConfigurationBean configBean = (ConfigurationBean)find(p.getType());
-                    args.add(configBean.getBeanMethod().invoke(configBean.getConfigurationFile().newInstance()));
-                }
-                else {
-                    args.add(setField(find(p.getType())));
-                }
-            }
-            // 인터페이스라서 후보로 등록되어있지 않은경우
-            else {
-                Class<?> concreteClass = BeanFactoryUtils.findConcreteClass(p.getType(), this.beanCandidates);
-                args.add(setField(find(concreteClass)));
-            }
+        for (Parameter p : params) {
+            args.add(inject(p));
         }
         return args;
     }
 
-    private Constructor getInjectedConstructor(Class clazz){
-        return BeanFactoryUtils.getInjectedConstructor(clazz);
+    public Object inject(Parameter param) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        if (getClasses().contains(param.getType())) {
+            // 인터페이스인데도 빈 후보로 등록된 경우
+            if (param.getType().isInterface()) {
+                ConfigurationBean configBean = (ConfigurationBean) find(param.getType());
+                return configBean.getBeanMethod().invoke(configBean.getConfigurationFile().newInstance());
+            }
+            return setField(find(param.getType()));
+
+        }
+        // 인터페이스라서 후보로 등록되어있지 않은경우
+        Class<?> concreteClass = BeanFactoryUtils.findConcreteClass(param.getType(), this.beanCandidates);
+        return setField(find(concreteClass));
     }
 }
