@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
-import org.springframework.beans.BeanUtils;
 
 public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클래스
     private static final Logger logger = LoggerFactory.getLogger(BeanFactory.class);
@@ -58,21 +57,11 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     private Object setField(Bean bean) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
         if (bean instanceof ClassPathBean) {
-            // 1. constructor 찾기
-            return instantiateClassPathBean((ClassPathBean) bean);
+            ClassPathBean classPathBean = (ClassPathBean)bean;
+            return classPathBean.instantiate(getObjects(classPathBean.getParameters()));
         }
-        // 1. Method 찾기
         ConfigurationBean configBean = (ConfigurationBean)bean;
         return configBean.instantiate(getObjects(configBean.getParameters()));
-    }
-
-    private Object instantiateClassPathBean(ClassPathBean bean) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        Constructor injectConstructor = bean.getInjectedConstructor();
-        if (injectConstructor == null) return bean.getClazz().newInstance();
-
-        Parameter[] params = injectConstructor.getParameters();
-        List<Object> args = getObjects(Arrays.asList(params));
-        return BeanUtils.instantiateClass(injectConstructor, args.toArray());
     }
 
     private List<Object> getObjects(List<Parameter> params) throws IllegalAccessException, InstantiationException, InvocationTargetException {

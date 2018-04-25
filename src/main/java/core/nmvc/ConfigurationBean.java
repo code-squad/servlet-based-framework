@@ -18,19 +18,17 @@ public class ConfigurationBean extends Bean {
     }
 
     public Method getBeanMethod() {
-        return beanMethod;
+        return this.beanMethod;
     }
 
-    public List<Parameter> getParameters(){
-        return Arrays.asList(beanMethod.getParameters());
-    }
-
+    @Override
     public Object instantiate(List<Object> args) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (getParameters().size() == 0) return beanMethod.invoke(this.configurationFile.newInstance());
+        if (getParameters().size() == 0) return this.beanMethod.invoke(this.configurationFile.newInstance());
         return beanMethod.invoke(this.configurationFile.newInstance(), args.toArray());
     }
 
-    public Class<?> getConfigurationFile() {
-        return configurationFile;
+    @Override
+    public List<Parameter> getParameters(){
+        return Arrays.asList(this.beanMethod.getParameters());
     }
 }
