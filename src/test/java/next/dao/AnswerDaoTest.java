@@ -1,16 +1,20 @@
 package next.dao;
 
+import core.annotation.ComponentScan;
+import core.annotation.Configuration;
 import core.di.factory.BeanFactory;
-import core.di.factory.example.IntegrationConfig;
-import core.jdbc.ConnectionManager;
+import core.nmvc.IntegrationConfig;
 import core.nmvc.BeanDefinition;
 import core.nmvc.ClassPathBeanScanner;
 import core.nmvc.ConfigurationBeanScanner;
+import next.exception.NoConfigurationFileException;
 import next.model.Answer;
 import next.model.Result;
-import next.model.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -27,13 +31,18 @@ public class AnswerDaoTest {
     private BeanDefinition bf;
     private AnswerDao answerDao;
 
+    private static final Logger log = LoggerFactory.getLogger(AnswerDao.class);
+
     @Before
     @SuppressWarnings("unchecked")
     public void setup() {
         // 리플렉션을 통해 annotation 이 붙은 클래스들을 모은다.
         // 클래스들을 빈으로 등록
-        cpbs = new ClassPathBeanScanner("core.di.factory.example");
-        cbs = new ConfigurationBeanScanner(IntegrationConfig.class);
+        Class<?> configuration = detectConfigurationFile("core");
+        
+        log.debug("configuration : {}", configuration) ;
+        cpbs = new ClassPathBeanScanner(configuration.getAnnotation(ComponentScan.class).basePackages());
+        cbs = new ConfigurationBeanScanner(configuration);
         bf = new BeanDefinition(cbs, cpbs);
         beanFactory = new BeanFactory(bf);
         beanFactory.initialize();
@@ -43,6 +52,11 @@ public class AnswerDaoTest {
         DatabasePopulatorUtils.execute(populator, beanFactory.getBean(DataSource.class));
 
         answerDao = new AnswerDao(beanFactory.getBean(JdbcTemplate.class));
+    }
+
+    private Class<?> detectConfigurationFile(Object configurationFilePackage) {
+        return new Reflections(configurationFilePackage).getTypesAnnotatedWith(Configuration.class).
+                stream().findFirst().orElseThrow(() -> new NoConfigurationFileException("There is no configuration file"));
     }
 
     @Test

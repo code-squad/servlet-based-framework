@@ -2,22 +2,13 @@ package core.di.factory;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
-
 import core.di.factory.example.*;
 import core.nmvc.BeanDefinition;
 import core.nmvc.ClassPathBeanScanner;
 import core.nmvc.ConfigurationBeanScanner;
+import core.nmvc.IntegrationConfig;
 import org.junit.Before;
 import org.junit.Test;
-import org.reflections.Reflections;
-
-import com.google.common.collect.Sets;
-
-import core.annotation.Controller;
-import core.annotation.Repository;
-import core.annotation.Service;
 
 import javax.sql.DataSource;
 

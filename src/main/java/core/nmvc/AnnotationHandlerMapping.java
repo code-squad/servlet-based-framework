@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
 
-import core.MyConfiguration;
 import core.annotation.*;
 import core.di.factory.BeanFactory;
 import next.exception.NoConfigurationFileException;

@@ -1,13 +1,5 @@
 package core.nmvc;
 
-import core.di.factory.BeanFactory;
-import core.di.factory.example.ExampleConfig;
-import org.junit.Test;
-
-import javax.sql.DataSource;
-
-import static org.junit.Assert.*;
-
 public class ConfigurationClassPathBeanScannerTest {
 //
 //    @Test
