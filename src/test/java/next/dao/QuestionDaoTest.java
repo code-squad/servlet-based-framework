@@ -15,36 +15,34 @@ import static org.junit.Assert.*;
 
 public class QuestionDaoTest {
     QuestionDao questionDao;
-
-    @Before
-    public void setup() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("jwp.sql"));
-        DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
-        questionDao = new QuestionDao();
-    }
-
-
-    @Test
-    public void insert() throws Exception {
-        Question question = new Question("writer", "title", "contents");
-        Question created = questionDao.insert(question);
-        assertEquals("writer", created.getWriter());
-        assertEquals(9, created.getQuestionId());
-    }
-
-    @Test
-    public void findById() throws Exception {
-        Question question = questionDao.findById(1L);
-        String firstWriter = "자바지기";
-        assertEquals(firstWriter, question.getWriter());
-    }
-
-    @Test
-    public void findAll() throws Exception {
-        List<Question> list = questionDao.findAll();
-        assertEquals(8, list.size());
-    }
-
-
+//
+//    @Before
+//    public void setup() {
+//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+//        populator.addScript(new ClassPathResource("jwp.sql"));
+//        DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
+//        questionDao = new QuestionDao();
+//    }
+//
+//
+//    @Test
+//    public void insert() throws Exception {
+//        Question question = new Question("writer", "title", "contents");
+//        Question created = questionDao.insert(question);
+//        assertEquals("writer", created.getWriter());
+//        assertEquals(9, created.getQuestionId());
+//    }
+//
+//    @Test
+//    public void findById() throws Exception {
+//        Question question = questionDao.findById(1L);
+//        String firstWriter = "자바지기";
+//        assertEquals(firstWriter, question.getWriter());
+//    }
+//
+//    @Test
+//    public void findAll() throws Exception {
+//        List<Question> list = questionDao.findAll();
+//        assertEquals(8, list.size());
+//    }
 }

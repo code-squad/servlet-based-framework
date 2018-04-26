@@ -22,7 +22,6 @@ import core.annotation.Service;
 import javax.sql.DataSource;
 
 public class BeanFactoryTest {
-    private Reflections reflections;
     private BeanFactory beanFactory;
     private ClassPathBeanScanner cpbs;
     private ConfigurationBeanScanner cbs;
@@ -31,7 +30,6 @@ public class BeanFactoryTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setup() {
-        reflections = new Reflections("core.di.factory.example");
         // 리플렉션을 통해 annotation 이 붙은 클래스들을 모은다.
         // 클래스들을 빈으로 등록
         cpbs = new ClassPathBeanScanner("core.di.factory.example");
@@ -71,14 +69,5 @@ public class BeanFactoryTest {
         MyJdbcTemplate jdbcTemplate = beanFactory.getBean(MyJdbcTemplate.class);
         assertNotNull(jdbcTemplate);
         assertNotNull(jdbcTemplate.getDataSource());
-    }
-
-    @SuppressWarnings("unchecked")
-    private Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation>... annotations) {
-        Set<Class<?>> beans = Sets.newHashSet();
-        for (Class<? extends Annotation> annotation : annotations) {
-            beans.addAll(reflections.getTypesAnnotatedWith(annotation));
-        }
-        return beans;
     }
 }

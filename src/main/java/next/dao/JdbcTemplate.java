@@ -38,24 +38,6 @@ public class JdbcTemplate {
         }
     }
 
-//    public static void update(String query, KeyHolder holder, PreparedStatementSetter pss) throws DataAccessException {// 변하지 않는 부분
-//        try (Connection con = ConnectionManager.getConnection();
-//             PreparedStatement pstmt = con.prepareStatement(query)
-//        ) {
-//
-//            pss.setValues(pstmt);
-//
-//            pstmt.executeUpdate();
-//
-//            setId(holder, pstmt);
-//            log.debug("key : {}", holder.getId());
-//
-//            // implement spl statement
-//        } catch (SQLException e) {
-//            throw new DataAccessException(e);
-//        }
-//    }
-
     private static void setId(KeyHolder holder, PreparedStatement pstmt) throws SQLException {
         ResultSet rs = pstmt.getGeneratedKeys();
         if (rs.next()) {
@@ -74,19 +56,6 @@ public class JdbcTemplate {
             throw new DataAccessException(e);
         }
     }
-
-//    public static void update(String query, PreparedStatementSetter pss) throws DataAccessException {
-//        try (Connection con = ConnectionManager.getConnection();
-//             PreparedStatement pstmt = con.prepareStatement(query)
-//        ) {
-//            pss.setValues(pstmt);
-//            // implement spl statement
-//            pstmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            throw new DataAccessException(e);
-//        }
-//    }
 
     public void update(String query, KeyHolder holder, Object... objects) throws DataAccessException {
         PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
