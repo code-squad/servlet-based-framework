@@ -1,7 +1,8 @@
-package core.di.factory.example;
+package core.nmvc;
 
 import core.annotation.Bean;
 import core.annotation.Configuration;
+import core.di.factory.example.MyJdbcTemplate;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;

@@ -5,10 +5,12 @@ import static org.reflections.ReflectionUtils.withAnnotation;
 
 import java.lang.reflect.Constructor;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 
 import core.annotation.Inject;
+import core.nmvc.Bean;
 
 public class BeanFactoryUtils {
     /**
@@ -35,18 +37,19 @@ public class BeanFactoryUtils {
      * @param preInstanticateBeans
      * @return
      */
-    public static Class<?> findConcreteClass(Class<?> injectedClazz, Set<Class<?>> preInstanticateBeans) {
+    public static Class<?> findConcreteClass(Class<?> injectedClazz, Set<Bean> preInstanticateBeans) {
         if (!injectedClazz.isInterface()) {
             return injectedClazz;
         }
 
-        for (Class<?> clazz : preInstanticateBeans) {
-            Set<Class<?>> interfaces = Sets.newHashSet(clazz.getInterfaces());
+        for (Bean bean : preInstanticateBeans) {
+            Set<Class<?>> interfaces = Sets.newHashSet(bean.getClazz().getInterfaces());
             if (interfaces.contains(injectedClazz)) {
-                return clazz;
+                return bean.getClazz();
             }
         }
 
         throw new IllegalStateException(injectedClazz + "인터페이스를 구현하는 Bean이 존재하지 않는다.");
     }
+
 }

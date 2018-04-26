@@ -1,7 +1,11 @@
 package core.mvc;
 
+import core.annotation.ComponentScan;
+import core.annotation.Configuration;
 import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.HandlerExecution;
+import next.exception.NoConfigurationFileException;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 // url 과 서블릿 매핑을 urlPatterns 속성을 통해 해주고 있음.
 // 모든 클라이언트 요청을 받는 서블릿
@@ -26,7 +31,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        annotationHandlerMapping = new AnnotationHandlerMapping("core.mvc", "next.dao", "next.service");
+        annotationHandlerMapping = new AnnotationHandlerMapping("core");
         annotationHandlerMapping.initialize();
     }
 

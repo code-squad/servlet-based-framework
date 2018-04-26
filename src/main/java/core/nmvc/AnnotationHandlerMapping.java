@@ -8,29 +8,39 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
 
-import core.annotation.RequestMapping;
-import core.annotation.RequestMethod;
+import core.annotation.*;
 import core.di.factory.BeanFactory;
+import next.exception.NoConfigurationFileException;
+import org.reflections.Reflections;
 
 public class AnnotationHandlerMapping {
     private Object[] basePackage;
+    private Class<?> configuration;
 
     private Map<HandlerKey, HandlerExecution> handlerExecutions = Maps.newHashMap();
 
-    public AnnotationHandlerMapping(Object... basePackage) {
-        this.basePackage = basePackage;
+    public AnnotationHandlerMapping(Object configurationFilePackage) {
+        this.configuration = detectConfigurationFile(configurationFilePackage);
+        this.basePackage = configuration.getAnnotation(ComponentScan.class).basePackages();
+    }
+
+    private Class<?> detectConfigurationFile(Object configurationFilePackage) {
+        return new Reflections(configurationFilePackage).getTypesAnnotatedWith(Configuration.class).
+                stream().findFirst().orElseThrow(() -> new NoConfigurationFileException("There is no configuration file"));
     }
 
     public void initialize() {
         // annotation 붙은 클래스들 빈으로 모두 등록
-        BeanScanner beanScanner = new BeanScanner(basePackage);
-        BeanFactory beanFactory = new BeanFactory(beanScanner.getBeans());
+        ClassPathBeanScanner cpbs = new ClassPathBeanScanner(basePackage);
+        ConfigurationBeanScanner cbs = new ConfigurationBeanScanner(configuration);
+        BeanDefinition beanDefinition = new BeanDefinition(cbs, cpbs);
+        BeanFactory beanFactory = new BeanFactory(beanDefinition);
 
         beanFactory.initialize();
 
-        beanScanner.getControllers().forEach(annotatedClass -> {
+        cpbs.getControllers().forEach(annotatedBean -> {
             // 1. @RequestMapping 붙은 method 만 필터.
-            Object bean = beanFactory.getBean(annotatedClass);
+            Object bean = beanFactory.getBean(annotatedBean.getClazz());
             List<Method> annotatedMethods = getMethods(bean.getClass());
             // 2. 필터한 메소드 맵에 넣는다.
             annotatedMethods.forEach(m -> {
@@ -49,6 +59,5 @@ public class AnnotationHandlerMapping {
         String requestUri = request.getRequestURI();
         RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
         return handlerExecutions.get(new HandlerKey(requestUri, rm));
-        // handlerExecution.handle(); -> requestMapping 달린 해당 메소드 실행.
     }
 }
