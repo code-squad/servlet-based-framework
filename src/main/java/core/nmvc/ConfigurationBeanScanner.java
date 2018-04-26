@@ -16,15 +16,15 @@ public class ConfigurationBeanScanner {
         this.beanMethods = getBeanMethods();
     }
 
-    private Set<Method> getBeanMethods(){
+    private Set<Method> getBeanMethods() {
         return Arrays.stream(this.configurationFile.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toSet());
     }
 
-     Set<core.nmvc.Bean> doScan(){
+    Set<core.nmvc.Bean> doScan() {
         return this.beanMethods.stream().map(method -> new ConfigurationBean(method.getReturnType(), method, this.configurationFile)).collect(Collectors.toSet());
     }
 
-     Class<?> getConfigurationFile() {
+    Class<?> getConfigurationFile() {
         return configurationFile;
     }
 }

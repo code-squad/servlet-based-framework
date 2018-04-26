@@ -75,7 +75,7 @@ public class JdbcTemplate {
         }
     }
 
-    public  <T> List<T> query(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
+    public <T> List<T> query(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
         List<T> objects = new ArrayList<>();
         try (PreparedStatement pstmt = ds.getConnection().prepareStatement(sql)) {
             pss.setValues(pstmt);
@@ -91,18 +91,18 @@ public class JdbcTemplate {
         return objects;
     }
 
-    public  <T> List<T> query(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
+    public <T> List<T> query(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
         PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
         return query(sql, rm, pss);
     }
 
-    public  <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
+    public <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
         List<T> list = query(sql, rm, pss);
         if (list.size() == 0) return null;
         return list.get(0);
     }
 
-    public  <T> T queryForObject(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
+    public <T> T queryForObject(String sql, RowMapper<T> rm, Object... objects) throws DataAccessException {
         // object -> pss
         PreparedStatementSetter pss = pstmt -> setValues(pstmt, objects);
         return queryForObject(sql, rm, pss);

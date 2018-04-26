@@ -21,7 +21,7 @@ public class AnnotationHandlerMapping {
     private Map<HandlerKey, HandlerExecution> handlerExecutions = Maps.newHashMap();
 
     public AnnotationHandlerMapping(Object configurationFilePackage) {
-        this.configuration =  detectConfigurationFile(configurationFilePackage);
+        this.configuration = detectConfigurationFile(configurationFilePackage);
         this.basePackage = configuration.getAnnotation(ComponentScan.class).basePackages();
     }
 

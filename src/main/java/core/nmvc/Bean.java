@@ -17,5 +17,6 @@ public abstract class Bean {
     }
 
     public abstract Object instantiate(List<Object> args) throws IllegalAccessException, InvocationTargetException, InstantiationException;
+
     public abstract List<Parameter> getParameters();
 }

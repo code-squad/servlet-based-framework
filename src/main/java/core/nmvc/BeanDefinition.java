@@ -13,8 +13,8 @@ public class BeanDefinition {
         this.cpbs = cpbs;
     }
 
-    public Set<Bean> getBeanCandidates(){
-       return  Stream.concat(this.cbs.doScan().stream(), this.cpbs.doScan().stream()).collect(Collectors.toSet());
+    public Set<Bean> getBeanCandidates() {
+        return Stream.concat(this.cbs.doScan().stream(), this.cpbs.doScan().stream()).collect(Collectors.toSet());
     }
 
     public Object instantiateConfiguration() throws IllegalAccessException, InstantiationException {

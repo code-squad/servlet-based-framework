@@ -28,7 +28,7 @@ public class ConfigurationBean extends Bean {
     }
 
     @Override
-    public List<Parameter> getParameters(){
+    public List<Parameter> getParameters() {
         return Arrays.asList(this.beanMethod.getParameters());
     }
 }

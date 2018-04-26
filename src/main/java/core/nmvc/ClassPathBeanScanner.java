@@ -10,9 +10,10 @@ import java.util.stream.Stream;
 public class ClassPathBeanScanner {
     private Object[] basePackage;
 
-    public ClassPathBeanScanner(Object... basePackage){
+    public ClassPathBeanScanner(Object... basePackage) {
         this.basePackage = basePackage;
     }
+
     Set<Bean> getControllers() {
         Reflections reflections = new Reflections(basePackage);
         return reflections.getTypesAnnotatedWith(Controller.class).stream()
@@ -31,12 +32,11 @@ public class ClassPathBeanScanner {
                 .map(ClassPathBean::new).collect(Collectors.toSet());
     }
 
-   Set<Bean> doScan() {
+    Set<Bean> doScan() {
         return Stream.concat(
                 Stream.concat(getControllers().stream(), getServices().stream()),
                 getRepositories().stream()).collect(Collectors.toSet());
     }
-
 
 
 }

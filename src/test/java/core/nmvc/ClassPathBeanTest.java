@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 public class ClassPathBeanTest {
     private ClassPathBean cpb;
+
     @Before
     public void setUp() throws Exception {
     }

@@ -17,7 +17,7 @@ public class ClassPathBean extends Bean {
         this.injectConstructor = getInjectedConstructor();
     }
 
-    public Constructor getInjectedConstructor(){
+    public Constructor getInjectedConstructor() {
         return BeanFactoryUtils.getInjectedConstructor(super.clazz);
     }
 
@@ -28,7 +28,7 @@ public class ClassPathBean extends Bean {
     }
 
     @Override
-    public List<Parameter> getParameters(){
+    public List<Parameter> getParameters() {
         return Arrays.asList(injectConstructor.getParameters());
     }
 

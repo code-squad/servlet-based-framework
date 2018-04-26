@@ -57,10 +57,10 @@ public class BeanFactory { // 프레임워크의 bean 들을 설정해주는 클
 
     private Object setField(Bean bean) throws IllegalAccessException, InstantiationException, InvocationTargetException {// 재귀로 구현
         if (bean instanceof ClassPathBean) {
-            ClassPathBean classPathBean = (ClassPathBean)bean;
+            ClassPathBean classPathBean = (ClassPathBean) bean;
             return classPathBean.instantiate(getObjects(classPathBean.getParameters()));
         }
-        ConfigurationBean configBean = (ConfigurationBean)bean;
+        ConfigurationBean configBean = (ConfigurationBean) bean;
         return configBean.instantiate(getObjects(configBean.getParameters()));
     }
 
